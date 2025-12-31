@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Inter', system-ui, sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+
+  color-scheme: light;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #fdfbf7;
+  color: #1c1917;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+@layer components {
+  /* Buttons */
+  .btn {
+    @apply px-4 py-2.5 font-medium transition-all duration-200 border;
+  }
+
+  .btn-primary {
+    @apply bg-ink-900 hover:bg-ink-800 text-sand-50 border-ink-900;
+  }
+
+  .btn-secondary {
+    @apply bg-sand-200 hover:bg-sand-300 text-ink-900 border-sand-300;
+  }
+
+  .btn-outline {
+    @apply bg-transparent hover:bg-ink-900 text-ink-900 hover:text-sand-50 border-ink-900;
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-white border border-sand-300 p-6;
+  }
+
+  .card-dark {
+    @apply bg-ink-900 border border-ink-700 p-6 text-sand-50;
+  }
+
+  /* Inputs */
+  .input-field {
+    @apply w-full px-4 py-2.5 border border-sand-400 bg-white text-ink-900
+           focus:outline-none focus:border-ink-900 focus:ring-1 focus:ring-ink-900
+           transition-colors duration-200;
+  }
+
+  .textarea-field {
+    @apply w-full px-4 py-2.5 border border-sand-400 bg-white text-ink-900
+           focus:outline-none focus:border-ink-900 focus:ring-1 focus:ring-ink-900
+           transition-colors duration-200 resize-none;
+  }
+
+  /* Labels */
+  .label {
+    @apply block text-sm font-medium text-ink-700 mb-2;
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-block px-3 py-1 text-xs font-medium border;
+  }
+
+  .badge-success {
+    @apply bg-sand-100 text-sand-900 border-sand-400;
+  }
+
+  .badge-warning {
+    @apply bg-sand-300 text-ink-900 border-sand-500;
+  }
+
+  .badge-dark {
+    @apply bg-ink-900 text-sand-50 border-ink-700;
+  }
+
+  /* Container */
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}
