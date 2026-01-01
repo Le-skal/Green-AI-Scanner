@@ -124,7 +124,7 @@ export const AI_MODELS_CONFIG = {
     ]
   },
   cohere: {
-    model: 'command',
+    model: 'command-r-08-2024', // Updated: 'command' was deprecated Sept 15, 2025
     maxTokens: 2048,
     temperature: 0.7,
     rateLimit: 5000, // par mois

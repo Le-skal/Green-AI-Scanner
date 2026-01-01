@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { promptsAPI } from '../../services/api';
 
-const HistorySidebar = () => {
+const HistorySidebar = ({ refreshTrigger = 0 }) => {
   const navigate = useNavigate();
   const [prompts, setPrompts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchRecentPrompts();
-  }, []);
+  }, [refreshTrigger]); // Re-fetch when refreshTrigger changes
 
   const fetchRecentPrompts = async () => {
     try {

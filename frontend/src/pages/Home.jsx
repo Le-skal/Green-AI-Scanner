@@ -14,6 +14,7 @@ function Home() {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
+  const [historyRefresh, setHistoryRefresh] = useState(0);
 
   const handleSubmit = async (data) => {
     setLoading(true);
@@ -23,6 +24,9 @@ function Home() {
       const response = await promptsAPI.createPrompt(data);
       setResults(response);
       console.log('✅ Results:', response);
+
+      // Trigger history sidebar refresh
+      setHistoryRefresh(prev => prev + 1);
     } catch (err) {
       console.error('❌ Error:', err);
       setError(err.response?.data?.message || 'Failed to process prompt');
@@ -232,7 +236,7 @@ function Home() {
         </main>
 
         {/* Right Sidebar - History */}
-        <HistorySidebar />
+        <HistorySidebar refreshTrigger={historyRefresh} />
       </div>
     </div>
   );

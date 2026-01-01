@@ -22,6 +22,9 @@ class ScoringService {
       return responses;
     }
 
+    // Calculer le temps de réponse max pour normaliser le score de vitesse
+    const maxResponseTime = Math.max(...responses.map(r => r.responseTime || 0));
+
     // Calculer les scores pour chaque réponse
     const scoredResponses = responses.map((response, index) => {
       if (response.status !== 'success' || !response.responseText) {
@@ -31,7 +34,8 @@ class ScoringService {
           scores: {
             relevance: null,
             similarity: null,
-            sovereignty: response.sovereignty
+            sovereignty: response.sovereignty,
+            composite: null
           },
           nlpAnalysis: {
             keywords: emptyAnalysis.keywords,
@@ -59,12 +63,25 @@ class ScoringService {
         successfulResponses.filter((_, i) => i !== index).map(r => r.responseText)
       );
 
+      // Score de vitesse (normalisé inversé - plus rapide = meilleur score)
+      const speedScore = this.calculateSpeedScore(response.responseTime, maxResponseTime);
+
+      // Score composite (pondéré)
+      const compositeScore = this.calculateCompositeScore({
+        relevance: relevanceScore,
+        similarity: similarityScore,
+        sovereignty: response.sovereignty?.score || 0,
+        speed: speedScore
+      });
+
       return {
         ...response,
         scores: {
           relevance: relevanceScore,
           similarity: similarityScore,
-          sovereignty: response.sovereignty
+          sovereignty: response.sovereignty,
+          speed: speedScore,
+          composite: compositeScore
         },
         nlpAnalysis: {
           keywords: nlpAnalysis.keywords,
@@ -153,6 +170,62 @@ class ScoringService {
   }
 
   /**
+   * Calcule le score de vitesse (normalisé inversé)
+   * @private
+   * @param {number} responseTime - Temps de réponse en ms
+   * @param {number} maxResponseTime - Temps max parmi toutes les réponses
+   * @returns {number} - Score de 0 à 100 (plus rapide = meilleur)
+   */
+  calculateSpeedScore(responseTime, maxResponseTime) {
+    if (!responseTime || !maxResponseTime || maxResponseTime === 0) {
+      return 50; // Score neutre si pas de données
+    }
+
+    try {
+      // Score inversé: plus le temps est court, plus le score est élevé
+      // Si responseTime = 0ms → score = 100
+      // Si responseTime = maxResponseTime → score = 0
+      const normalizedScore = 100 - ((responseTime / maxResponseTime) * 100);
+
+      return Math.round(Math.max(0, Math.min(100, normalizedScore)));
+    } catch (error) {
+      console.error('Error calculating speed score:', error);
+      return 50;
+    }
+  }
+
+  /**
+   * Calcule le score composite pondéré
+   * Formule: 40% Pertinence + 30% Souveraineté + 20% Similarité + 10% Vitesse
+   * @private
+   * @param {object} scores - Objet contenant tous les scores
+   * @returns {number} - Score composite de 0 à 100
+   */
+  calculateCompositeScore(scores) {
+    try {
+      const {
+        relevance = 0,
+        sovereignty = 0,
+        similarity = 0,
+        speed = 0
+      } = scores;
+
+      // Pondération alignée avec les objectifs du projet
+      const compositeScore = (
+        (relevance * 0.40) +      // 40% - Qualité de la réponse
+        (sovereignty * 0.30) +    // 30% - Souveraineté des données (IT for Green)
+        (similarity * 0.20) +     // 20% - Consensus entre modèles
+        (speed * 0.10)            // 10% - Rapidité de réponse
+      );
+
+      return Math.round(Math.max(0, Math.min(100, compositeScore)));
+    } catch (error) {
+      console.error('Error calculating composite score:', error);
+      return 0;
+    }
+  }
+
+  /**
    * Calcule une matrice de similarité entre toutes les réponses
    * @param {object[]} responses - Tableau des réponses
    * @returns {number[][]} - Matrice de similarité
@@ -215,9 +288,17 @@ class ScoringService {
       sum + (r.scores?.similarity || 0), 0
     ) / successfulResponses.length;
 
-    // Trouver la meilleure et pire réponse
-    const sortedByRelevance = [...successfulResponses].sort((a, b) =>
-      (b.scores?.relevance || 0) - (a.scores?.relevance || 0)
+    const avgSovereignty = successfulResponses.reduce((sum, r) =>
+      sum + (r.scores?.sovereignty?.score || 0), 0
+    ) / successfulResponses.length;
+
+    const avgComposite = successfulResponses.reduce((sum, r) =>
+      sum + (r.scores?.composite || 0), 0
+    ) / successfulResponses.length;
+
+    // Trouver la meilleure et pire réponse (basé sur le score composite)
+    const sortedByComposite = [...successfulResponses].sort((a, b) =>
+      (b.scores?.composite || 0) - (a.scores?.composite || 0)
     );
 
     // Distribution de souveraineté
@@ -233,16 +314,20 @@ class ScoringService {
       failedResponses: responses.length - successfulResponses.length,
       averageRelevance: Math.round(avgRelevance),
       averageSimilarity: Math.round(avgSimilarity),
+      averageSovereignty: Math.round(avgSovereignty),
+      averageComposite: Math.round(avgComposite),
       averageResponseTime: Math.round(
         responses.reduce((sum, r) => sum + r.responseTime, 0) / responses.length
       ),
       bestResponse: {
-        model: sortedByRelevance[0]?.model,
-        relevance: sortedByRelevance[0]?.scores?.relevance
+        model: sortedByComposite[0]?.model,
+        compositeScore: sortedByComposite[0]?.scores?.composite,
+        relevance: sortedByComposite[0]?.scores?.relevance,
+        sovereignty: sortedByComposite[0]?.scores?.sovereignty?.score
       },
       worstResponse: {
-        model: sortedByRelevance[sortedByRelevance.length - 1]?.model,
-        relevance: sortedByRelevance[sortedByRelevance.length - 1]?.scores?.relevance
+        model: sortedByComposite[sortedByComposite.length - 1]?.model,
+        compositeScore: sortedByComposite[sortedByComposite.length - 1]?.scores?.composite
       },
       consensusLevel: avgSimilarity, // Niveau de consensus entre les réponses
       sovereigntyDistribution: sovereigntyDist

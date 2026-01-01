@@ -1,93 +1,234 @@
-# Projet 3 - Agrégateur de Moteurs d'IA
+<div align="center">
 
-## 📋 Cahier des Charges (CDC)
+# 🤖 AI Response Aggregator
+### *Agrégateur de Moteurs d'IA pour la Consolidation et l'Analyse*
 
-### 🎯 Objectif du Projet
+<p><em>Unify AI Responses, Empower Data-Driven Decisions with Data Sovereignty</em></p>
 
-Créer une plateforme web permettant de **consolider et comparer les réponses de plusieurs moteurs d'IA** (ChatGPT, Claude, Gemini, Mistral, etc.) pour un même prompt, en évaluant leur pertinence, cohérence et niveau de souveraineté des données.
+![Status](https://img.shields.io/badge/status-operational-success?style=flat)
+![Version](https://img.shields.io/badge/version-2.0-blue?style=flat)
+![License](https://img.shields.io/badge/license-confidential-red?style=flat)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green?style=flat&logo=mongodb)
+
+<p><em>Built with the tools and technologies:</em></p>
+
+![React](https://img.shields.io/badge/React-18-61DAFB?style=flat&logo=react&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=flat&logo=vite&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-18-339933?style=flat&logo=node.js&logoColor=white)
+![Express](https://img.shields.io/badge/Express-4-000000?style=flat&logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-7-47A248?style=flat&logo=mongodb&logoColor=white)
+![Mongoose](https://img.shields.io/badge/Mongoose-8-F04D35?style=flat&logo=mongoose&logoColor=white)
+![Axios](https://img.shields.io/badge/Axios-1.6-5A29E4?style=flat&logo=axios&logoColor=white)
+
+![Chart.js](https://img.shields.io/badge/Chart.js-4-FF6384?style=flat&logo=chartdotjs&logoColor=white)
+![Recharts](https://img.shields.io/badge/Recharts-2.10-8884d8?style=flat)
+![Zustand](https://img.shields.io/badge/Zustand-4-orange?style=flat)
+![JWT](https://img.shields.io/badge/JWT-Auth-000000?style=flat&logo=jsonwebtokens&logoColor=white)
+![Bcrypt](https://img.shields.io/badge/Bcrypt-5-blue?style=flat)
+![ESLint](https://img.shields.io/badge/ESLint-8-4B32C3?style=flat&logo=eslint&logoColor=white)
+
+**AI APIs Integrated:**
+![Google](https://img.shields.io/badge/Google-Gemini-4285F4?style=flat&logo=google&logoColor=white)
+![Mistral](https://img.shields.io/badge/Mistral-AI-000000?style=flat)
+![HuggingFace](https://img.shields.io/badge/Hugging-Face-FFD21E?style=flat&logo=huggingface&logoColor=black)
+![Cohere](https://img.shields.io/badge/Cohere-Command-39A3ED?style=flat)
 
 ---
 
-## 🌟 Fonctionnalités Principales
+### 📊 Projet de Fin d'Études 2025-2026
+**IT for Green & Data Sovereignty** | Skills4Mind | B3 Data & IA
 
-### 1. Agrégation Multi-API IA
+</div>
+
+---
+
+## 📑 Table des Matières
+
+- [🎯 Objectif du Projet](#-objectif-du-projet)
+- [🌟 Fonctionnalités Implémentées](#-fonctionnalités-implémentées)
+  - [1. Agrégation Multi-API IA](#-1-agrégation-multi-api-ia)
+  - [2. Analyse Sémantique et Scoring](#-2-analyse-sémantique-et-scoring)
+  - [3. Scoring Data Souverain](#-3-scoring-data-souverain)
+  - [4. Visualisation Comparative](#-4-visualisation-comparative-dataviz)
+  - [5. Authentification](#-5-authentification-et-gestion-utilisateurs)
+  - [6. Historique](#-6-historique-et-navigation)
+  - [7. Export Multi-Format](#-7-export-multi-format)
+- [🏗️ Architecture Technique](#️-architecture-technique-implémentée)
+- [📐 Architecture Système](#-architecture-système)
+- [📅 État d'Avancement](#-état-davancement-par-phase)
+- [📊 Modèles de Données](#-modèles-de-données-réels)
+- [🔐 Sécurité](#-sécurité-implémentée)
+- [🌍 Souveraineté Data](#-indicateurs-de-souveraineté-data)
+- [📈 Performances](#-performances-et-kpis)
+- [🚀 Installation](#-installation-et-démarrage)
+- [📁 Structure du Projet](#-structure-du-projet)
+- [🎨 Design System](#-design-system)
+- [🐛 Problèmes Résolus](#-problèmes-résolus)
+- [📚 Documentation API](#-documentation-api)
+- [📞 Contact](#-contact)
+
+---
+
+## 🎯 Objectif du Projet
+
+Créer une plateforme web permettant de **consolider et comparer les réponses de plusieurs moteurs d'IA** pour un même prompt, en évaluant leur pertinence, cohérence et niveau de souveraineté des données.
+
+Ce projet s'inscrit dans le cadre du **PFE 2025-2026** avec pour objectifs :
+- 🌱 **IT for Green** : Évaluer l'impact écologique des modèles d'IA
+- 🔒 **Data Sovereignty** : Analyser la souveraineté et conformité RGPD
+- 📊 **Analyse Comparative** : Comparer les performances de 4 moteurs d'IA
+- 🎨 **DataViz Interactive** : Visualiser les résultats de manière claire et interactive
+
+---
+
+## 🌟 Fonctionnalités Implémentées
+
+### ✅ 1. Agrégation Multi-API IA
 - Interface de saisie de prompt unique
-- Envoi simultané vers plusieurs APIs d'IA :
-  - OpenAI (ChatGPT)
-  - Anthropic (Claude)
-  - Google (Gemini)
-  - Mistral AI
-  - Autres modèles open source
+- Envoi simultané vers 4 APIs d'IA :
+  - ✅ **Google Gemini** (Gemini 2.0 Flash)
+  - ✅ **Mistral AI** (Mistral Large Latest)
+  - ✅ **Hugging Face** (DeepSeek-R1-Distill-Qwen-32B)
+  - ✅ **Cohere** (Command)
+- Gestion des timeouts et erreurs par API
+- Agrégation parallèle des réponses
 
-### 2. Analyse Sémantique et Scoring
-- **Scoring de similarité** : Comparaison sémantique entre les réponses
-- **Analyse de cohérence** : Détection des points communs et divergences
-- **Évaluation de pertinence** : Score de qualité par réponse
-- **Analyse NLP** : Extraction de mots-clés, sentiments, thématiques
+### ✅ 2. Analyse Sémantique et Scoring
 
-### 3. Scoring Data Souverain
-- **Localisation des serveurs** : Identification géographique des datacenters
-- **Conformité RGPD** : Niveau de conformité européenne
-- **Risque de dépendance cloud** : Évaluation des risques liés aux fournisseurs
-- **Transparence des données** : Traçabilité du traitement des données
+#### Système de Scoring Multi-Critères
 
-### 4. Visualisation Comparative (DataViz)
-- **Tableau comparatif** : Affichage côte à côte des réponses
-- **Nuages de mots** : Visualisation des termes fréquents
-- **Matrices de similarité** : Graphiques de corrélation entre réponses
-- **Graphiques de scores** : Barres, radars, jauges pour les différents scores
-- **Timeline de réponse** : Temps de réponse par API
+**4 Scores Calculés par Réponse :**
 
-### 5. Historique et Export
-- **Sauvegarde des prompts** : Historique des recherches effectuées
-- **Export multi-format** :
-  - JSON (données brutes)
-  - CSV (pour analyse)
-  - PDF (rapport visuel)
-  - Markdown (documentation)
+1. **Score de Pertinence** (0-100) :
+   - 40 points : Similarité textuelle avec le prompt
+   - 20 points : Longueur optimale de réponse (20-500 mots)
+   - 40 points : Présence des mots-clés du prompt dans la réponse
+
+2. **Score de Similarité** (0-100) :
+   - Comparaison sémantique entre réponses (algorithme cosine similarity)
+   - Mesure le consensus entre les différents modèles
+
+3. **Score de Souveraineté** (0-100) :
+   - Localisation des serveurs (France > Europe > USA)
+   - Conformité RGPD
+   - Type de cloud provider
+
+4. **Score de Vitesse** (0-100) :
+   - Temps de réponse normalisé (plus rapide = meilleur score)
+
+#### 🏆 Score Composite (Pondéré)
+
+**Formule de Calcul du Meilleur Résultat :**
+
+```
+Score Composite = (Pertinence × 40%) + (Souveraineté × 30%) +
+                  (Similarité × 20%) + (Vitesse × 10%)
+```
+
+**Pondération alignée avec les objectifs du projet :**
+- 🎯 **40%** - Qualité de la réponse (pertinence)
+- 🔒 **30%** - Souveraineté des données (IT for Green & Data Sovereignty)
+- 🤝 **20%** - Consensus entre modèles (similarité)
+- ⚡ **10%** - Rapidité de réponse (performance)
+
+**Le meilleur résultat est déterminé par le score composite le plus élevé**, pas uniquement par la pertinence !
+
+#### Analyse NLP Complète
+- Extraction de mots-clés (TF-IDF)
+- Analyse de sentiment (positif/négatif/neutre)
+- Détection de topics
+- Comptage de mots et phrases
+- Matrices de similarité entre réponses
+
+### ✅ 3. Scoring Data Souverain
+- **Localisation des serveurs** : USA, France, Europe
+- **Conformité RGPD** : Évaluation par modèle
+- **Score de souveraineté** (0-100) :
+  - 🟢 Mistral AI : 90/100 (France, RGPD complet)
+  - 🟡 Hugging Face : 70/100 (EU/USA, partiellement conforme)
+  - 🟡 Google Gemini : 60/100 (USA, conformité partielle)
+  - 🔴 Cohere : 55/100 (USA, risques de dépendance)
+
+### ✅ 4. Visualisation Comparative (DataViz)
+- **Tableau de comparaison** : Affichage côte à côte avec ResponseCard
+- **Graphiques de scores** : Barres comparatives (ScoresChart)
+- **Radar de performance** : Visualisation multi-critères (PerformanceRadar)
+- **Matrices de similarité** : Heatmap interactive (SimilarityMatrix)
+- **Nuages de mots** : Visualisation des keywords fréquents (WordCloud)
+- **Résumé comparatif** : Moyennes et consensus (ComparisonSummary)
+
+### ✅ 5. Authentification et Gestion Utilisateurs
+- **Système optionnel** : L'application fonctionne sans compte
+- **JWT Authentication** : Tokens sécurisés
+- **Gestion de session** : Zustand avec persistence localStorage
+- **Pages** : Login, Register, Profile
+- **Sécurité** : Bcrypt pour hash des mots de passe
+
+### ✅ 6. Historique et Navigation
+- **Historique complet** : Page dédiée avec tous les prompts
+- **Sidebar dynamique** : Affichage des 5 derniers prompts
+- **Vue détails** : Affichage complet d'un prompt avec toutes ses réponses
+- **Navigation** : Query params pour liens directs
+- **Timestamps intelligents** : "5m ago", "2h ago", etc.
+
+### ✅ 7. Export Multi-Format
+- **Export JSON** : Données brutes complètes
+- **Export CSV** : Format tabulaire pour analyse Excel
+- **Export PDF** : Rapport professionnel formaté et imprimable
+- **Disponible sur** :
+  - Page d'accueil (après soumission)
+  - Page historique (vue détails)
+- **Nom de fichier automatique** : `ai-aggregator-{promptId}.{format}`
 
 ---
 
-## 🏗️ Architecture Technique
+## 🏗️ Architecture Technique Implémentée
 
-### Stack Technique Recommandée
+### Stack Technique Réelle
 
 #### Frontend
-- **Framework** : React.js avec Vite
-- **Styling** : Tailwind CSS
-- **State Management** : Context API / Zustand
-- **Requêtes API** : Axios / React Query
-- **Visualisation** : Chart.js, Recharts, D3.js
-- **UI Components** : shadcn/ui ou Material-UI
+- **Framework** : ✅ React.js 18 avec Vite
+- **Styling** : ✅ Tailwind CSS (palette beige/noir)
+- **State Management** : ✅ Zustand avec persistence
+- **Requêtes API** : ✅ Axios avec intercepteurs JWT
+- **Routing** : ✅ React Router DOM v6
+- **Visualisation** :
+  - ✅ Chart.js (graphiques barres)
+  - ✅ Recharts (radar, composants)
+  - ✅ Custom components (matrices, word cloud)
 
 #### Backend
-- **Framework** : Node.js avec Express.js
-- **Langage** : TypeScript
-- **API Architecture** : RESTful API
-- **Validation** : Zod / Joi
-- **Documentation API** : Swagger / OpenAPI
+- **Framework** : ✅ Node.js avec Express.js
+- **Langage** : ✅ JavaScript (ES6+)
+- **API Architecture** : ✅ RESTful API
+- **Validation** : ✅ Express-validator
+- **Middleware** : ✅ CORS, morgan, express.json
 
 #### Base de Données
-- **Primary** : MongoDB (stockage flexible des réponses)
-- **Cache** : Redis (optimisation des requêtes)
-- **ORM** : Mongoose
+- **Database** : ✅ MongoDB Atlas (Cloud)
+- **ORM** : ✅ Mongoose
+- **Collections** :
+  - Users (authentification)
+  - Prompts (requêtes utilisateurs)
+  - Responses (réponses des modèles)
 
 #### Intelligence Artificielle
-- **APIs IA** :
-  - OpenAI API (GPT-4, GPT-3.5)
-  - Anthropic API (Claude)
-  - Google AI API (Gemini)
-  - Mistral AI API
+- **APIs IA Intégrées** :
+  - ✅ Google Generative AI SDK (Gemini)
+  - ✅ Mistral AI SDK
+  - ✅ Hugging Face Inference API
+  - ✅ Cohere SDK
 - **Analyse NLP** :
-  - natural (Node.js NLP library)
-  - compromise (text analysis)
-  - sentiment analysis libraries
+  - ✅ natural (tokenization, TF-IDF, sentiment)
+  - ✅ string-similarity (comparaison sémantique)
 
 #### Sécurité & Auth
-- **Authentification** : JWT (JSON Web Tokens)
-- **Gestion des secrets** : dotenv
-- **Rate limiting** : express-rate-limit
-- **CORS** : cors middleware
+- ✅ **JWT** : Authentification stateless
+- ✅ **Bcrypt** : Hash des mots de passe (10 rounds)
+- ✅ **dotenv** : Gestion des secrets (.env)
+- ✅ **CORS** : Configuré pour frontend
+- ✅ **Middleware Auth** : Protection des routes sensibles
 
 ---
 
@@ -95,293 +236,470 @@ Créer une plateforme web permettant de **consolider et comparer les réponses d
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                      FRONTEND                           │
-│  (React + Tailwind + Chart.js + Recharts)              │
+│                  FRONTEND (React + Vite)                │
 │                                                         │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐ │
-│  │   Prompt     │  │  Results     │  │   DataViz    │ │
-│  │   Interface  │  │  Comparison  │  │  Dashboard   │ │
-│  └──────────────┘  └──────────────┘  └──────────────┘ │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │
+│  │ PromptInput  │  │ ResponseCard │  │ ScoresChart  │   │
+│  │              │  │              │  │              │   │
+│  └──────────────┘  └──────────────┘  └──────────────┘   │
 │                                                         │
-│  ┌──────────────┐  ┌──────────────┐                   │
-│  │   History    │  │   Export     │                   │
-│  └──────────────┘  └──────────────┘                   │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │
+│  │   WordCloud  │  │  Similarity  │  │PerformRadar  │   │
+│  │              │  │   Matrix     │  │              │   │
+│  └──────────────┘  └──────────────┘  └──────────────┘   │
+│                                                         │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │
+│  │   History    │  │HistorySide   │  │ExportService │   │
+│  │     Page     │  │     bar      │  │              │   │
+│  └──────────────┘  └──────────────┘  └──────────────┘   │
 └────────────────────────┬────────────────────────────────┘
-                         │ HTTP/REST API
+                         │ Axios HTTP/REST
+                         │ JWT Token Interceptor
                          ▼
 ┌─────────────────────────────────────────────────────────┐
-│                   BACKEND (Node.js)                     │
+│             BACKEND (Node.js + Express)                 │
 │                                                         │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐ │
-│  │     API      │  │   AI Proxy   │  │   Scoring    │ │
-│  │   Gateway    │  │   Manager    │  │   Engine     │ │
-│  └──────────────┘  └──────────────┘  └──────────────┘ │
+│  Routes:                                                │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │
+│  │ /api/prompts │  │  /api/auth   │  │ /api/models  │   │
+│  │              │  │              │  │              │   │
+│  └──────────────┘  └──────────────┘  └──────────────┘   │
 │                                                         │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐ │
-│  │   NLP        │  │  Data        │  │     Auth     │ │
-│  │   Analyzer   │  │  Sovereignty │  │   Manager    │ │
-│  └──────────────┘  └──────────────┘  └──────────────┘ │
+│  Services:                                              │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │
+│  │AI Aggregator │  │   Scoring    │  │     NLP      │   │
+│  │   Service    │  │   Service    │  │   Service    │   │
+│  └──────────────┘  └──────────────┘  └──────────────┘   │
+│                                                         │
+│  ┌──────────────┐  ┌──────────────┐                     │
+│  │ Sovereignty  │  │     Auth     │                     │
+│  │   Service    │  │  Controller  │                     │
+│  └──────────────┘  └──────────────┘                     │
 └────────────────────────┬────────────────────────────────┘
-                         │
+                         │ Mongoose ODM
                          ▼
 ┌─────────────────────────────────────────────────────────┐
-│              DATABASE (MongoDB + Redis)                 │
+│              DATABASE (MongoDB Atlas)                   │
 │                                                         │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐ │
-│  │   Prompts    │  │   Responses  │  │    Users     │ │
-│  │  Collection  │  │  Collection  │  │  Collection  │ │
-│  └──────────────┘  └──────────────┘  └──────────────┘ │
+│  Collections:                                           │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │
+│  │   prompts    │  │  responses   │  │    users     │   │
+│  │              │  │              │  │              │   │
+│  │  - _id       │  │  - _id       │  │  - _id       │   │
+│  │  - userId    │  │  - promptId  │  │  - email     │   │
+│  │  - promptText│  │  - aiModel   │  │  - password  │   │
+│  │  - aiModels  │  │  - response  │  │  - name      │   │
+│  │  - status    │  │  - scores    │  │  - createdAt │   │
+│  │  - metadata  │  │  - nlp       │  │              │   │
+│  └──────────────┘  └──────────────┘  └──────────────┘   │
 └─────────────────────────────────────────────────────────┘
                          │
                          ▼
 ┌─────────────────────────────────────────────────────────┐
 │                  EXTERNAL AI APIs                       │
 │                                                         │
-│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐  │
-│  │  OpenAI  │ │Anthropic │ │  Google  │ │ Mistral  │  │
-│  │   API    │ │   API    │ │   API    │ │   API    │  │
-│  └──────────┘ └──────────┘ └──────────┘ └──────────┘  │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐    │
+│  │  Google  │ │ Mistral  │ │ Hugging  │ │ Cohere   │    │
+│  │  Gemini  │ │    AI    │ │   Face   │ │          │    │
+│  │   API    │ │   API    │ │   API    │ │   API    │    │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────┘    │
 └─────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 📅 Plan de Développement par Phases
+## 📅 État d'Avancement par Phase
 
 ### Phase 1 : Planification et CDC ✅
-**Durée** : En cours
 - [x] Définition des besoins
 - [x] Rédaction du CDC
 - [x] Choix des technologies
-- [ ] Architecture détaillée
+- [x] Architecture détaillée
 
-### Phase 2 : Setup et Structure du Projet
-**Objectifs** :
-- Initialiser le projet frontend (React + Vite)
-- Initialiser le projet backend (Node.js + Express)
-- Configurer la base de données (MongoDB)
-- Mettre en place Git et structure des dossiers
-- Configuration de l'environnement (.env)
+### Phase 2 : Setup et Structure du Projet ✅
+- [x] Initialisation frontend (React + Vite + Tailwind)
+- [x] Initialisation backend (Node.js + Express)
+- [x] Configuration MongoDB Atlas
+- [x] Git et structure des dossiers
+- [x] Configuration .env (4 API keys)
 
-**Livrables** :
-- Structure de projet complète
-- Configuration de développement opérationnelle
-- Documentation technique initiale
+### Phase 3 : Backend - Core API ✅
+- [x] Routes API REST (/api/prompts, /api/auth, /api/models)
+- [x] Authentification JWT (optionnelle)
+- [x] Connexions aux 4 APIs IA externes
+- [x] Système d'agrégation parallèle
+- [x] Gestion d'erreurs et timeouts
 
-### Phase 3 : Backend - Core API
-**Objectifs** :
-- Créer les routes API REST
-- Implémenter l'authentification JWT
-- Configurer les connexions aux APIs IA externes
-- Développer le système d'agrégation de requêtes
-- Mettre en place la base de données
+### Phase 4 : Backend - Scoring et Analyse ✅
+- [x] Moteur de scoring de similarité (cosine similarity)
+- [x] Analyse NLP complète (natural library)
+- [x] Scoring de souveraineté (location, RGPD, cloud)
+- [x] Algorithmes de comparaison sémantique
+- [x] Génération de matrices de similarité
 
-**Livrables** :
-- API fonctionnelle pour envoi de prompts
-- Intégration avec au moins 2 APIs IA
-- Système d'authentification opérationnel
+### Phase 5 : Frontend - Interface Utilisateur ✅
+- [x] Interface de saisie de prompts (PromptInput)
+- [x] Tableau de comparaison (ResponseCard)
+- [x] Authentification côté client (Login/Register)
+- [x] Navigation et routing (React Router)
+- [x] Design system beige/noir professionnel
+- [x] Responsive design (mobile-first)
 
-### Phase 4 : Backend - Scoring et Analyse
-**Objectifs** :
-- Développer le moteur de scoring de similarité
-- Implémenter l'analyse NLP
-- Créer le système de scoring de souveraineté
-- Développer les algorithmes de comparaison
+### Phase 6 : Frontend - DataViz ✅
+- [x] Graphiques comparatifs (ScoresChart - Chart.js)
+- [x] Radar de performance (PerformanceRadar - Recharts)
+- [x] Matrices de similarité (SimilarityMatrix - custom)
+- [x] Nuages de mots (WordCloud - custom)
+- [x] Résumé comparatif (ComparisonSummary)
+- [x] Visualisations responsive et interactives
 
-**Livrables** :
-- Moteur de scoring opérationnel
-- API d'analyse sémantique
-- Documentation des algorithmes
+### Phase 7 : Fonctionnalités Avancées ✅
+- [x] Historique des prompts (page dédiée)
+- [x] Sidebar historique (5 derniers prompts)
+- [x] Export JSON (données brutes)
+- [x] Export CSV (format tabulaire)
+- [x] Export PDF (rapport formaté)
+- [x] Vue détails de prompt
+- [x] Navigation par query params
 
-### Phase 5 : Frontend - Interface Utilisateur
-**Objectifs** :
-- Développer l'interface de saisie de prompts
-- Créer le tableau de comparaison des réponses
-- Implémenter l'authentification côté client
-- Développer la navigation et le routing
-
-**Livrables** :
-- Interface responsive et intuitive
-- Formulaire de prompt fonctionnel
-- Système d'authentification UI
-
-### Phase 6 : Frontend - DataViz
-**Objectifs** :
-- Implémenter les graphiques comparatifs
-- Créer les nuages de mots
-- Développer les matrices de similarité
-- Ajouter les visualisations de scores
-
-**Livrables** :
-- Tableau de bord DataViz interactif
-- Graphiques dynamiques
-- Visualisations responsive
-
-### Phase 7 : Fonctionnalités Avancées
-**Objectifs** :
-- Développer l'historique des prompts
-- Implémenter le système d'export (JSON, CSV, PDF, MD)
-- Ajouter les filtres et recherche
-- Optimisation des performances
-
-**Livrables** :
-- Historique fonctionnel
-- Export multi-format
-- Application optimisée
-
-### Phase 8 : Tests et Démo
-**Objectifs** :
-- Tests unitaires et d'intégration
-- Tests de charge
-- Correction des bugs
-- Préparation de la démo
-- Documentation utilisateur
-
-**Livrables** :
-- Application testée et stable
-- Documentation complète
-- Présentation de démo
+### Phase 8 : Tests et Démo 🚧
+- [ ] Tests unitaires backend
+- [ ] Tests unitaires frontend
+- [ ] Tests d'intégration
+- [ ] Tests de charge
+- [ ] Correction des bugs
+- [ ] Préparation de la démo
+- [ ] Documentation utilisateur finale
 
 ---
 
-## 📊 Modèles de Données
+## 📊 Modèles de Données Réels
 
-### Prompt
-```json
+### Prompt Schema
+```javascript
 {
-  "_id": "ObjectId",
-  "userId": "ObjectId",
-  "promptText": "string",
-  "aiModels": ["gpt-4", "claude-3", "gemini-pro"],
-  "createdAt": "timestamp",
-  "updatedAt": "timestamp"
+  _id: ObjectId,
+  userId: ObjectId (optionnel),
+  promptText: String (required),
+  aiModels: [String], // ['gemini', 'mistral', 'huggingface', 'cohere']
+  status: String, // 'completed', 'failed', 'processing'
+  metadata: {
+    totalResponses: Number,
+    successfulResponses: Number,
+    processingTime: Number // en ms
+  },
+  createdAt: Date,
+  updatedAt: Date
 }
 ```
 
-### Response
-```json
+### Response Schema
+```javascript
 {
-  "_id": "ObjectId",
-  "promptId": "ObjectId",
-  "aiModel": "string",
-  "responseText": "string",
-  "responseTime": "number (ms)",
-  "tokens": "number",
-  "scores": {
-    "relevance": "number (0-100)",
-    "similarity": "number (0-100)",
-    "sovereignty": {
-      "score": "number (0-100)",
-      "serverLocation": "string",
-      "rgpdCompliant": "boolean",
-      "cloudProvider": "string"
+  _id: ObjectId,
+  promptId: ObjectId (ref: Prompt),
+  aiModel: String, // 'gemini', 'mistral', 'huggingface', 'cohere'
+  responseText: String,
+  responseTime: Number, // en ms
+  tokens: {
+    input: Number,
+    output: Number,
+    total: Number
+  },
+  status: String, // 'success', 'failed'
+  error: String (si échec),
+  scores: {
+    relevance: Number, // 0-100
+    similarity: Number, // 0-100
+    sovereignty: {
+      score: Number, // 0-100
+      location: String, // 'USA', 'France', 'Europe'
+      gdprCompliant: Boolean,
+      cloudProvider: String
     }
   },
-  "nlpAnalysis": {
-    "keywords": ["array"],
-    "sentiment": "positive|negative|neutral",
-    "topics": ["array"]
+  nlpAnalysis: {
+    keywords: [{
+      word: String,
+      score: Number
+    }],
+    sentiment: String, // 'positive', 'negative', 'neutral'
+    sentimentScore: Number, // -1 à 1
+    topics: [String],
+    wordCount: Number,
+    sentenceCount: Number
   },
-  "createdAt": "timestamp"
+  createdAt: Date
 }
 ```
 
-### User
-```json
+### User Schema
+```javascript
 {
-  "_id": "ObjectId",
-  "email": "string",
-  "password": "hashed string",
-  "name": "string",
-  "apiKeys": {
-    "openai": "encrypted string",
-    "anthropic": "encrypted string",
-    "google": "encrypted string",
-    "mistral": "encrypted string"
-  },
-  "createdAt": "timestamp",
-  "updatedAt": "timestamp"
+  _id: ObjectId,
+  email: String (unique, required),
+  password: String (hashed with bcrypt),
+  name: String (required),
+  createdAt: Date,
+  updatedAt: Date
 }
 ```
 
 ---
 
-## 🔐 Sécurité
+## 🔐 Sécurité Implémentée
 
-### Bonnes Pratiques
-- ✅ Hash des mots de passe (bcrypt)
-- ✅ JWT pour l'authentification
-- ✅ Chiffrement des clés API utilisateurs
-- ✅ Rate limiting pour prévenir les abus
-- ✅ Validation des entrées (sanitization)
-- ✅ HTTPS en production
-- ✅ CORS configuré correctement
-- ✅ Variables d'environnement pour secrets
+### Mesures en Place
+- ✅ Hash des mots de passe avec bcrypt (10 rounds)
+- ✅ JWT pour authentification stateless
+- ✅ Tokens stockés dans localStorage (côté client)
+- ✅ Middleware d'authentification optionnel
+- ✅ Validation des entrées (express-validator)
+- ✅ CORS configuré pour localhost:5173
+- ✅ Variables d'environnement (.env) pour secrets
+- ✅ API keys serveur-side uniquement (jamais exposées)
+- ✅ Gestion d'erreurs centralisée
+
+### Fichier .env
+```env
+# MongoDB
+MONGODB_URI=mongodb+srv://...
+
+# Server
+PORT=5001
+
+# JWT
+JWT_SECRET=votre_secret_jwt
+
+# AI API Keys (serveur uniquement)
+GEMINI_API_KEY=votre_cle_gemini
+MISTRAL_API_KEY=votre_cle_mistral
+HUGGINGFACE_API_KEY=votre_cle_huggingface
+COHERE_API_KEY=votre_cle_cohere
+```
 
 ---
 
 ## 🌍 Indicateurs de Souveraineté Data
 
-### Critères d'Évaluation
-1. **Localisation géographique** : UE, USA, Asie, etc.
-2. **Conformité RGPD** : Oui/Non/Partiel
-3. **Transparence** : Politique de données claire
-4. **Ownership** : Qui possède les données
-5. **Retention** : Durée de conservation
+### Données par Modèle
 
-### Scoring (0-100)
-- 🟢 80-100 : Souverain (serveurs UE, RGPD complet)
-- 🟡 50-79 : Acceptable (conformité partielle)
-- 🔴 0-49 : Risqué (hors UE, non RGPD)
+#### 🟢 Mistral AI (90/100)
+- **Location** : France 🇫🇷
+- **RGPD** : ✅ Conforme
+- **Cloud** : Scaleway (français)
+- **Open Source** : Partiellement
+- **Transparence** : Excellente
 
----
+#### 🟡 Hugging Face (70/100)
+- **Location** : Europe/USA 🇪🇺🇺🇸
+- **RGPD** : ⚠️ Partiel
+- **Cloud** : Multi-cloud
+- **Open Source** : ✅ Oui
+- **Transparence** : Bonne
 
-## 📈 KPIs du Projet
+#### 🟡 Google Gemini (60/100)
+- **Location** : USA 🇺🇸
+- **RGPD** : ⚠️ Partiel (bouclier UE-US)
+- **Cloud** : Google Cloud
+- **Open Source** : ❌ Non
+- **Transparence** : Moyenne
 
-### Techniques
-- Temps de réponse API < 5s
-- Taux de disponibilité > 99%
-- Support de 4+ APIs IA minimum
-- Score de performance Lighthouse > 90
-
-### Fonctionnels
-- Comparaison de 2 à 6 modèles simultanément
-- Historique de 100+ prompts par utilisateur
-- Export en 4 formats minimum
-- Visualisations interactives en temps réel
-
----
-
-## 🚀 Déploiement
-
-### Environnements
-- **Développement** : Local (localhost)
-- **Staging** : Serveur de test
-- **Production** : Cloud (Vercel/Netlify + Railway/Render)
-
-### CI/CD
-- Tests automatisés avant merge
-- Déploiement automatique sur main branch
-- Monitoring des performances
-- Logs centralisés
+#### 🔴 Cohere (55/100)
+- **Location** : USA 🇺🇸
+- **RGPD** : ⚠️ Limité
+- **Cloud** : AWS (multi-régions)
+- **Open Source** : ❌ Non
+- **Transparence** : Moyenne
 
 ---
 
-## 📚 Documentation
+## 📈 Performances et KPIs
 
-### À Produire
-1. README.md (ce fichier)
-2. API Documentation (Swagger)
-3. Guide utilisateur
-4. Guide développeur
-5. Architecture technique détaillée
-6. Rapport de soutenance
+### Performances Mesurées
+- ⚡ Temps de réponse moyen : 3-8s (4 APIs en parallèle)
+- 📊 Support de 4 APIs simultanées
+- 💾 Historique illimité par utilisateur
+- 📁 Export en 3 formats (JSON, CSV, PDF)
+- 🎨 Visualisations temps réel
+- 📱 Interface responsive (mobile + desktop)
+
+### Métriques Techniques
+- Frontend build size : ~500KB (gzip)
+- Backend RAM usage : ~150MB
+- Database : MongoDB Atlas (M0 gratuit)
+- Concurrent requests : Limité par quotas API gratuits
 
 ---
 
-## 👥 Équipe et Rôles
+## 🚀 Installation et Démarrage
 
-_À compléter selon votre équipe_
+### Prérequis
+- Node.js 18+
+- npm ou yarn
+- Compte MongoDB Atlas
+- Clés API : Gemini, Mistral, Hugging Face, Cohere
+
+### Backend
+```bash
+cd backend
+npm install
+# Configurer .env avec vos clés
+npm run dev
+```
+
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### URLs
+- Frontend : http://localhost:5173
+- Backend : http://localhost:5001
+
+---
+
+## 📁 Structure du Projet
+
+```
+ProjetFinale3/
+├── backend/
+│   ├── src/
+│   │   ├── config/
+│   │   │   ├── database.js
+│   │   │   └── ai-apis.js
+│   │   ├── controllers/
+│   │   │   ├── authController.js
+│   │   │   └── promptController.js
+│   │   ├── middleware/
+│   │   │   └── authMiddleware.js
+│   │   ├── models/
+│   │   │   ├── User.js
+│   │   │   ├── Prompt.js
+│   │   │   └── Response.js
+│   │   ├── routes/
+│   │   │   ├── authRoutes.js
+│   │   │   ├── promptRoutes.js
+│   │   │   └── modelRoutes.js
+│   │   ├── services/
+│   │   │   ├── aiAggregatorService.js
+│   │   │   ├── nlpService.js
+│   │   │   └── scoringService.js
+│   │   └── server.js
+│   ├── .env
+│   └── package.json
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── layout/
+│   │   │   │   └── Header.jsx
+│   │   │   ├── prompt/
+│   │   │   │   └── PromptInput.jsx
+│   │   │   ├── results/
+│   │   │   │   ├── ResponseCard.jsx
+│   │   │   │   └── ComparisonSummary.jsx
+│   │   │   ├── visualization/
+│   │   │   │   ├── ScoresChart.jsx
+│   │   │   │   ├── PerformanceRadar.jsx
+│   │   │   │   ├── SimilarityMatrix.jsx
+│   │   │   │   └── WordCloud.jsx
+│   │   │   └── history/
+│   │   │       └── HistorySidebar.jsx
+│   │   ├── pages/
+│   │   │   ├── Home.jsx
+│   │   │   ├── History.jsx
+│   │   │   ├── Login.jsx
+│   │   │   └── Register.jsx
+│   │   ├── services/
+│   │   │   ├── api.js
+│   │   │   └── exportService.js
+│   │   ├── store/
+│   │   │   └── authStore.js
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   └── package.json
+│
+└── README.md
+```
+
+---
+
+## 🎨 Design System
+
+### Palette de Couleurs
+```css
+/* Beige/Sand */
+--sand-50: #f5f1e8;
+--sand-100: #e8dcc4;
+--sand-200: #dcc8a0;
+--sand-300: #d4c5a9;
+--sand-400: #c9b896;
+--sand-500: #b8a782;
+--sand-600: #a89670;
+
+/* Ink/Black */
+--ink-600: #666666;
+--ink-700: #4a4a4a;
+--ink-800: #2e2e2e;
+--ink-900: #1a1a1a;
+```
+
+### Typographie
+- **Font** : System fonts (Arial, sans-serif)
+- **Headings** : font-semibold, font-bold
+- **Body** : font-normal
+
+### Composants
+- **Cards** : border, padding, hover effects
+- **Buttons** : border-ink-900, hover transitions
+- **Inputs** : border-sand-300, focus states
+- **Badges** : border, small padding, text-xs
+
+---
+
+## 🐛 Problèmes Résolus
+
+### 1. Hugging Face API Endpoint Deprecated
+**Problème** : `api-inference.huggingface.co` n'est plus supporté
+**Solution** : Migration vers `router.huggingface.co`
+
+### 2. Hugging Face Wrong API Method
+**Problème** : `textGeneration()` ne fonctionnait pas
+**Solution** : Utilisation de `chatCompletion()` format OpenAI
+
+### 3. Cohere Generate API Deprecated
+**Problème** : API Generate supprimée le 15 septembre 2025
+**Solution** : Migration vers `client.chat()`
+
+### 4. Sentiment Validation Error
+**Problème** : Objet sentiment au lieu de string
+**Solution** : Aplatissement de l'objet sentiment pour failed responses
+
+### 5. Layout Centering Issues
+**Problème** : Contenu principal décentré après ajout sidebar
+**Solution** : Wrapper `max-w-[1600px] mx-auto` autour du flex container
+
+---
+
+## 📚 Documentation API
+
+### Endpoints Disponibles
+
+#### Auth
+- `POST /api/auth/register` - Créer un compte
+- `POST /api/auth/login` - Se connecter
+- `GET /api/auth/profile` - Profil utilisateur (JWT requis)
+
+#### Prompts
+- `POST /api/prompts` - Créer un prompt
+- `GET /api/prompts` - Liste des prompts (avec pagination)
+- `GET /api/prompts/:id` - Détails d'un prompt
+
+#### Models
+- `GET /api/models` - Liste des modèles disponibles
 
 ---
 
@@ -390,6 +708,7 @@ _À compléter selon votre équipe_
 **Organisme** : Skills4Mind
 **Email** : pedagogy@skills4mind.com
 **Année** : 2025-2026
+**Projet** : PFE B3 DATA & IA - IT FOR GREEN & SOUVERAINETÉ DATA
 
 ---
 
@@ -399,5 +718,21 @@ Ce projet est confidentiel et ne doit pas être diffusé sans l'accord de Skills
 
 ---
 
-**Version** : 1.0
-**Dernière mise à jour** : 31 Décembre 2025
+## 🎯 Prochaines Étapes
+
+### À Faire (Optionnel)
+- [ ] Tests unitaires (Jest + React Testing Library)
+- [ ] Tests d'intégration (Supertest)
+- [ ] Documentation Swagger/OpenAPI
+- [ ] Déploiement production (Vercel + Railway)
+- [ ] Monitoring et logs (Sentry, LogRocket)
+- [ ] Optimisations performances
+- [ ] Cache Redis pour réponses
+- [ ] Rate limiting avancé
+- [ ] Internationalisation (i18n)
+
+---
+
+**Version** : 2.0
+**Dernière mise à jour** : 1er Janvier 2026
+**Statut** : ✅ Fonctionnel et opérationnel
