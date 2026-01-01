@@ -7,6 +7,8 @@ const PromptInput = ({ onSubmit, loading }) => {
   const aiModels = [
     { id: 'gemini', name: 'Gemini 2.5', provider: 'Google', sovereignty: 60 },
     { id: 'mistral', name: 'Mistral', provider: 'Mistral AI', sovereignty: 90 },
+    { id: 'huggingface', name: 'DeepSeek-R1', provider: 'Hugging Face', sovereignty: 70 },
+    { id: 'cohere', name: 'Command', provider: 'Cohere', sovereignty: 55 },
   ];
 
   const handleSubmit = (e) => {

@@ -19,13 +19,13 @@ const ComparisonSummary = ({ summary }) => {
 
         <div className="border border-sand-300 p-4">
           <p className="text-xs text-ink-600 mb-1">Avg Relevance</p>
-          <p className="text-3xl font-bold text-ink-900">{summary.averageRelevance}</p>
+          <p className="text-3xl font-bold text-ink-900">{summary.averageRelevance?.toFixed(2) || 0}</p>
           <p className="text-xs text-ink-600 mt-1">out of 100</p>
         </div>
 
         <div className="border border-sand-300 p-4">
           <p className="text-xs text-ink-600 mb-1">Consensus</p>
-          <p className="text-3xl font-bold text-ink-900">{summary.consensusLevel}%</p>
+          <p className="text-3xl font-bold text-ink-900">{summary.consensusLevel?.toFixed(2) || 0}%</p>
           <p className="text-xs text-ink-600 mt-1">similarity</p>
         </div>
 

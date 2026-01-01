@@ -35,8 +35,10 @@ export const initHuggingFace = () => {
     console.warn('⚠️  Hugging Face API key not found');
     return null;
   }
-  const hf = new HfInference(process.env.HUGGINGFACE_API_KEY);
-  console.log('✅ Hugging Face initialized');
+  const hf = new HfInference(process.env.HUGGINGFACE_API_KEY, {
+    baseUrl: 'https://router.huggingface.co'
+  });
+  console.log('✅ Hugging Face initialized (using router.huggingface.co)');
   return hf;
 };
 
@@ -110,15 +112,15 @@ export const AI_MODELS_CONFIG = {
     description: 'Mistral Tiny - Gratuit'
   },
   huggingface: {
-    model: 'mistralai/Mistral-7B-Instruct-v0.2',
+    model: 'deepseek-ai/DeepSeek-R1-Distill-Qwen-32B:novita',
     maxTokens: 1024,
     temperature: 0.7,
     rateLimit: 100,
-    description: 'Mistral 7B via Hugging Face - Gratuit',
+    description: 'DeepSeek-R1-Distill via Hugging Face - Gratuit',
     alternatives: [
-      'meta-llama/Llama-2-7b-chat-hf',
-      'tiiuae/falcon-7b-instruct',
-      'google/flan-t5-large'
+      'deepseek-ai/DeepSeek-R1:novita',
+      'Qwen/Qwen2.5-Coder-32B-Instruct',
+      'meta-llama/Llama-3.2-1B-Instruct'
     ]
   },
   cohere: {

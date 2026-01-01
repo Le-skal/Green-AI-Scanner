@@ -168,24 +168,26 @@ class AIAggregatorService {
    * @private
    */
   async callHuggingFace(client, prompt, options) {
-    const result = await client.textGeneration({
+    const result = await client.chatCompletion({
       model: AI_MODELS_CONFIG.huggingface.model,
-      inputs: prompt,
-      parameters: {
-        max_new_tokens: options.maxTokens,
-        temperature: options.temperature,
-        return_full_text: false
-      }
+      messages: [
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      max_tokens: options.maxTokens,
+      temperature: options.temperature
     });
 
-    const text = result.generated_text || result;
+    const text = result.choices[0].message.content;
 
     return {
       text,
       tokens: {
-        input: prompt.length / 4,
-        output: text.length / 4,
-        total: (prompt.length + text.length) / 4
+        input: result.usage?.prompt_tokens || prompt.length / 4,
+        output: result.usage?.completion_tokens || text.length / 4,
+        total: result.usage?.total_tokens || (prompt.length + text.length) / 4
       }
     };
   }
@@ -195,21 +197,22 @@ class AIAggregatorService {
    * @private
    */
   async callCohere(client, prompt, options) {
-    const response = await client.generate({
-      prompt,
+    // Use Chat API (generate API was deprecated September 2025)
+    const response = await client.chat({
+      message: prompt,
       model: AI_MODELS_CONFIG.cohere.model,
       max_tokens: options.maxTokens,
       temperature: options.temperature
     });
 
-    const text = response.generations[0].text;
+    const text = response.text;
 
     return {
       text,
       tokens: {
-        input: prompt.length / 4,
-        output: text.length / 4,
-        total: (prompt.length + text.length) / 4
+        input: response.meta?.tokens?.input_tokens || prompt.length / 4,
+        output: response.meta?.tokens?.output_tokens || text.length / 4,
+        total: (response.meta?.tokens?.input_tokens + response.meta?.tokens?.output_tokens) || (prompt.length + text.length) / 4
       }
     };
   }

@@ -25,6 +25,7 @@ class ScoringService {
     // Calculer les scores pour chaque réponse
     const scoredResponses = responses.map((response, index) => {
       if (response.status !== 'success' || !response.responseText) {
+        const emptyAnalysis = this.nlpService.getEmptyAnalysis();
         return {
           ...response,
           scores: {
@@ -32,7 +33,14 @@ class ScoringService {
             similarity: null,
             sovereignty: response.sovereignty
           },
-          nlpAnalysis: this.nlpService.getEmptyAnalysis()
+          nlpAnalysis: {
+            keywords: emptyAnalysis.keywords,
+            sentiment: emptyAnalysis.sentiment.sentiment,
+            sentimentScore: emptyAnalysis.sentiment.score,
+            topics: emptyAnalysis.topics,
+            wordCount: emptyAnalysis.wordCount,
+            sentenceCount: emptyAnalysis.sentenceCount
+          }
         };
       }
 

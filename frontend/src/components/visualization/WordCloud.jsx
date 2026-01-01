@@ -7,10 +7,14 @@ const WordCloud = ({ responses }) => {
   responses.forEach((response) => {
     const keywords = response.nlpAnalysis?.keywords || [];
     keywords.forEach(keyword => {
-      if (keywordMap[keyword]) {
-        keywordMap[keyword]++;
-      } else {
-        keywordMap[keyword] = 1;
+      // Keywords are objects with {word, count, relevance}
+      const word = typeof keyword === 'string' ? keyword : keyword.word;
+      if (word) {
+        if (keywordMap[word]) {
+          keywordMap[word]++;
+        } else {
+          keywordMap[word] = 1;
+        }
       }
     });
   });
