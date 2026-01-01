@@ -703,15 +703,6 @@ ProjetFinale3/
 
 ---
 
-## 📞 Contact
-
-**Organisme** : Skills4Mind
-**Email** : pedagogy@skills4mind.com
-**Année** : 2025-2026
-**Projet** : PFE B3 DATA & IA - IT FOR GREEN & SOUVERAINETÉ DATA
-
----
-
 ## 📝 Licence
 
 Ce projet est confidentiel et ne doit pas être diffusé sans l'accord de Skills4Mind.
