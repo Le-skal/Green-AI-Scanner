@@ -137,15 +137,15 @@ export const AI_MODELS_CONFIG = {
     description: 'Mistral Tiny - Gratuit'
   },
   huggingface: {
-    model: 'deepseek-ai/DeepSeek-R1-Distill-Qwen-32B:novita',
+    model: 'meta-llama/Llama-3.2-3B-Instruct',
     maxTokens: 1024,
     temperature: 0.7,
     rateLimit: 100,
-    description: 'DeepSeek-R1-Distill via Hugging Face - Gratuit',
+    description: 'Meta Llama 3.2 3B via Hugging Face - Gratuit',
     alternatives: [
-      'deepseek-ai/DeepSeek-R1:novita',
-      'Qwen/Qwen2.5-Coder-32B-Instruct',
-      'meta-llama/Llama-3.2-1B-Instruct'
+      'meta-llama/Llama-3.2-1B-Instruct',
+      'microsoft/Phi-3.5-mini-instruct',
+      'Qwen/Qwen2.5-Coder-7B-Instruct'
     ]
   },
   cohere: {

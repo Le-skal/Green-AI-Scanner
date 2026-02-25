@@ -7,7 +7,7 @@ const PromptInput = ({ onSubmit, loading }) => {
   const aiModels = [
     { id: 'gemini', name: 'Gemini 2.5', provider: 'Google' },
     { id: 'mistral', name: 'Mistral', provider: 'Mistral AI' },
-    { id: 'huggingface', name: 'DeepSeek-R1', provider: 'Hugging Face' },
+    { id: 'huggingface', name: 'Llama 3.2 3B', provider: 'Hugging Face' },
     { id: 'cohere', name: 'Command', provider: 'Cohere' },
   ];
 

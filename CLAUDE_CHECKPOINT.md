@@ -15,7 +15,7 @@
 4. **Système de scoring scientifique** - BM25, TF-IDF, ROUGE, Sovereignty, Speed
 5. **Analyse NLP** - Extraction de mots-clés, sentiment, topics
 6. **Data Visualization** - 4 composants de visualisation
-7. **Swagger Documentation** - API REST documentée et testable (http://localhost:5001/api-docs)
+7. **Swagger Documentation** - API REST documentée et testable (http://localhost:5000/api-docs)
 8. **SOLID Refactoring** - Architecture respectant Single Responsibility Principle
 9. **Code Cleanup** - Suppression des emojis du code (logs professionnels)
 10. **Sovereignty Service** - Calcul dynamique 3 composantes (Hosting 50pts + Company 30pts + License 20pts)
@@ -49,9 +49,9 @@
 ## Services en Cours
 
 ### Backend
-- **Port**: `5001` (NE PAS utiliser 5000)
-- **URL**: http://localhost:5001/api
-- **Swagger**: http://localhost:5001/api-docs
+- **Port**: `5000` (NE PAS utiliser 5000)
+- **URL**: http://localhost:5000/api
+- **Swagger**: http://localhost:5000/api-docs
 - **Commande**: `cd backend && npm run dev`
 - **Status**: Prêt à démarrer
 
@@ -165,7 +165,7 @@ import WordCloud from './components/visualization/WordCloud';
 
 ### 2. Port 5000 Occupé
 - **Erreur**: EADDRINUSE
-- **Solution**: Changé PORT à 5001
+- **Solution**: Changé PORT à 5000
 - **Fichier**: `backend/.env`
 
 ### 3. userId Required
@@ -186,7 +186,7 @@ import WordCloud from './components/visualization/WordCloud';
 ```bash
 cd backend
 npm run dev
-# Attendre: "✅ MongoDB connected" + "Server running on port 5001"
+# Attendre: "✅ MongoDB connected" + "Server running on port 5000"
 ```
 
 ### 2. Démarrer le Frontend
@@ -240,7 +240,7 @@ npm run dev
 - `backend/src/routes/prompts.js` - Documentation JSDoc complète
 - `backend/src/routes/auth.js` - Documentation JSDoc complète
 
-**Accès**: http://localhost:5001/api-docs
+**Accès**: http://localhost:5000/api-docs
 
 ### 2. Captures d'écran Frontend
 **Objectif**: Documentation visuelle de l'interface
@@ -374,7 +374,7 @@ backend/src/services/ai/
 ## Fichiers Clés
 
 ### Configuration
-- `backend/.env` - Variables d'environnement (PORT=5001, API keys)
+- `backend/.env` - Variables d'environnement (PORT=5000, API keys)
 - `backend/src/config/ai-apis.js` - Config des APIs (models, sovereignty)
 - `backend/src/config/swagger.js` - Configuration Swagger/OpenAPI (NOUVEAU)
 - `frontend/tailwind.config.js` - Palette beige/noir
@@ -408,7 +408,7 @@ backend/src/services/ai/
 
 ## Notes Importantes
 
-1. **TOUJOURS utiliser le port 5001** pour le backend (5000 est occupé)
+1. **TOUJOURS utiliser le port 5000** pour le backend (5000 est occupé)
 2. **Model Gemini**: `gemini-2.5-flash` (PAS gemini-pro)
 3. **Design**: Minimal border-radius (2-6px), palette beige/noir
 4. **Chart.js**: Déjà installé et optimisé par Vite
@@ -769,11 +769,11 @@ cd ../frontend && npm run dev
 
 # Tuer les processus Node (si port occupé)
 # Windows:
-netstat -ano | findstr :5001
+netstat -ano | findstr :5000
 taskkill /PID <PID> /F
 
 # Tester backend directement
-curl http://localhost:5001/api/prompts/models
+curl http://localhost:5000/api/prompts/models
 
 # Vérifier MongoDB
 # Login Atlas: https://cloud.mongodb.com

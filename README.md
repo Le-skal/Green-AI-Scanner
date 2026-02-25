@@ -89,7 +89,7 @@ Ce projet s'inscrit dans le cadre du **PFE 2025-2026** avec pour objectifs :
 - Envoi simultané vers 4 APIs d'IA :
   - **Google Gemini** (Gemini 2.0 Flash)
   - **Mistral AI** (Mistral Large Latest)
-  - **Hugging Face** (DeepSeek-R1-Distill-Qwen-32B)
+  - **Hugging Face** (Meta Llama 3.2 3B)
   - **Cohere** (Command)
 - Gestion des timeouts et erreurs par API
 - Agrégation parallèle des réponses
@@ -589,7 +589,7 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 MONGODB_URI=mongodb+srv://...
 
 # Server
-PORT=5001
+PORT=5000
 
 # JWT
 JWT_SECRET=votre_secret_jwt
@@ -680,7 +680,7 @@ npm run dev
 
 ### URLs
 - Frontend : http://localhost:5173
-- Backend : http://localhost:5001
+- Backend : http://localhost:5000
 
 ---
 
@@ -825,6 +825,10 @@ ProjetFinale3/
 
 ## Documentation API
 
+**Documentation interactive Swagger**: [http://localhost:5000/api-docs](http://localhost:5000/api-docs)
+
+L'API REST est entièrement documentée avec Swagger/OpenAPI. Vous pouvez tester tous les endpoints directement depuis l'interface Swagger.
+
 ### Endpoints Disponibles
 
 #### Auth
@@ -841,10 +845,6 @@ ProjetFinale3/
 - `GET /api/models` - Liste des modèles disponibles
 
 ---
-
-## Licence
-
-Ce projet est confidentiel et ne doit pas être diffusé sans l'accord de Skills4Mind.
 
 ---
 
