@@ -60,17 +60,49 @@ const ScoringGuide = () => {
             {/* Sovereignty */}
             <div className="border border-sand-300 p-4">
               <div className="mb-3">
-                <h3 className="font-semibold text-ink-900">Data Sovereignty</h3>
+                <h3 className="font-semibold text-ink-900">Data Sovereignty (Dynamic)</h3>
                 <p className="text-xs text-ink-600">Weight: 25% - Privacy Matters</p>
               </div>
               <p className="text-sm text-ink-700 mb-2">
-                <strong>What it measures:</strong> Data privacy and GDPR compliance
+                <strong>What it measures:</strong> Data sovereignty calculated with 3 components (0-100)
               </p>
               <p className="text-xs text-ink-600 mb-2">
-                <strong>Scoring:</strong> EU servers (90) &gt; USA servers (60)
+                <strong>Formula:</strong> Hosting (50pts) + Company (30pts) + License (20pts)
+              </p>
+              <p className="text-xs text-ink-600 mb-1">
+                <strong>Hosting:</strong> France=50, EU=40, USA=20
+              </p>
+              <p className="text-xs text-ink-600 mb-1">
+                <strong>Company:</strong> France=30, EU=25, USA=15
+              </p>
+              <p className="text-xs text-ink-600 mb-2">
+                <strong>License:</strong> Open Source=20, Open Weights=15, Proprietary=5
               </p>
               <p className="text-xs text-ink-600">
-                <strong>Why:</strong> IT for Green & Data Sovereignty principles
+                <strong>Features:</strong> RGPD compliance, Cloud Act Risk detection, recommendations
+              </p>
+            </div>
+
+            {/* Green IT */}
+            <div className="border border-sand-300 p-4 bg-green-50">
+              <div className="mb-3">
+                <h3 className="font-semibold text-ink-900">Green IT Impact (NEW)</h3>
+                <p className="text-xs text-ink-600">Ecological Footprint Analysis</p>
+              </div>
+              <p className="text-sm text-ink-700 mb-2">
+                <strong>What it measures:</strong> CO2 emissions and energy consumption per request
+              </p>
+              <p className="text-xs text-ink-600 mb-1">
+                <strong>Energy:</strong> kWh per 1000 tokens (Mistral=0.002, Gemini=0.005)
+              </p>
+              <p className="text-xs text-ink-600 mb-1">
+                <strong>Carbon:</strong> France=50g CO2/kWh, USA=380g CO2/kWh (IEA 2024)
+              </p>
+              <p className="text-xs text-ink-600 mb-2">
+                <strong>Eco-Score:</strong> A to E rating (like Nutri-score)
+              </p>
+              <p className="text-xs text-ink-600">
+                <strong>Result:</strong> Mistral (France) is 7.6x more eco-friendly than Gemini (USA)
               </p>
             </div>
 

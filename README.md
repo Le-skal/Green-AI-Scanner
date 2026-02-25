@@ -144,12 +144,34 @@ Ce projet utilise des algorithmes et métriques **scientifiquement validés** is
      - Standard académique pour l'évaluation NLP
      - Capture à la fois le contenu et la structure
 
-4. **Score de Souveraineté** (0-100) :
-   - Localisation des serveurs (France > Europe > USA)
-   - Conformité RGPD
-   - Type de cloud provider
+4. **Score de Souveraineté Dynamique** (0-100) - **AMÉLIORÉ** :
+   - **Calcul scientifique en 3 composantes** :
+     - Hosting (50 pts max) : Localisation serveurs (France=50, EU=40, USA=20)
+     - Company (30 pts max) : Nationalité entreprise (France=30, EU=25, USA=15)
+     - License (20 pts max) : Type licence (Open Source=20, Open Weights=15, Proprietary=5)
+   - **Cloud Act Risk** : Détection automatique si score < 50
+   - **RGPD Analysis** : Statut de conformité détaillé
+   - **Recommandations** : Suggestions de sécurité automatiques
+   - **Scores réels** :
+     - Mistral: 95/100 (France + Open Weights + RGPD complet)
+     - Hugging Face: 70/100 (USA + Open Source)
+     - Gemini: 40/100 (USA + Proprietary)
+     - Cohere: 25/100 (USA + Proprietary + Non RGPD)
 
-5. **Score de Vitesse** (0-100) :
+5. **Green IT Impact Écologique** - **NOUVEAU** :
+   - **Consommation énergétique** : kWh par 1000 tokens (Mistral=0.002, Gemini=0.005, Cohere=0.006)
+   - **Impact carbone** : Grammes de CO2 calculés selon localisation serveurs
+     - France: 50g CO2/kWh (nucléaire/renouvelable)
+     - EU: 250g CO2/kWh (mix européen)
+     - USA: 380g CO2/kWh (charbon/gaz dominant)
+   - **Eco-Score** : Note A à E (comme Nutri-score) basée sur CO2/token
+   - **Facteur temporel** : 1.2x entre 18h-22h (heures de pointe)
+   - **Équivalences** : km voiture, charges smartphone, streaming vidéo, arbres/an
+   - **Référence** : Green IT best practices + IEA 2024 carbon intensity data
+   - **Résultats** : Mistral (A - 0.096g CO2), Gemini (D - 2.34g CO2)
+   - **Status** : ✅ FONCTIONNEL (frontend affiche toutes les données)
+
+6. **Score de Vitesse** (0-100) :
    - Temps de réponse normalisé (plus rapide = meilleur score)
 
 #### 🏆 Score Composite (Pondération Scientifiquement Justifiée)
@@ -260,9 +282,10 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 #### Backend
 - **Framework** : ✅ Node.js avec Express.js
 - **Langage** : ✅ JavaScript (ES6+)
-- **API Architecture** : ✅ RESTful API
+- **API Architecture** : ✅ RESTful API + Swagger/OpenAPI 3.0
 - **Validation** : ✅ Express-validator
-- **Middleware** : ✅ CORS, morgan, express.json
+- **Middleware** : ✅ CORS, morgan, express.json, rate limiting
+- **Architecture** : ✅ SOLID Principles (Single Responsibility)
 
 #### Base de Données
 - **Database** : ✅ MongoDB Atlas (Cloud)
@@ -426,7 +449,20 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 - [x] Vue détails de prompt
 - [x] Navigation par query params
 
-### Phase 8 : Tests et Démo 🚧
+### Phase 8 : Amélioration Scoring (Green IT + Sovereignty) ✅
+- [x] **Sovereignty Service** - Calcul dynamique 3 composantes (Hosting/Company/License)
+- [x] **Green IT Service** - Calcul impact écologique (CO2, énergie, eco-score)
+- [x] Métadonnées AI enrichies (AI_SOVEREIGNTY_DATA)
+- [x] Schéma MongoDB étendu (sovereignty breakdown, greenIT)
+- [x] Fix validation Mongoose (objets imbriqués)
+- [x] Scores souveraineté fonctionnels (Mistral 95/100, Gemini 40/100)
+- [x] **Fix Green IT Bug** : promptController.js sauvegarde greenIT correctement
+- [x] Affichage frontend Green IT data (eco-score, CO2, équivalences)
+- [x] Affichage frontend Sovereignty détails (breakdown, RGPD, recommandations)
+- [x] Guide pédagogique (ScoringGuide.jsx) avec méthologie scientifique
+- [x] Suppression emojis frontend + hardcoded sovereignty scores
+
+### Phase 9 : Tests et Démo 🚧
 - [ ] Tests unitaires backend
 - [ ] Tests unitaires frontend
 - [ ] Tests d'intégration
@@ -483,11 +519,17 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
       rougeL: Number  // 0-1 (longest common subsequence)
     },
     sovereignty: {
-      score: Number, // 0-100
-      serverLocation: String, // 'USA', 'EU', 'ASIA', 'OTHER'
-      rgpdCompliant: Boolean,
-      cloudProvider: String,
-      dataRetention: String
+      score: Number, // 0-100 (total)
+      breakdown: {
+        hosting: { score, maxScore, location, percentage },
+        company: { score, maxScore, nationality, percentage },
+        license: { score, maxScore, type, percentage }
+      },
+      rgpd: { compliant, location, status, risk },
+      cloudActRisk: Boolean,
+      sovereigntyLevel: String, // 'Excellent', 'Good', 'Medium', 'Low', 'Critical'
+      metadata: { cloudProvider, dataRetention, serverLocation, ... },
+      recommendations: [{ type, priority, message, action }]
     }
   },
   nlpAnalysis: {
@@ -501,6 +543,14 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
     topics: [String],
     wordCount: Number,
     sentenceCount: Number
+  },
+  greenIT: {
+    tokens: { total, input, output },
+    energy: { consumedKwh, perToken, timeFactor },
+    carbon: { impactGrams, intensity, location },
+    ecoScore: String, // 'A', 'B', 'C', 'D', 'E', 'N/A'
+    equivalences: { carKm, smartphoneCharges, streamingMinutes, treesPerYear },
+    timestamp: String
   },
   createdAt: Date
 }
@@ -642,25 +692,33 @@ ProjetFinale3/
 │   ├── src/
 │   │   ├── config/
 │   │   │   ├── database.js
-│   │   │   └── ai-apis.js
+│   │   │   ├── ai-apis.js
+│   │   │   ├── swagger.js
+│   │   │   └── index.js
 │   │   ├── controllers/
 │   │   │   ├── authController.js
 │   │   │   └── promptController.js
 │   │   ├── middleware/
-│   │   │   └── authMiddleware.js
+│   │   │   ├── auth.js
+│   │   │   ├── errorHandler.js
+│   │   │   └── rateLimiter.js
 │   │   ├── models/
 │   │   │   ├── User.js
 │   │   │   ├── Prompt.js
 │   │   │   └── Response.js
 │   │   ├── routes/
-│   │   │   ├── authRoutes.js
-│   │   │   ├── promptRoutes.js
-│   │   │   └── modelRoutes.js
+│   │   │   ├── auth.js
+│   │   │   └── prompts.js
 │   │   ├── services/
-│   │   │   ├── aiAggregatorService.js
+│   │   │   ├── ai/
+│   │   │   │   ├── geminiService.js (NEW - SOLID)
+│   │   │   │   ├── mistralService.js (NEW - SOLID)
+│   │   │   │   ├── huggingfaceService.js (NEW - SOLID)
+│   │   │   │   ├── cohereService.js (NEW - SOLID)
+│   │   │   │   └── orchestratorService.js (NEW - SOLID)
 │   │   │   ├── nlpService.js
 │   │   │   └── scoringService.js
-│   │   └── server.js
+│   │   └── index.js
 │   ├── .env
 │   └── package.json
 │
@@ -755,6 +813,12 @@ ProjetFinale3/
 **Problème** : Contenu principal décentré après ajout sidebar
 **Solution** : Wrapper `max-w-[1600px] mx-auto` autour du flex container
 
+### 6. Mongoose Validation Error - Nested Objects
+**Problème** : 500 error "Cast to string failed for value {...} (type Object)"
+**Cause** : Schéma Response.js avec objets imbriqués mal définis (sovereignty.breakdown)
+**Solution** : Définition explicite avec `{ type: ... }` pour tous les champs imbriqués
+**Date** : Janvier 2026
+
 ---
 
 ## 📚 Documentation API
@@ -782,18 +846,71 @@ Ce projet est confidentiel et ne doit pas être diffusé sans l'accord de Skills
 
 ---
 
-## 🎯 Prochaines Étapes
+## 🎯 Retours Professeur - Prochaines Tâches Prioritaires
 
-### À Faire (Optionnel)
+### Documentation et Tests
+- [x] **Swagger/OpenAPI** - Documentation API REST interactive (TERMINÉ)
+  - Installation: `swagger-jsdoc` + `swagger-ui-express`
+  - Endpoint `/api-docs` créé et fonctionnel
+  - Tous les endpoints documentés (POST/GET /api/prompts, /api/auth)
+  - Schémas complets (User, Prompt, Response, AIModel)
+  - Accessible sur: http://localhost:5001/api-docs
+
+- [ ] **Captures d'écran Frontend** - Ajouter screenshots dans documentation
+  - Interface principale avec prompt input
+  - Résultats avec visualisations (charts, radar, matrices)
+  - Page historique
+  - Exports (JSON, CSV, PDF)
+
+### Sécurité et Architecture
+
+- [ ] **HashiCorp Vault** - Remplacer .env par Vault pour gestion des secrets
+  - Documentation: https://developer.hashicorp.com/vault
+  - Avantages: Modulable, rotation automatique, audit logs
+  - Migration des API keys (GEMINI_API_KEY, MISTRAL_API_KEY, etc.)
+  - Migration MONGODB_URI et JWT_SECRET
+
+### Principes SOLID (TERMINÉ)
+
+Référence: https://www.geeksforgeeks.org/system-design/solid-principle-in-programming-understand-with-real-life-examples/
+
+- [x] **Single Responsibility Principle** - Architecture refactorisée (TERMINÉ)
+
+  **Nouvelle architecture respectant SOLID**:
+
+  1. **Services AI séparés** - Chaque provider a son propre service
+     - `services/ai/geminiService.js` - Responsable uniquement de Gemini
+     - `services/ai/mistralService.js` - Responsable uniquement de Mistral
+     - `services/ai/huggingfaceService.js` - Responsable uniquement de Hugging Face
+     - `services/ai/cohereService.js` - Responsable uniquement de Cohere
+
+  2. **Orchestrator Service** - Coordination centralisée
+     - `services/ai/orchestratorService.js` - Coordonne les services AI
+     - Gère les appels parallèles et timeouts
+     - Ne fait PAS d'appels API directs (délègue aux services spécialisés)
+
+  3. **Controller simplifié**
+     - `promptController.js` utilise maintenant `OrchestratorService`
+     - Garde uniquement la logique HTTP (req/res)
+     - Délègue la logique métier aux services
+
+  **Avantages**:
+  - Chaque fichier a une seule responsabilité
+  - Code plus maintenable et testable
+  - Facilite l'ajout de nouveaux providers AI
+  - Respect des standards de l'industrie
+
+- [x] **Réduction des emojis** - Code professionnel sans emojis (TERMINÉ)
+  - Supprimé emojis dans code backend (index.js, database.js, ai-apis.js, controllers)
+  - Logs propres et professionnels
+  - Emojis conservés uniquement dans README pour lisibilité
+
+### Optimisations (Optionnel)
 - [ ] Tests unitaires (Jest + React Testing Library)
 - [ ] Tests d'intégration (Supertest)
-- [ ] Documentation Swagger/OpenAPI
 - [ ] Déploiement production (Vercel + Railway)
-- [ ] Monitoring et logs (Sentry, LogRocket)
-- [ ] Optimisations performances
 - [ ] Cache Redis pour réponses
 - [ ] Rate limiting avancé
-- [ ] Internationalisation (i18n)
 
 ---
 

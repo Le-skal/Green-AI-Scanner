@@ -44,7 +44,7 @@ export const protect = async (req, res, next) => {
     }
 
   } catch (error) {
-    console.error('❌ Auth middleware error:', error);
+    console.error('Auth middleware error:', error);
     res.status(500).json({
       error: 'Authentication error',
       message: error.message

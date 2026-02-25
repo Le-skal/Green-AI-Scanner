@@ -3,9 +3,11 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import swaggerUi from 'swagger-ui-express';
 
 // Configuration
 import { connectDB, initAllAIClients } from './config/index.js';
+import swaggerSpec from './config/swagger.js';
 
 // Routes
 import authRoutes from './routes/auth.js';
@@ -34,16 +36,23 @@ app.use(express.urlencoded({ extended: true })); // Parse URL-encoded
 // Rate limiting général
 app.use('/api', generalLimiter);
 
+// Documentation Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: 'AI Aggregator API Documentation'
+}));
+
 // Route de bienvenue
 app.get('/', (req, res) => {
   res.json({
     message: 'API Agrégateur IA - Backend',
-    version: '1.0.0',
+    version: '2.0.0',
     status: 'running',
     endpoints: {
       auth: '/api/auth',
       prompts: '/api/prompts',
-      health: '/health'
+      health: '/health',
+      documentation: '/api-docs'
     }
   });
 });
@@ -72,33 +81,33 @@ app.use(errorHandler);
 // Fonction de démarrage
 const startServer = async () => {
   try {
-    console.log('\n🚀 Starting AI Aggregator API Server...\n');
+    console.log('\nStarting AI Aggregator API Server...\n');
 
     // Connecter à MongoDB
-    console.log('📊 Connecting to MongoDB...');
+    console.log('Connecting to MongoDB...');
     await connectDB();
     app.locals.dbConnected = true;
 
     // Initialiser les clients AI
-    console.log('🤖 Initializing AI clients...');
+    console.log('Initializing AI clients...');
     const aiClients = initAllAIClients();
     app.locals.aiClients = aiClients;
 
     if (Object.keys(aiClients).length === 0) {
-      console.warn('\n⚠️  WARNING: No AI clients initialized!');
+      console.warn('\nWARNING: No AI clients initialized!');
       console.warn('Please configure API keys in .env file\n');
     }
 
     // Démarrer le serveur
     app.listen(PORT, () => {
-      console.log(`\n✅ Server is running!`);
-      console.log(`🌐 URL: http://localhost:${PORT}`);
-      console.log(`📝 Environment: ${process.env.NODE_ENV || 'development'}`);
-      console.log(`🤖 AI Clients: ${Object.keys(aiClients).length} active\n`);
+      console.log(`\nServer is running!`);
+      console.log(`URL: http://localhost:${PORT}`);
+      console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`AI Clients: ${Object.keys(aiClients).length} active\n`);
     });
 
   } catch (error) {
-    console.error('❌ Failed to start server:', error);
+    console.error('Failed to start server:', error);
     process.exit(1);
   }
 };

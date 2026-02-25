@@ -24,12 +24,12 @@ function Home() {
     try {
       const response = await promptsAPI.createPrompt(data);
       setResults(response);
-      console.log('✅ Results:', response);
+      console.log(' Results:', response);
 
       // Trigger history sidebar refresh
       setHistoryRefresh(prev => prev + 1);
     } catch (err) {
-      console.error('❌ Error:', err);
+      console.error('Error:', err);
       setError(err.response?.data?.message || 'Failed to process prompt');
     } finally {
       setLoading(false);

@@ -10,86 +10,111 @@ import { CohereClient } from 'cohere-ai';
 // Google Gemini
 export const initGemini = () => {
   if (!process.env.GOOGLE_GEMINI_API_KEY) {
-    console.warn('⚠️  Google Gemini API key not found');
+    console.warn('Google Gemini API key not found');
     return null;
   }
   const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY);
-  console.log('✅ Google Gemini initialized');
+  console.log('Google Gemini initialized');
   return genAI;
 };
 
 // Mistral AI
 export const initMistral = () => {
   if (!process.env.MISTRAL_API_KEY) {
-    console.warn('⚠️  Mistral API key not found');
+    console.warn('Mistral API key not found');
     return null;
   }
   const client = new MistralClient(process.env.MISTRAL_API_KEY);
-  console.log('✅ Mistral AI initialized');
+  console.log('Mistral AI initialized');
   return client;
 };
 
 // Hugging Face
 export const initHuggingFace = () => {
   if (!process.env.HUGGINGFACE_API_KEY) {
-    console.warn('⚠️  Hugging Face API key not found');
+    console.warn('Hugging Face API key not found');
     return null;
   }
   const hf = new HfInference(process.env.HUGGINGFACE_API_KEY, {
     baseUrl: 'https://router.huggingface.co'
   });
-  console.log('✅ Hugging Face initialized (using router.huggingface.co)');
+  console.log('Hugging Face initialized (using router.huggingface.co)');
   return hf;
 };
 
 // Cohere
 export const initCohere = () => {
   if (!process.env.COHERE_API_KEY) {
-    console.warn('⚠️  Cohere API key not found');
+    console.warn('Cohere API key not found');
     return null;
   }
   const cohere = new CohereClient({
     token: process.env.COHERE_API_KEY,
   });
-  console.log('✅ Cohere initialized');
+  console.log('Cohere initialized');
   return cohere;
 };
 
 /**
- * Métadonnées de souveraineté pour chaque API
+ * Métadonnées détaillées pour le calcul dynamique de souveraineté et Green IT
+ * Ces données sont utilisées par SovereigntyService et GreenITService
  */
 export const AI_SOVEREIGNTY_DATA = {
   gemini: {
-    score: 60,
-    serverLocation: 'USA',
-    rgpdCompliant: true,
+    // Localisation et infrastructure
+    serverLocation: 'USA',              // Pour GreenIT (intensité carbone) et Souveraineté
+    companyNationality: 'USA',          // Pour calcul souveraineté (30 pts)
     cloudProvider: 'Google Cloud',
     dataRetention: '30 days',
-    description: 'Serveurs principalement aux USA, conformité RGPD partielle'
+
+    // Conformité et licence
+    rgpdCompliant: true,                // Partiel (Privacy Shield)
+    licenseType: 'Proprietary',         // Pour calcul souveraineté (20 pts)
+
+    // Métadonnées supplémentaires
+    description: 'Serveurs principalement aux USA, conformité RGPD partielle via Privacy Shield'
   },
   mistral: {
-    score: 90,
-    serverLocation: 'EU',
-    rgpdCompliant: true,
-    cloudProvider: 'European Cloud',
+    // Localisation et infrastructure
+    serverLocation: 'France',           // EU optimisé pour Green IT
+    companyNationality: 'France',       // Entreprise française
+    cloudProvider: 'European Cloud (Scaleway)',
     dataRetention: 'No retention',
-    description: 'Solution souveraine européenne, serveurs en France'
+
+    // Conformité et licence
+    rgpdCompliant: true,                // Full RGPD compliance
+    licenseType: 'Open Weights',        // Modèle ouvert (Apache 2.0)
+
+    // Métadonnées supplémentaires
+    description: 'Solution souveraine européenne, serveurs en France, RGPD complet'
   },
   huggingface: {
-    score: 70,
-    serverLocation: 'USA',
-    rgpdCompliant: true,
-    cloudProvider: 'AWS/Azure',
-    dataRetention: 'Variable',
-    description: 'Open source, localisation variable selon le modèle'
+    // Localisation et infrastructure
+    serverLocation: 'USA',              // Infrastructure mixte EU/USA
+    companyNationality: 'USA',          // Entreprise américaine
+    cloudProvider: 'AWS/Azure (Multi-cloud)',
+    dataRetention: 'Variable',          // Dépend du modèle
+
+    // Conformité et licence
+    rgpdCompliant: true,                // Via modèles EU-hosted
+    licenseType: 'Open Source',         // Plateforme open source
+
+    // Métadonnées supplémentaires
+    description: 'Open source, localisation variable selon le modèle, communauté mondiale'
   },
   cohere: {
-    score: 55,
-    serverLocation: 'USA',
-    rgpdCompliant: false,
+    // Localisation et infrastructure
+    serverLocation: 'USA',              // Canada/USA
+    companyNationality: 'USA',          // Entreprise canadienne (considéré USA pour simplicité)
     cloudProvider: 'AWS',
     dataRetention: '90 days',
-    description: 'Serveurs USA/Canada, conformité RGPD limitée'
+
+    // Conformité et licence
+    rgpdCompliant: false,               // Conformité RGPD limitée
+    licenseType: 'Proprietary',         // Modèle fermé
+
+    // Métadonnées supplémentaires
+    description: 'Serveurs USA/Canada, conformité RGPD limitée, modèle propriétaire'
   }
 };
 
@@ -148,7 +173,7 @@ export const initAllAIClients = () => {
     .filter(([_, client]) => client !== null)
     .reduce((acc, [key, client]) => ({ ...acc, [key]: client }), {});
 
-  console.log(`\n🤖 Active AI APIs: ${Object.keys(activeClients).join(', ')}\n`);
+  console.log(`\nActive AI APIs: ${Object.keys(activeClients).join(', ')}\n`);
 
   return activeClients;
 };

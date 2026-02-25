@@ -36,3 +36,6 @@ data/
 
 # Redis
 dump.rdb
+
+# Claude Code - Development files
+CLAUDE_CHECKPOINT.md

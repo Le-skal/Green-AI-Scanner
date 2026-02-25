@@ -2,7 +2,7 @@
  * Middleware de gestion globale des erreurs
  */
 export const errorHandler = (err, req, res, next) => {
-  console.error('❌ Error:', err);
+  console.error('Error:', err);
 
   // Erreur de validation Mongoose
   if (err.name === 'ValidationError') {

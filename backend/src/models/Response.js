@@ -77,7 +77,7 @@ const responseSchema = new mongoose.Schema({
         default: null
       }
     },
-    // Scoring de souveraineté des données
+    // Scoring de souveraineté des données (calculé dynamiquement)
     sovereignty: {
       score: {
         type: Number,
@@ -85,24 +85,91 @@ const responseSchema = new mongoose.Schema({
         max: 100,
         required: false
       },
-      serverLocation: {
-        type: String,
-        required: false,
-        enum: ['USA', 'EU', 'ASIA', 'OTHER']
+      breakdown: {
+        hosting: {
+          score: { type: Number },
+          maxScore: { type: Number },
+          location: { type: String },
+          percentage: { type: Number }
+        },
+        company: {
+          score: { type: Number },
+          maxScore: { type: Number },
+          nationality: { type: String },
+          percentage: { type: Number }
+        },
+        license: {
+          score: { type: Number },
+          maxScore: { type: Number },
+          type: { type: String },
+          percentage: { type: Number }
+        }
       },
-      rgpdCompliant: {
+      rgpd: {
+        compliant: Boolean,
+        location: String,
+        status: String,
+        risk: String
+      },
+      cloudActRisk: {
         type: Boolean,
-        required: false
+        default: false
       },
-      cloudProvider: {
+      sovereigntyLevel: {
         type: String,
-        required: false
+        enum: ['Excellent', 'Good', 'Medium', 'Low', 'Critical'],
+        default: 'Medium'
       },
-      dataRetention: {
-        type: String,
-        default: 'Unknown'
-      }
+      metadata: {
+        cloudProvider: { type: String },
+        dataRetention: { type: String },
+        serverLocation: { type: String },
+        companyNationality: { type: String },
+        licenseType: { type: String }
+      },
+      recommendations: [{
+        type: {
+          type: String,
+          enum: ['Security', 'Compliance', 'Sovereignty', 'Transparency', 'Success']
+        },
+        priority: {
+          type: String,
+          enum: ['High', 'Medium', 'Low', 'Info']
+        },
+        message: { type: String },
+        action: { type: String }
+      }]
     }
+  },
+  // Impact écologique Green IT
+  greenIT: {
+    tokens: {
+      total: { type: Number, default: 0 },
+      input: { type: Number, default: 0 },
+      output: { type: Number, default: 0 }
+    },
+    energy: {
+      consumedKwh: { type: Number, default: 0 },
+      perToken: { type: Number, default: 0 },
+      timeFactor: { type: Number, default: 1.0 }
+    },
+    carbon: {
+      impactGrams: { type: Number, default: 0 },
+      intensity: { type: Number, default: 0 },
+      location: { type: String, default: 'Unknown' }
+    },
+    ecoScore: {
+      type: String,
+      enum: ['A', 'B', 'C', 'D', 'E', 'N/A'],
+      default: 'N/A'
+    },
+    equivalences: {
+      carKm: { type: Number, default: 0 },
+      smartphoneCharges: { type: Number, default: 0 },
+      streamingMinutes: { type: Number, default: 0 },
+      treesPerYear: { type: Number, default: 0 }
+    },
+    timestamp: { type: String }
   },
   // Analyse NLP de la réponse
   nlpAnalysis: {

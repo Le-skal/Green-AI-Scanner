@@ -1,4 +1,6 @@
 import NLPService from './nlpService.js';
+import GreenITService from './greenITService.js';
+import SovereigntyService from './sovereigntyService.js';
 
 /**
  * Service de scoring et évaluation des réponses IA
@@ -6,10 +8,14 @@ import NLPService from './nlpService.js';
  * - BM25 pour le relevance scoring (Robertson & Zaragoza, 2009)
  * - ROUGE pour l'évaluation de qualité (Lin, 2004)
  * - Cosine Similarity avec TF-IDF pour la comparaison sémantique
+ * - Green IT pour l'impact écologique (consommation énergétique, CO2)
+ * - Souveraineté calculée dynamiquement (hosting + company + license)
  */
 class ScoringService {
   constructor() {
     this.nlpService = new NLPService();
+    this.greenITService = new GreenITService();
+    this.sovereigntyService = new SovereigntyService();
 
     // Paramètres BM25 (valeurs standards de la littérature)
     this.BM25_K1 = 1.5;  // Contrôle la saturation de fréquence des termes
@@ -37,14 +43,19 @@ class ScoringService {
     const scoredResponses = responses.map((response, index) => {
       if (response.status !== 'success' || !response.responseText) {
         const emptyAnalysis = this.nlpService.getEmptyAnalysis();
+        const emptySovereignty = this.sovereigntyService.calculateSovereignty(response.sovereignty || {});
+        const emptyGreenIT = this.greenITService.getEmptyImpact();
+
         return {
           ...response,
           scores: {
             relevance: null,
             similarity: null,
-            sovereignty: response.sovereignty,
-            composite: null
+            sovereignty: emptySovereignty,
+            composite: null,
+            rouge: { rouge1: 0, rouge2: 0, rougeL: 0 }
           },
+          greenIT: emptyGreenIT,
           nlpAnalysis: {
             keywords: emptyAnalysis.keywords,
             sentiment: emptyAnalysis.sentiment.sentiment,
@@ -77,11 +88,21 @@ class ScoringService {
       // Scores ROUGE (qualité de la réponse par rapport au prompt)
       const rougeScores = this.calculateRougeScores(response.responseText, originalPrompt);
 
-      // Score composite (pondéré)
+      // GREEN IT: Calcul de l'impact écologique
+      const greenITImpact = this.greenITService.calculateImpact(
+        response,
+        response.model,
+        response.sovereignty?.serverLocation || 'Other'
+      );
+
+      // SOUVERAINETÉ: Calcul dynamique du score de souveraineté
+      const sovereigntyScore = this.sovereigntyService.calculateSovereignty(response.sovereignty || {});
+
+      // Score composite (pondéré) - utilise le nouveau score de souveraineté calculé
       const compositeScore = this.calculateCompositeScore({
         relevance: relevanceScore,
         similarity: similarityScore,
-        sovereignty: response.sovereignty?.score || 0,
+        sovereignty: sovereigntyScore.score,
         speed: speedScore
       });
 
@@ -90,11 +111,12 @@ class ScoringService {
         scores: {
           relevance: relevanceScore,
           similarity: similarityScore,
-          sovereignty: response.sovereignty,
+          sovereignty: sovereigntyScore,        // Score de souveraineté détaillé
           speed: speedScore,
           composite: compositeScore,
-          rouge: rougeScores  // Ajout des scores ROUGE
+          rouge: rougeScores
         },
+        greenIT: greenITImpact,                 // Impact écologique détaillé
         nlpAnalysis: {
           keywords: nlpAnalysis.keywords,
           sentiment: nlpAnalysis.sentiment.sentiment,
@@ -453,9 +475,30 @@ class ScoringService {
     // Distribution de souveraineté
     const sovereigntyDist = {};
     responses.forEach(r => {
-      const location = r.sovereignty?.serverLocation || 'UNKNOWN';
+      const location = r.scores?.sovereignty?.metadata?.serverLocation || 'UNKNOWN';
       sovereigntyDist[location] = (sovereigntyDist[location] || 0) + 1;
     });
+
+    // GREEN IT: Calcul de l'impact total
+    const greenITImpacts = successfulResponses
+      .map(r => r.greenIT)
+      .filter(g => g && g.carbon);
+
+    const totalGreenIT = greenITImpacts.length > 0
+      ? this.greenITService.calculateTotalImpact(greenITImpacts)
+      : null;
+
+    // Meilleur et pire modèle pour l'écologie
+    const sortedByEcoScore = [...successfulResponses].sort((a, b) => {
+      const scoreA = a.greenIT?.ecoScore || 'E';
+      const scoreB = b.greenIT?.ecoScore || 'E';
+      return scoreA.localeCompare(scoreB);
+    });
+
+    // Souveraineté: Cloud Act Risk analysis
+    const cloudActRiskCount = successfulResponses.filter(r =>
+      r.scores?.sovereignty?.cloudActRisk
+    ).length;
 
     return {
       totalResponses: responses.length,
@@ -472,14 +515,25 @@ class ScoringService {
         model: sortedByComposite[0]?.model,
         compositeScore: sortedByComposite[0]?.scores?.composite,
         relevance: sortedByComposite[0]?.scores?.relevance,
-        sovereignty: sortedByComposite[0]?.scores?.sovereignty?.score
+        sovereignty: sortedByComposite[0]?.scores?.sovereignty?.score,
+        ecoScore: sortedByComposite[0]?.greenIT?.ecoScore
       },
       worstResponse: {
         model: sortedByComposite[sortedByComposite.length - 1]?.model,
         compositeScore: sortedByComposite[sortedByComposite.length - 1]?.scores?.composite
       },
-      consensusLevel: avgSimilarity, // Niveau de consensus entre les réponses
-      sovereigntyDistribution: sovereigntyDist
+      consensusLevel: avgSimilarity,
+      sovereigntyDistribution: sovereigntyDist,
+      cloudActRisk: {
+        modelsAtRisk: cloudActRiskCount,
+        percentage: parseFloat(((cloudActRiskCount / successfulResponses.length) * 100).toFixed(1))
+      },
+      greenIT: totalGreenIT,
+      bestEcoModel: {
+        model: sortedByEcoScore[0]?.model,
+        ecoScore: sortedByEcoScore[0]?.greenIT?.ecoScore,
+        co2Grams: sortedByEcoScore[0]?.greenIT?.carbon?.impactGrams
+      }
     };
   }
 }

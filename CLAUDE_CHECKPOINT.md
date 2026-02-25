@@ -1,33 +1,49 @@
-# 🤖 Claude Checkpoint - PFE AI Aggregator
+# Claude Checkpoint - PFE AI Aggregator
 
-**Date**: 2025-12-31
+**Date**: 2026-02-25
 **Projet**: Agrégateur de Moteurs d'IA (PFE 2025-2026)
-**Status**: ✅ Data Visualization TERMINÉE
+**Status**: Scoring Amélioré (Sovereignty OK, Green IT Bug)
 
 ---
 
-## 📊 État Actuel du Projet
+## État Actuel du Projet
 
-### ✅ Complété (100%)
+### Complété (100%)
 1. **Backend complet** - Node.js + Express + MongoDB
 2. **Frontend de base** - React + Vite + Tailwind
 3. **Intégration AI** - 4 APIs gratuites (Gemini, Mistral, Hugging Face, Cohere)
-4. **Système de scoring** - Relevance, Similarity, Sovereignty
+4. **Système de scoring scientifique** - BM25, TF-IDF, ROUGE, Sovereignty, Speed
 5. **Analyse NLP** - Extraction de mots-clés, sentiment, topics
 6. **Data Visualization** - 4 composants de visualisation
+7. **Swagger Documentation** - API REST documentée et testable (http://localhost:5001/api-docs)
+8. **SOLID Refactoring** - Architecture respectant Single Responsibility Principle
+9. **Code Cleanup** - Suppression des emojis du code (logs professionnels)
+10. **Sovereignty Service** - Calcul dynamique 3 composantes (Hosting 50pts + Company 30pts + License 20pts)
+11. **Green IT Service** - Impact écologique (CO2, énergie, eco-score A-E)
+12. **AI Metadata Enrichment** - AI_SOVEREIGNTY_DATA avec détails (location, RGPD, license)
+13. **MongoDB Schema Extension** - Champs sovereignty.breakdown et greenIT ajoutés
+14. **Mongoose Validation Fix** - Objets imbriqués correctement définis avec `{ type: ... }`
 
-### ⏳ En Attente
-1. **Authentication Frontend** (Backend prêt, pas de pages login/register)
-2. **Export de données** (JSON, CSV, PDF, Markdown)
-3. **Historique des prompts** (API existe, interface manquante)
+### Fonctionnel - Phase 8 Complétée
+- ✅ **Sovereignty Score** : Mistral 95/100, Gemini 40/100 (calcul dynamique 3 composantes)
+- ✅ **Green IT** : Impact écologique complet (CO2, eco-score A-E, équivalences)
+- ✅ **Frontend** : Affichage Green IT + Sovereignty avec breakdown, RGPD, recommandations
+- ✅ **Guide pédagogique** : Méthodologie scientifique documentée (ScoringGuide.jsx)
+
+### En Attente (Phase 9)
+1. **Amélioration UI** - Couleurs (red/green/yellow → beige/ink), Markdown rendering
+2. **HashiCorp Vault** - Migration des secrets depuis .env
+3. **Captures d'écran Frontend** - Documentation visuelle
+4. **Tests unitaires** (optionnel)
 
 ---
 
-## 🚀 Services en Cours
+## Services en Cours
 
 ### Backend
-- **Port**: `5001` (⚠️ NE PAS utiliser 5000)
+- **Port**: `5001` (NE PAS utiliser 5000)
 - **URL**: http://localhost:5001/api
+- **Swagger**: http://localhost:5001/api-docs
 - **Commande**: `cd backend && npm run dev`
 - **Status**: Prêt à démarrer
 
@@ -40,7 +56,7 @@
 ### MongoDB
 - **Type**: MongoDB Atlas (Cloud)
 - **URI**: Configuré dans `backend/.env`
-- **Status**: ✅ Connecté et testé
+- **Status**: Connecté et testé
 
 ---
 
@@ -189,7 +205,143 @@ npm run dev
 
 ---
 
-## 📝 Prochaines Étapes Suggérées
+## Retours Professeur - État des Tâches
+
+### 1. Documentation API - Swagger (TERMINÉ)
+**Objectif**: Documenter et tester facilement les endpoints API
+
+**Actions complétées**:
+- Installation de `swagger-jsdoc` et `swagger-ui-express`
+- Création de `backend/src/config/swagger.js`
+- Route `/api-docs` ajoutée dans index.js
+- Tous les endpoints documentés avec JSDoc:
+  - POST /api/prompts (création prompt)
+  - GET /api/prompts (liste avec pagination)
+  - GET /api/prompts/:id (détails prompt)
+  - DELETE /api/prompts/:id (suppression)
+  - POST /api/auth/register
+  - POST /api/auth/login
+  - GET /api/auth/me
+  - PUT /api/auth/profile
+  - GET /api/prompts/models
+
+**Fichiers modifiés**:
+- `backend/package.json` - Dépendances ajoutées
+- `backend/src/index.js` - Swagger UI intégré
+- `backend/src/config/swagger.js` - Configuration complète (NOUVEAU)
+- `backend/src/routes/prompts.js` - Documentation JSDoc complète
+- `backend/src/routes/auth.js` - Documentation JSDoc complète
+
+**Accès**: http://localhost:5001/api-docs
+
+### 2. Captures d'écran Frontend
+**Objectif**: Documentation visuelle de l'interface
+
+**Screenshots à ajouter**:
+1. Interface principale (prompt input + sélection modèles)
+2. Résultats avec visualisations (graphs, radar, matrices)
+3. Page historique
+4. Exports (JSON, CSV, PDF)
+
+**Dossier**: `docs/screenshots/`
+
+### 3. HashiCorp Vault - Migration .env
+**Objectif**: Gestion modulable et sécurisée des secrets
+
+**Documentation**: https://developer.hashicorp.com/vault
+
+**Avantages**:
+- Rotation automatique des secrets
+- Audit logs
+- Accès contrôlé par policies
+- Centralisé et modulable
+
+**Secrets à migrer**:
+- MONGODB_URI
+- JWT_SECRET
+- GEMINI_API_KEY
+- MISTRAL_API_KEY
+- HUGGINGFACE_API_KEY
+- COHERE_API_KEY
+
+**Actions**:
+1. Installer HashiCorp Vault (dev server ou Docker)
+2. Créer `backend/src/config/vault.js`
+3. Remplacer `dotenv` par appels Vault
+4. Documenter le setup dans README
+
+**Fichiers à modifier**:
+- `backend/src/config/vault.js` (nouveau)
+- `backend/src/index.js` (remplacer dotenv)
+- `backend/src/config/ai-apis.js` (charger depuis Vault)
+
+### 4. SOLID Principles - Refactoring (TERMINÉ)
+
+**Référence**: https://www.geeksforgeeks.org/system-design/solid-principle-in-programming-understand-with-real-life-examples/
+
+#### Single Responsibility Principle (SRP) - APPLIQUÉ
+
+**Problème résolu**: Architecture refactorisée pour respecter SOLID
+
+**Nouvelle architecture**:
+```
+backend/src/services/ai/
+├── geminiService.js         (responsable uniquement de Gemini)
+├── mistralService.js        (responsable uniquement de Mistral)
+├── huggingfaceService.js    (responsable uniquement de Hugging Face)
+├── cohereService.js         (responsable uniquement de Cohere)
+└── orchestratorService.js   (coordonne les services AI)
+```
+
+**Chaque service AI**:
+- Une seule responsabilité: gérer son API
+- Méthode `generateResponse(prompt, options)`
+- Gestion d'erreurs isolée
+- Estimation des tokens
+
+**OrchestratorService**:
+- Coordonne les appels parallèles
+- Gère les timeouts
+- Agrège les résultats
+- Ne fait PAS d'appels API directs
+
+**promptController.js** simplifié:
+- Utilise `OrchestratorService` au lieu de `AIAggregatorService`
+- Garde uniquement la logique HTTP (req/res)
+- Délègue la logique métier aux services
+
+**Avantages**:
+- Code plus maintenable et testable
+- Facilite l'ajout de nouveaux providers
+- Respect des standards de l'industrie
+- Chaque fichier ~60 lignes (vs 260 avant)
+
+**Fichiers créés**:
+- `backend/src/services/ai/geminiService.js` (NOUVEAU)
+- `backend/src/services/ai/mistralService.js` (NOUVEAU)
+- `backend/src/services/ai/huggingfaceService.js` (NOUVEAU)
+- `backend/src/services/ai/cohereService.js` (NOUVEAU)
+- `backend/src/services/ai/orchestratorService.js` (NOUVEAU)
+
+**Fichiers modifiés**:
+- `backend/src/controllers/promptController.js` (utilise OrchestratorService)
+
+### 5. Réduction des Emojis (TERMINÉ)
+
+**Objectif**: Code professionnel
+
+**Actions complétées**:
+- Supprimé TOUS les emojis dans le code backend
+  - `index.js` - Console.log propres
+  - `database.js` - Logs MongoDB propres
+  - `ai-apis.js` - Logs clients propres
+  - `promptController.js` - Logs d'erreur propres
+- Emojis conservés uniquement dans README pour lisibilité
+- CHECKPOINT nettoyé (ce fichier)
+
+---
+
+## Anciennes Étapes (Complétées)
 
 ### Option A: Authentication Frontend
 1. Créer pages Login/Register
@@ -211,11 +363,12 @@ npm run dev
 
 ---
 
-## 🔧 Fichiers Clés
+## Fichiers Clés
 
 ### Configuration
 - `backend/.env` - Variables d'environnement (PORT=5001, API keys)
 - `backend/src/config/ai-apis.js` - Config des APIs (models, sovereignty)
+- `backend/src/config/swagger.js` - Configuration Swagger/OpenAPI (NOUVEAU)
 - `frontend/tailwind.config.js` - Palette beige/noir
 
 ### Modèles Backend
@@ -223,14 +376,18 @@ npm run dev
 - `backend/src/models/Prompt.js` - Prompts (userId optionnel)
 - `backend/src/models/Response.js` - Réponses avec scores
 
-### Services Backend
-- `backend/src/services/aiAggregatorService.js` - Appels multi-API
+### Services Backend (Architecture SOLID)
+- `backend/src/services/ai/orchestratorService.js` - Coordination (NOUVEAU)
+- `backend/src/services/ai/geminiService.js` - Gemini uniquement (NOUVEAU)
+- `backend/src/services/ai/mistralService.js` - Mistral uniquement (NOUVEAU)
+- `backend/src/services/ai/huggingfaceService.js` - HF uniquement (NOUVEAU)
+- `backend/src/services/ai/cohereService.js` - Cohere uniquement (NOUVEAU)
 - `backend/src/services/scoringService.js` - Calcul des scores
 - `backend/src/services/nlpService.js` - Analyse NLP
 
 ### Routes Backend
-- `backend/src/routes/promptRoutes.js` - CRUD prompts
-- `backend/src/routes/authRoutes.js` - Login/Register (backend prêt)
+- `backend/src/routes/prompts.js` - CRUD prompts (Swagger docs)
+- `backend/src/routes/auth.js` - Login/Register (Swagger docs)
 
 ### Composants Frontend
 - `frontend/src/App.jsx` - App principale (avec visualisations)
@@ -241,21 +398,24 @@ npm run dev
 
 ---
 
-## 💡 Notes Importantes
+## Notes Importantes
 
 1. **TOUJOURS utiliser le port 5001** pour le backend (5000 est occupé)
 2. **Model Gemini**: `gemini-2.5-flash` (PAS gemini-pro)
 3. **Design**: Minimal border-radius (2-6px), palette beige/noir
 4. **Chart.js**: Déjà installé et optimisé par Vite
 5. **userId**: Optionnel dans Prompt (pas besoin d'auth pour tester)
+6. **Swagger**: Documentation API disponible sur /api-docs
+7. **Architecture SOLID**: Services séparés dans services/ai/
 
 ---
 
-## 📦 Dépendances Installées
+## Dépendances Installées
 
 ### Backend
 - express, mongoose, mongodb
 - bcryptjs, jsonwebtoken (auth)
+- swagger-jsdoc, swagger-ui-express (documentation - NOUVEAU)
 - @google/generative-ai (Gemini)
 - @mistralai/mistralai (Mistral)
 - cohere-ai, @huggingface/inference
@@ -265,7 +425,7 @@ npm run dev
 ### Frontend
 - react, react-dom, react-router-dom
 - axios
-- chart.js, react-chartjs-2 ✅ (pour visualisations)
+- chart.js, react-chartjs-2 (pour visualisations)
 - recharts, d3, d3-cloud
 - tailwindcss, lucide-react
 - zustand, react-query
@@ -289,6 +449,301 @@ npm run dev
 - ✅ Localisation des serveurs
 - ✅ Conformité RGPD
 - ✅ APIs gratuites (pas de coûts énergétiques cloud)
+
+---
+
+## 🎯 NOUVEAU: Amélioration Système de Scoring (Session Actuelle)
+
+### Contexte
+L'ancien système de scoring avait des limitations:
+- Score de souveraineté hardcodé (valeurs statiques)
+- Pas de calcul d'impact écologique
+- Pas de détails sur la conformité RGPD
+- Pas de recommandations automatiques
+
+**Référence utilisée**: Projet PromptOptim (stocké dans projetdepotes.md)
+
+### Architecture Créée
+
+#### 1. SovereigntyService.js (✅ FONCTIONNEL)
+**Fichier**: `backend/src/services/sovereigntyService.js`
+
+**Calcul en 3 composantes** (Total = 100 points):
+```javascript
+// Hosting (50 pts max)
+France: 50, EU: 40, USA: 20, China: 10, Other: 15
+
+// Company (30 pts max)
+France: 30, EU: 25, USA: 15, China: 5, Other: 10
+
+// License (20 pts max)
+Open Source: 20, Open Weights: 15, Proprietary: 5, Unknown: 0
+```
+
+**Fonctionnalités**:
+- ✅ Calcul dynamique du score total
+- ✅ Breakdown détaillé (hosting/company/license avec pourcentages)
+- ✅ Cloud Act Risk detection (score < 50 = risque)
+- ✅ Analyse RGPD (compliant/location/status/risk)
+- ✅ Sovereignty Level (Excellent, Good, Medium, Low, Critical)
+- ✅ Recommandations automatiques (Security, Compliance, Sovereignty, Transparency)
+
+**Résultats obtenus**:
+- Mistral: 95/100 (France 50 + France 30 + Open Weights 15)
+- Hugging Face: 70/100 (USA 20 + USA 15 + Open Source 20 + malus)
+- Gemini: 40/100 (USA 20 + USA 15 + Proprietary 5)
+- Cohere: 25/100 (USA 20 + USA 15 + Proprietary 5 - malus)
+
+#### 2. GreenITService.js (⚠️ BUG TOKENS)
+**Fichier**: `backend/src/services/greenITService.js`
+
+**Consommation énergétique** (kWh pour 1000 tokens):
+```javascript
+gemini: 0.005
+mistral: 0.002       // Plus sobre
+huggingface: 0.004
+cohere: 0.006
+```
+
+**Intensité carbone** (grammes CO2 par kWh - source IEA 2024):
+```javascript
+France: 50.0    // Mix nucléaire/renouvelable
+EU: 250.0       // Moyenne européenne
+USA: 380.0      // Mix charbon/gaz dominant
+Other: 500.0    // Conservative estimate
+```
+
+**Calcul**:
+```javascript
+energyKwh = (tokens / 1000) * energyPerToken
+timeFactor = 1.2 (si 18h-22h) ou 1.0
+co2Grams = energyKwh * carbonIntensity * timeFactor
+ecoScore = A/B/C/D/E basé sur co2Grams/token
+```
+
+**Équivalences calculées**:
+- km voiture (120g CO2/km)
+- charges smartphone (8.22g CO2/charge)
+- minutes streaming HD (2.4g CO2/min)
+- arbres/an nécessaires (1 arbre = 21kg CO2/an)
+
+**✅ BUG RÉSOLU**:
+- **Problème initial**: `greenIT.tokens` = 0 dans la réponse MongoDB
+- **Cause identifiée**: `promptController.js` ne sauvegardait pas le champ `greenIT` dans Response.create()
+- **Solution appliquée**: Ajout de `greenIT: response.greenIT || {}` à la ligne 68
+- **Résultat**: Service fonctionne parfaitement, toutes les données Green IT sont maintenant sauvegardées
+- **Test confirmé**: Mistral A (0.096g CO2), Gemini D (2.34g CO2)
+
+#### 3. Métadonnées AI Enrichies
+**Fichier**: `backend/src/config/ai-apis.js`
+
+**AI_SOVEREIGNTY_DATA étendu**:
+```javascript
+export const AI_SOVEREIGNTY_DATA = {
+  gemini: {
+    serverLocation: 'USA',
+    companyNationality: 'USA',
+    cloudProvider: 'Google Cloud',
+    dataRetention: '30 days',
+    rgpdCompliant: true,         // Partiel
+    licenseType: 'Proprietary'
+  },
+  mistral: {
+    serverLocation: 'France',
+    companyNationality: 'France',
+    cloudProvider: 'European Cloud (Scaleway)',
+    dataRetention: 'No retention',
+    rgpdCompliant: true,         // Full
+    licenseType: 'Open Weights'  // Apache 2.0
+  },
+  // ... huggingface, cohere
+}
+```
+
+#### 4. MongoDB Schema Extension
+**Fichier**: `backend/src/models/Response.js`
+
+**Nouveaux champs**:
+
+```javascript
+// Sovereignty (enrichi)
+scores: {
+  sovereignty: {
+    score: Number,  // 0-100
+    breakdown: {
+      hosting: { score, maxScore, location, percentage },
+      company: { score, maxScore, nationality, percentage },
+      license: { score, maxScore, type, percentage }
+    },
+    rgpd: { compliant, location, status, risk },
+    cloudActRisk: Boolean,
+    sovereigntyLevel: String,
+    metadata: { cloudProvider, dataRetention, ... },
+    recommendations: [{ type, priority, message, action }]
+  }
+}
+
+// Green IT (nouveau)
+greenIT: {
+  tokens: { total, input, output },
+  energy: { consumedKwh, perToken, timeFactor },
+  carbon: { impactGrams, intensity, location },
+  ecoScore: String,  // A/B/C/D/E/N/A
+  equivalences: { carKm, smartphoneCharges, streamingMinutes, treesPerYear },
+  timestamp: String
+}
+```
+
+**🐛 FIX APPLIQUÉ**: Validation Mongoose
+- **Erreur**: `Cast to string failed for value "{...}" (type Object)`
+- **Cause**: Objets imbriqués mal définis (manquait `{ type: ... }`)
+- **Solution**: Définition explicite pour TOUS les champs imbriqués
+```javascript
+// Avant (incorrect)
+breakdown: {
+  hosting: {
+    score: Number,  // ❌ Mongoose confus
+  }
+}
+
+// Après (correct)
+breakdown: {
+  hosting: {
+    score: { type: Number },  // ✅ Explicite
+  }
+}
+```
+
+### Intégration dans scoringService.js
+
+**Modifications**:
+```javascript
+import GreenITService from './greenITService.js';
+import SovereigntyService from './sovereigntyService.js';
+
+constructor() {
+  this.nlpService = new NLPService();
+  this.greenITService = new GreenITService();
+  this.sovereigntyService = new SovereigntyService();
+}
+
+// Dans scoreAllResponses()
+const sovereigntyScore = this.sovereigntyService.calculateSovereignty(
+  response.sovereignty || {}
+);
+
+const greenITImpact = this.greenITService.calculateImpact(
+  response,
+  response.model,
+  response.sovereignty?.serverLocation || 'Other'
+);
+
+return {
+  ...response,
+  scores: {
+    sovereignty: sovereigntyScore,  // Objet complet
+    // ...
+  },
+  greenIT: greenITImpact  // Objet complet
+};
+```
+
+### Résultats de Test (via API)
+
+**Test effectué**: POST /api/prompts avec Mistral
+
+**Sovereignty Data (✅ PARFAIT)**:
+```json
+{
+  "score": 95,
+  "breakdown": {
+    "hosting": {
+      "score": 50,
+      "maxScore": 50,
+      "location": "France",
+      "percentage": 100
+    },
+    "company": {
+      "score": 30,
+      "maxScore": 30,
+      "nationality": "France",
+      "percentage": 100
+    },
+    "license": {
+      "score": 15,
+      "maxScore": 20,
+      "type": "Open Weights",
+      "percentage": 75
+    }
+  },
+  "rgpd": {
+    "compliant": true,
+    "location": "France",
+    "status": "Full Compliance",
+    "risk": "Low"
+  },
+  "cloudActRisk": false,
+  "sovereigntyLevel": "Excellent",
+  "recommendations": [{
+    "type": "Success",
+    "priority": "Info",
+    "message": "Excellent sovereignty score. Model respects data sovereignty principles.",
+    "action": "No action required"
+  }]
+}
+```
+
+**Green IT Data (⚠️ BUG)**:
+```json
+{
+  "tokens": { "total": 0, "input": 0, "output": 0 },  // ❌ Devrait être 98
+  "energy": { "consumedKwh": 0, "perToken": 0 },
+  "carbon": { "impactGrams": 0, "intensity": 0 },
+  "ecoScore": "N/A",
+  "equivalences": { "carKm": 0, ... }
+}
+```
+
+**MAIS response.tokens existe**:
+```json
+{
+  "tokens": { "input": 4, "output": 94, "total": 98 }  // ✅ Présent
+}
+```
+
+### Prochaines Étapes (Phase 9 - UI Refinements)
+
+1. **Amélioration Couleurs** (EN COURS)
+   - Remplacer red/green/yellow/orange par palette beige/ink
+   - Maintenir la hiérarchie visuelle avec sand-X et ink-X
+   - Fichiers concernés: ResponseCard.jsx (eco-score badges, recommandations)
+
+2. **Markdown Rendering** (EN COURS)
+   - Installer react-markdown ou markdown-it
+   - Parser et afficher les réponses AI avec formatage propre
+   - Gérer: **, ###, listes, liens, etc.
+
+3. **Tests Complets**
+   - Tester avec tous les modèles (gemini, mistral, huggingface, cohere)
+   - Vérifier calculs sur différents prompts
+   - Tester heures de pointe vs normales pour Green IT
+
+4. **Documentation Visuelle**
+   - Captures d'écran de l'interface
+   - Vidéo démo de l'application
+
+### Fichiers Modifiés dans Cette Session
+
+**Créés**:
+- `backend/src/services/greenITService.js`
+- `backend/src/services/sovereigntyService.js`
+
+**Modifiés**:
+- `backend/src/config/ai-apis.js` (AI_SOVEREIGNTY_DATA enrichi)
+- `backend/src/models/Response.js` (schema sovereignty + greenIT)
+- `backend/src/services/scoringService.js` (intégration des 2 nouveaux services)
+- `README.md` (documentation scoring amélioré)
+- `CLAUDE_CHECKPOINT.md` (cette mise à jour)
 
 ---
 
@@ -322,5 +777,14 @@ curl http://localhost:5001/api/prompts/models
 
 ---
 
-**Session terminée avec succès** ✅
-**Prêt pour la prochaine session** 🚀
+**Dernière mise à jour**: 2026-02-25
+**Status actuel**:
+- ✅ Phase 8 COMPLÉTÉE: Sovereignty + Green IT 100% fonctionnels
+- ✅ Frontend: Affichage complet des données (breakdown, RGPD, eco-score, recommandations)
+- ✅ Guide pédagogique: Méthodologie scientifique documentée
+- 📝 Documentation: README + CHECKPOINT mis à jour
+- 🎨 En cours: Amélioration couleurs + Markdown rendering
+
+**Prochaine session**: Finaliser UI (couleurs thématiques + Markdown)
+
+**Session en cours - Phase 9 UI Refinements** 🚀

@@ -32,7 +32,7 @@ class AIAggregatorService {
       throw new Error('No AI models available. Please configure API keys.');
     }
 
-    console.log(`✅ Available models: ${availableModels.join(', ')}`);
+    console.log(` Available models: ${availableModels.join(', ')}`);
 
     // Créer les promesses pour chaque API
     const promises = availableModels.map(async (model) => {
@@ -56,7 +56,7 @@ class AIAggregatorService {
 
         const responseTime = Date.now() - startTime;
 
-        console.log(`✅ ${model} responded in ${responseTime}ms`);
+        console.log(` ${model} responded in ${responseTime}ms`);
 
         return {
           model,
@@ -70,7 +70,7 @@ class AIAggregatorService {
 
       } catch (error) {
         const responseTime = Date.now() - startTime;
-        console.error(`❌ ${model} failed:`, error.message);
+        console.error(`${model} failed:`, error.message);
 
         return {
           model,
@@ -231,3 +231,6 @@ class AIAggregatorService {
 }
 
 export default AIAggregatorService;
+
+
+

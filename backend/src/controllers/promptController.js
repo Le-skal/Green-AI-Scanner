@@ -1,7 +1,7 @@
 import Prompt from '../models/Prompt.js';
 import Response from '../models/Response.js';
 import User from '../models/User.js';
-import AIAggregatorService from '../services/aiAggregatorService.js';
+import OrchestratorService from '../services/ai/orchestratorService.js';
 import ScoringService from '../services/scoringService.js';
 
 /**
@@ -23,7 +23,7 @@ export const createPrompt = async (req, res) => {
       });
     }
 
-    console.log(`\n📝 New prompt from user ${userId}: "${promptText.substring(0, 50)}..."`);
+    console.log(`New prompt from user ${userId}: "${promptText.substring(0, 50)}..."`);
 
     // Créer le prompt dans la DB
     const prompt = await Prompt.create({
@@ -35,13 +35,13 @@ export const createPrompt = async (req, res) => {
     });
 
     // Obtenir les clients AI (depuis req.app.locals)
-    const aiAggregator = new AIAggregatorService(req.app.locals.aiClients);
+    const orchestrator = new OrchestratorService(req.app.locals.aiClients);
     const scoringService = new ScoringService();
 
     const startTime = Date.now();
 
     // Agréger les réponses
-    const aggregatedResponses = await aiAggregator.aggregateResponses(
+    const aggregatedResponses = await orchestrator.aggregateResponses(
       promptText,
       aiModels,
       parameters || {}
@@ -65,6 +65,7 @@ export const createPrompt = async (req, res) => {
         responseTime: response.responseTime,
         tokens: response.tokens,
         scores: response.scores,
+        greenIT: response.greenIT || {},
         nlpAnalysis: response.nlpAnalysis || {},
         status: response.status,
         error: response.error
@@ -96,7 +97,7 @@ export const createPrompt = async (req, res) => {
     // Calculer la matrice de similarité
     const similarityMatrix = scoringService.calculateSimilarityMatrix(scoredResponses);
 
-    console.log(`✅ Prompt processed successfully in ${processingTime}ms`);
+    console.log(`Prompt processed successfully in ${processingTime}ms`);
 
     res.status(201).json({
       prompt: {
@@ -118,7 +119,7 @@ export const createPrompt = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Error creating prompt:', error);
+    console.error('Error creating prompt:', error);
     res.status(500).json({
       error: 'Failed to process prompt',
       message: error.message
@@ -156,7 +157,7 @@ export const getPrompts = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Error fetching prompts:', error);
+    console.error('Error fetching prompts:', error);
     res.status(500).json({
       error: 'Failed to fetch prompts',
       message: error.message
@@ -193,7 +194,7 @@ export const getPromptById = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Error fetching prompt:', error);
+    console.error('Error fetching prompt:', error);
     res.status(500).json({
       error: 'Failed to fetch prompt',
       message: error.message
@@ -229,7 +230,7 @@ export const deletePrompt = async (req, res) => {
     res.json({ message: 'Prompt deleted successfully' });
 
   } catch (error) {
-    console.error('❌ Error deleting prompt:', error);
+    console.error('Error deleting prompt:', error);
     res.status(500).json({
       error: 'Failed to delete prompt',
       message: error.message
@@ -242,8 +243,8 @@ export const deletePrompt = async (req, res) => {
  */
 export const getAvailableModels = async (req, res) => {
   try {
-    const aiAggregator = new AIAggregatorService(req.app.locals.aiClients);
-    const models = aiAggregator.getAvailableModels();
+    const orchestrator = new OrchestratorService(req.app.locals.aiClients);
+    const models = orchestrator.getAvailableModels();
 
     res.json({
       models,
@@ -251,7 +252,7 @@ export const getAvailableModels = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Error fetching models:', error);
+    console.error('Error fetching models:', error);
     res.status(500).json({
       error: 'Failed to fetch available models',
       message: error.message

@@ -47,7 +47,7 @@ export const register = async (req, res) => {
     // Générer le token
     const token = generateToken(user._id);
 
-    console.log(`✅ New user registered: ${email}`);
+    console.log(` New user registered: ${email}`);
 
     res.status(201).json({
       message: 'User registered successfully',
@@ -61,7 +61,7 @@ export const register = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Error registering user:', error);
+    console.error('Error registering user:', error);
     res.status(500).json({
       error: 'Failed to register user',
       message: error.message
@@ -104,7 +104,7 @@ export const login = async (req, res) => {
     // Générer le token
     const token = generateToken(user._id);
 
-    console.log(`✅ User logged in: ${email}`);
+    console.log(` User logged in: ${email}`);
 
     res.json({
       message: 'Login successful',
@@ -118,7 +118,7 @@ export const login = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Error logging in:', error);
+    console.error('Error logging in:', error);
     res.status(500).json({
       error: 'Failed to login',
       message: error.message
@@ -150,7 +150,7 @@ export const getMe = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Error fetching user:', error);
+    console.error('Error fetching user:', error);
     res.status(500).json({
       error: 'Failed to fetch user',
       message: error.message
@@ -186,7 +186,7 @@ export const updateProfile = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Error updating profile:', error);
+    console.error('Error updating profile:', error);
     res.status(500).json({
       error: 'Failed to update profile',
       message: error.message

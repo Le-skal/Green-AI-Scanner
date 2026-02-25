@@ -21,7 +21,49 @@ const downloadFile = (content, filename, mimeType) => {
  * Export data as JSON
  */
 export const exportToJSON = (data, filename = 'prompt-results') => {
-  const jsonContent = JSON.stringify(data, null, 2);
+  // Find winner (highest composite score)
+  const winner = data.responses?.reduce((best, current) => {
+    const currentScore = current.scores?.composite || 0;
+    const bestScore = best?.scores?.composite || 0;
+    return currentScore > bestScore ? current : best;
+  }, data.responses[0]);
+
+  // Enhanced data with winner analysis
+  const enhancedData = {
+    ...data,
+    comparativeAnalysis: {
+      winner: {
+        model: winner?.aiModel || 'Unknown',
+        compositeScore: winner?.scores?.composite || 0,
+        breakdown: {
+          relevance: {
+            score: winner?.scores?.relevance || 0,
+            weight: 0.45,
+            contribution: ((winner?.scores?.relevance || 0) * 0.45).toFixed(1)
+          },
+          sovereignty: {
+            score: winner?.scores?.sovereignty?.score || 0,
+            weight: 0.25,
+            contribution: ((winner?.scores?.sovereignty?.score || 0) * 0.25).toFixed(1)
+          },
+          similarity: {
+            score: winner?.scores?.similarity || 0,
+            weight: 0.20,
+            contribution: ((winner?.scores?.similarity || 0) * 0.2).toFixed(1)
+          },
+          speed: {
+            score: winner?.scores?.speed || 0,
+            weight: 0.10,
+            contribution: ((winner?.scores?.speed || 0) * 0.1).toFixed(1)
+          }
+        },
+        formula: 'Composite = (Relevance × 45%) + (Sovereignty × 25%) + (Similarity × 20%) + (Speed × 10%)'
+      },
+      exportedAt: new Date().toISOString()
+    }
+  };
+
+  const jsonContent = JSON.stringify(enhancedData, null, 2);
   downloadFile(jsonContent, `${filename}.json`, 'application/json');
 };
 
@@ -34,40 +76,66 @@ export const exportToCSV = (data, filename = 'prompt-results') => {
     return;
   }
 
+  // Find winner (highest composite score)
+  const winner = data.responses.reduce((best, current) => {
+    const currentScore = current.scores?.composite || 0;
+    const bestScore = best?.scores?.composite || 0;
+    return currentScore > bestScore ? current : best;
+  }, data.responses[0]);
+
+  // Summary section
+  const summarySection = [
+    '=== COMPARATIVE ANALYSIS ===',
+    `Winner: ${winner.aiModel}`,
+    `Winning Score: ${winner.scores?.composite || 0}/100`,
+    '',
+    '=== SCORE BREAKDOWN ===',
+    `Relevance: ${winner.scores?.relevance || 0} × 45% = ${((winner.scores?.relevance || 0) * 0.45).toFixed(1)}`,
+    `Sovereignty: ${winner.scores?.sovereignty?.score || 0} × 25% = ${((winner.scores?.sovereignty?.score || 0) * 0.25).toFixed(1)}`,
+    `Similarity: ${winner.scores?.similarity || 0} × 20% = ${((winner.scores?.similarity || 0) * 0.2).toFixed(1)}`,
+    `Speed: ${winner.scores?.speed || 0} × 10% = ${((winner.scores?.speed || 0) * 0.1).toFixed(1)}`,
+    '',
+    '=== INDIVIDUAL RESPONSES ==='
+  ];
+
   // CSV Headers
   const headers = [
     'AI Model',
+    'Composite Score',
     'Status',
-    'Response Text',
     'Response Time (ms)',
     'Relevance Score',
     'Similarity Score',
     'Sovereignty Score',
+    'Speed Score',
     'Location',
     'GDPR Compliant',
-    'Keywords',
-    'Sentiment',
-    'Word Count'
+    'Eco-Score',
+    'CO2 Impact (g)',
+    'Response Text (truncated)'
   ];
 
   // CSV Rows
   const rows = data.responses.map(response => [
     response.aiModel || response.model || '-',
+    response.scores?.composite || '-',
     response.status || '-',
-    response.responseText ? `"${response.responseText.replace(/"/g, '""')}"` : '-',
     response.responseTime || '-',
     response.scores?.relevance || '-',
     response.scores?.similarity || '-',
     response.scores?.sovereignty?.score || response.sovereignty?.score || '-',
-    response.sovereignty?.location || '-',
-    response.sovereignty?.gdprCompliant ? 'Yes' : 'No',
-    response.nlpAnalysis?.keywords?.map(k => typeof k === 'string' ? k : k.word).join('; ') || '-',
-    response.nlpAnalysis?.sentiment || '-',
-    response.nlpAnalysis?.wordCount || '-'
+    response.scores?.speed || '-',
+    response.scores?.sovereignty?.metadata?.serverLocation || '-',
+    response.scores?.sovereignty?.rgpd?.compliant ? 'Yes' : 'No',
+    response.greenIT?.ecoScore || '-',
+    response.greenIT?.carbon?.impactGrams || '-',
+    response.responseText ? `"${response.responseText.substring(0, 200).replace(/"/g, '""')}..."` : '-'
   ]);
 
-  // Combine headers and rows
+  // Combine all sections
   const csvContent = [
+    ...summarySection,
+    '',
     headers.join(','),
     ...rows.map(row => row.join(','))
   ].join('\n');
@@ -263,8 +331,101 @@ const generatePDFHTML = (data) => {
         ` : ''}
       </div>
 
+      ${(() => {
+        // Find winner (highest composite score)
+        const winner = responses.reduce((best, current) => {
+          const currentScore = current.scores?.composite || 0;
+          const bestScore = best?.scores?.composite || 0;
+          return currentScore > bestScore ? current : best;
+        }, responses[0]);
+
+        return `
+        <h2>Comparative Analysis - Winner</h2>
+        <div style="background: #1a1a1a; color: #f5f1e8; padding: 20px; margin: 20px 0; border: 3px solid #d4c5a9;">
+          <div style="text-align: center;">
+            <div style="font-size: 14px; color: #d4c5a9; margin-bottom: 10px;">BEST MODEL</div>
+            <div style="font-size: 32px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase;">
+              ${winner.aiModel || 'Unknown'}
+            </div>
+            <div style="font-size: 48px; font-weight: bold; color: #d4c5a9;">
+              ${winner.scores?.composite || 0}<span style="font-size: 24px;">/100</span>
+            </div>
+          </div>
+        </div>
+
+        <h2>Why This Model Won - Score Breakdown</h2>
+        <div style="background: #f5f1e8; border: 1px solid #d4c5a9; padding: 20px; margin: 20px 0;">
+          <p style="margin-bottom: 15px;">
+            The composite score is calculated using a weighted formula that prioritizes relevance
+            while considering privacy, consensus, and efficiency:
+          </p>
+
+          <div style="background: white; border: 1px solid #d4c5a9; padding: 15px; margin: 15px 0; font-family: monospace; font-size: 13px;">
+            <strong>Composite Score Formula:</strong><br>
+            = (Relevance × <strong>45%</strong>) + (Sovereignty × <strong>25%</strong>) +
+            (Similarity × <strong>20%</strong>) + (Speed × <strong>10%</strong>)
+          </div>
+
+          <div style="margin-top: 20px;">
+            <strong style="margin-bottom: 10px; display: block;">Calculation for ${winner.aiModel}:</strong>
+
+            <div style="margin: 10px 0; display: flex; align-items: center; gap: 10px;">
+              <span style="width: 100px;">Relevance:</span>
+              <div style="flex: 1; background: #e8dcc4; height: 20px; position: relative; border: 1px solid #d4c5a9;">
+                <div style="background: #1a1a1a; height: 100%; width: ${winner.scores?.relevance || 0}%;"></div>
+              </div>
+              <span style="width: 150px; text-align: right; font-size: 12px;">
+                ${winner.scores?.relevance || 0} × 45% = ${((winner.scores?.relevance || 0) * 0.45).toFixed(1)}
+              </span>
+            </div>
+
+            <div style="margin: 10px 0; display: flex; align-items: center; gap: 10px;">
+              <span style="width: 100px;">Sovereignty:</span>
+              <div style="flex: 1; background: #e8dcc4; height: 20px; position: relative; border: 1px solid #d4c5a9;">
+                <div style="background: #a89263; height: 100%; width: ${winner.scores?.sovereignty?.score || 0}%;"></div>
+              </div>
+              <span style="width: 150px; text-align: right; font-size: 12px;">
+                ${winner.scores?.sovereignty?.score || 0} × 25% = ${((winner.scores?.sovereignty?.score || 0) * 0.25).toFixed(1)}
+              </span>
+            </div>
+
+            <div style="margin: 10px 0; display: flex; align-items: center; gap: 10px;">
+              <span style="width: 100px;">Similarity:</span>
+              <div style="flex: 1; background: #e8dcc4; height: 20px; position: relative; border: 1px solid #d4c5a9;">
+                <div style="background: #c5b083; height: 100%; width: ${winner.scores?.similarity || 0}%;"></div>
+              </div>
+              <span style="width: 150px; text-align: right; font-size: 12px;">
+                ${winner.scores?.similarity || 0} × 20% = ${((winner.scores?.similarity || 0) * 0.2).toFixed(1)}
+              </span>
+            </div>
+
+            <div style="margin: 10px 0; display: flex; align-items: center; gap: 10px;">
+              <span style="width: 100px;">Speed:</span>
+              <div style="flex: 1; background: #e8dcc4; height: 20px; position: relative; border: 1px solid #d4c5a9;">
+                <div style="background: #d4c5a3; height: 100%; width: ${winner.scores?.speed || 0}%;"></div>
+              </div>
+              <span style="width: 150px; text-align: right; font-size: 12px;">
+                ${winner.scores?.speed || 0} × 10% = ${((winner.scores?.speed || 0) * 0.1).toFixed(1)}
+              </span>
+            </div>
+
+            <div style="margin-top: 20px; padding-top: 15px; border-top: 2px solid #d4c5a9; display: flex; justify-content: space-between; align-items: center; background: #1a1a1a; color: #f5f1e8; padding: 15px;">
+              <span style="font-weight: bold;">Final Composite Score:</span>
+              <span style="font-size: 28px; font-weight: bold;">${winner.scores?.composite || 0}/100</span>
+            </div>
+          </div>
+
+          <div style="background: #f5f1e8; border-left: 4px solid #1a1a1a; padding: 10px; margin-top: 15px; font-size: 12px;">
+            <strong>Why these weights?</strong> Relevance (45%) is most important because answer quality matters most.
+            Sovereignty (25%) ensures data privacy. Similarity (20%) validates consensus. Speed (10%) improves user
+            experience. These weights are based on academic research in Information Retrieval.
+          </div>
+        </div>
+        `;
+      })()}
+
       ${summary && Object.keys(summary).length > 0 ? `
-      <h2>Summary</h2>
+      <h2>Summary Statistics</h2>
       <div class="summary">
         ${summary.averageRelevance !== undefined ? `
         <div class="summary-item">
@@ -309,19 +470,40 @@ const generatePDFHTML = (data) => {
               ${response.responseText || 'No response text'}
             </div>
 
+            <div style="background: #1a1a1a; color: #f5f1e8; padding: 15px; margin: 15px 0; text-align: center;">
+              <div style="font-size: 12px; color: #d4c5a9; margin-bottom: 5px;">COMPOSITE SCORE</div>
+              <div style="font-size: 36px; font-weight: bold;">
+                ${response.scores?.composite || '-'}<span style="font-size: 18px; color: #d4c5a9;">/100</span>
+              </div>
+            </div>
+
             <div class="scores">
               <div class="score-item">
-                <div class="score-label">Relevance</div>
+                <div class="score-label">Relevance (BM25)</div>
                 <div class="score-value">${response.scores?.relevance || '-'}/100</div>
               </div>
               <div class="score-item">
-                <div class="score-label">Similarity</div>
+                <div class="score-label">Similarity (TF-IDF)</div>
                 <div class="score-value">${response.scores?.similarity || '-'}/100</div>
               </div>
               <div class="score-item">
                 <div class="score-label">Sovereignty</div>
                 <div class="score-value">${response.scores?.sovereignty?.score || response.sovereignty?.score || '-'}/100</div>
               </div>
+              <div class="score-item">
+                <div class="score-label">Speed</div>
+                <div class="score-value">${response.scores?.speed || '-'}/100</div>
+              </div>
+              ${response.greenIT?.ecoScore && response.greenIT.ecoScore !== 'N/A' ? `
+              <div class="score-item">
+                <div class="score-label">Eco-Score</div>
+                <div class="score-value">${response.greenIT.ecoScore}</div>
+              </div>
+              <div class="score-item">
+                <div class="score-label">CO₂ Impact</div>
+                <div class="score-value">${response.greenIT.carbon.impactGrams.toFixed(4)}g</div>
+              </div>
+              ` : ''}
             </div>
 
             ${response.nlpAnalysis?.keywords && response.nlpAnalysis.keywords.length > 0 ? `

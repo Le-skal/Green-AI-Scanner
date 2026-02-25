@@ -5,10 +5,10 @@ const PromptInput = ({ onSubmit, loading }) => {
   const [selectedModels, setSelectedModels] = useState(['gemini', 'mistral']);
 
   const aiModels = [
-    { id: 'gemini', name: 'Gemini 2.5', provider: 'Google', sovereignty: 60 },
-    { id: 'mistral', name: 'Mistral', provider: 'Mistral AI', sovereignty: 90 },
-    { id: 'huggingface', name: 'DeepSeek-R1', provider: 'Hugging Face', sovereignty: 70 },
-    { id: 'cohere', name: 'Command', provider: 'Cohere', sovereignty: 55 },
+    { id: 'gemini', name: 'Gemini 2.5', provider: 'Google' },
+    { id: 'mistral', name: 'Mistral', provider: 'Mistral AI' },
+    { id: 'huggingface', name: 'DeepSeek-R1', provider: 'Hugging Face' },
+    { id: 'cohere', name: 'Command', provider: 'Cohere' },
   ];
 
   const handleSubmit = (e) => {
@@ -70,14 +70,6 @@ const PromptInput = ({ onSubmit, loading }) => {
                     <p className="font-medium text-sm">{model.name}</p>
                     <p className={`text-xs ${selectedModels.includes(model.id) ? 'text-sand-400' : 'text-ink-500'}`}>
                       {model.provider}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className={`text-xs ${selectedModels.includes(model.id) ? 'text-sand-400' : 'text-ink-500'}`}>
-                      Sovereignty
-                    </p>
-                    <p className={`text-sm font-medium ${selectedModels.includes(model.id) ? 'text-sand-100' : 'text-ink-900'}`}>
-                      {model.sovereignty}/100
                     </p>
                   </div>
                 </div>
