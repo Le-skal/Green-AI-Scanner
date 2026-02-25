@@ -846,8 +846,6 @@ L'API REST est entièrement documentée avec Swagger/OpenAPI. Vous pouvez tester
 
 ---
 
----
-
 ## Tâches Restantes
 
 ### Prioritaires
