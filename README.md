@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🤖 AI Response Aggregator
+# AI Response Aggregator
 ### *Agrégateur de Moteurs d'IA pour la Consolidation et l'Analyse*
 
 <p><em>Unify AI Responses, Empower Data-Driven Decisions with Data Sovereignty</em></p>
@@ -43,60 +43,60 @@
 
 ---
 
-## 📑 Table des Matières
+## Table des Matières
 
-- [🎯 Objectif du Projet](#-objectif-du-projet)
-- [🌟 Fonctionnalités Implémentées](#-fonctionnalités-implémentées)
-  - [1. Agrégation Multi-API IA](#-1-agrégation-multi-api-ia)
-  - [2. Analyse Sémantique et Scoring](#-2-analyse-sémantique-et-scoring)
-  - [3. Scoring Data Souverain](#-3-scoring-data-souverain)
-  - [4. Visualisation Comparative](#-4-visualisation-comparative-dataviz)
-  - [5. Authentification](#-5-authentification-et-gestion-utilisateurs)
-  - [6. Historique](#-6-historique-et-navigation)
-  - [7. Export Multi-Format](#-7-export-multi-format)
-- [🏗️ Architecture Technique](#️-architecture-technique-implémentée)
-- [📐 Architecture Système](#-architecture-système)
-- [📅 État d'Avancement](#-état-davancement-par-phase)
-- [📊 Modèles de Données](#-modèles-de-données-réels)
-- [🔐 Sécurité](#-sécurité-implémentée)
-- [🌍 Souveraineté Data](#-indicateurs-de-souveraineté-data)
-- [📈 Performances](#-performances-et-kpis)
-- [🚀 Installation](#-installation-et-démarrage)
-- [📁 Structure du Projet](#-structure-du-projet)
-- [🎨 Design System](#-design-system)
-- [🐛 Problèmes Résolus](#-problèmes-résolus)
-- [📚 Documentation API](#-documentation-api)
-- [📞 Contact](#-contact)
+- [Objectif du Projet](#objectif-du-projet)
+- [Fonctionnalités Implémentées](#fonctionnalités-implémentées)
+  - [1. Agrégation Multi-API IA](#1-agrégation-multi-api-ia)
+  - [2. Analyse Sémantique et Scoring](#2-analyse-sémantique-et-scoring)
+  - [3. Scoring Data Souverain](#3-scoring-data-souverain)
+  - [4. Visualisation Comparative](#4-visualisation-comparative-dataviz)
+  - [5. Authentification](#5-authentification-et-gestion-utilisateurs)
+  - [6. Historique](#6-historique-et-navigation)
+  - [7. Export Multi-Format](#7-export-multi-format)
+- [Architecture Technique](#architecture-technique-implémentée)
+- [Architecture Système](#architecture-système)
+- [État d'Avancement](#état-davancement-par-phase)
+- [Modèles de Données](#modèles-de-données-réels)
+- [Sécurité](#sécurité-implémentée)
+- [Souveraineté Data](#indicateurs-de-souveraineté-data)
+- [Performances](#performances-et-kpis)
+- [Installation](#installation-et-démarrage)
+- [Structure du Projet](#structure-du-projet)
+- [Design System](#design-system)
+- [Problèmes Résolus](#problèmes-résolus)
+- [Documentation API](#documentation-api)
+- [Contact](#contact)
 
 ---
 
-## 🎯 Objectif du Projet
+## Objectif du Projet
 
 Créer une plateforme web permettant de **consolider et comparer les réponses de plusieurs moteurs d'IA** pour un même prompt, en évaluant leur pertinence, cohérence et niveau de souveraineté des données.
 
 Ce projet s'inscrit dans le cadre du **PFE 2025-2026** avec pour objectifs :
-- 🌱 **IT for Green** : Évaluer l'impact écologique des modèles d'IA
-- 🔒 **Data Sovereignty** : Analyser la souveraineté et conformité RGPD
-- 📊 **Analyse Comparative** : Comparer les performances de 4 moteurs d'IA
-- 🎨 **DataViz Interactive** : Visualiser les résultats de manière claire et interactive
+- **IT for Green** : Évaluer l'impact écologique des modèles d'IA
+- **Data Sovereignty** : Analyser la souveraineté et conformité RGPD
+- **Analyse Comparative** : Comparer les performances de 4 moteurs d'IA
+- **DataViz Interactive** : Visualiser les résultats de manière claire et interactive
 
 ---
 
-## 🌟 Fonctionnalités Implémentées
+## Fonctionnalités Implémentées
 
-### ✅ 1. Agrégation Multi-API IA
+### 1. Agrégation Multi-API IA
 - Interface de saisie de prompt unique
 - Envoi simultané vers 4 APIs d'IA :
-  - ✅ **Google Gemini** (Gemini 2.0 Flash)
-  - ✅ **Mistral AI** (Mistral Large Latest)
-  - ✅ **Hugging Face** (DeepSeek-R1-Distill-Qwen-32B)
-  - ✅ **Cohere** (Command)
+  - **Google Gemini** (Gemini 2.0 Flash)
+  - **Mistral AI** (Mistral Large Latest)
+  - **Hugging Face** (DeepSeek-R1-Distill-Qwen-32B)
+  - **Cohere** (Command)
 - Gestion des timeouts et erreurs par API
 - Agrégation parallèle des réponses
 
-### ✅ 2. Analyse Sémantique et Scoring Scientifiquement Validé
+### 2. Analyse Sémantique et Scoring Scientifiquement Validé
 
-#### 🔬 Méthodes Scientifiques Implémentées
+#### Méthodes Scientifiques Implémentées
 
 Ce projet utilise des algorithmes et métriques **scientifiquement validés** issus de la recherche académique en Information Retrieval (IR) et Natural Language Processing (NLP), au lieu de simples heuristiques arbitraires.
 
@@ -174,7 +174,7 @@ Ce projet utilise des algorithmes et métriques **scientifiquement validés** is
 6. **Score de Vitesse** (0-100) :
    - Temps de réponse normalisé (plus rapide = meilleur score)
 
-#### 🏆 Score Composite (Pondération Scientifiquement Justifiée)
+#### Score Composite (Pondération Scientifiquement Justifiée)
 
 **Formule Optimisée :**
 
@@ -184,10 +184,10 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 ```
 
 **Pondération basée sur la recherche académique :**
-- 🎯 **45%** - Pertinence BM25 (critère principal en IR - Manning et al., 2008)
-- 🔒 **25%** - Souveraineté (RGPD + Green IT - importance réglementaire)
-- 🤝 **20%** - Consensus TF-IDF (Ensemble methods - Dietterich, 2000)
-- ⚡ **10%** - Vitesse (Green computing - efficacité énergétique)
+- **45%** - Pertinence BM25 (critère principal en IR - Manning et al., 2008)
+- **25%** - Souveraineté (RGPD + Green IT - importance réglementaire)
+- **20%** - Consensus TF-IDF (Ensemble methods - Dietterich, 2000)
+- **10%** - Vitesse (Green computing - efficacité énergétique)
 
 **Justification des pondérations** :
 - La recherche en Information Retrieval montre que la pertinence est le critère #1 (45%)
@@ -222,16 +222,16 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 
 5. **Ensemble Methods** : Dietterich, T. G. (2000). "Ensemble Methods in Machine Learning". *Multiple Classifier Systems*.
 
-### ✅ 3. Scoring Data Souverain
+### 3. Scoring Data Souverain
 - **Localisation des serveurs** : USA, France, Europe
 - **Conformité RGPD** : Évaluation par modèle
 - **Score de souveraineté** (0-100) :
-  - 🟢 Mistral AI : 90/100 (France, RGPD complet)
-  - 🟡 Hugging Face : 70/100 (EU/USA, partiellement conforme)
-  - 🟡 Google Gemini : 60/100 (USA, conformité partielle)
-  - 🔴 Cohere : 55/100 (USA, risques de dépendance)
+  - Mistral AI : 90/100 (France, RGPD complet)
+  - Hugging Face : 70/100 (EU/USA, partiellement conforme)
+  - Google Gemini : 60/100 (USA, conformité partielle)
+  - Cohere : 55/100 (USA, risques de dépendance)
 
-### ✅ 4. Visualisation Comparative (DataViz)
+### 4. Visualisation Comparative (DataViz)
 - **Tableau de comparaison** : Affichage côte à côte avec ResponseCard
 - **Graphiques de scores** : Barres comparatives (ScoresChart)
 - **Radar de performance** : Visualisation multi-critères (PerformanceRadar)
@@ -239,21 +239,21 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 - **Nuages de mots** : Visualisation des keywords fréquents (WordCloud)
 - **Résumé comparatif** : Moyennes et consensus (ComparisonSummary)
 
-### ✅ 5. Authentification et Gestion Utilisateurs
+### 5. Authentification et Gestion Utilisateurs
 - **Système optionnel** : L'application fonctionne sans compte
 - **JWT Authentication** : Tokens sécurisés
 - **Gestion de session** : Zustand avec persistence localStorage
 - **Pages** : Login, Register, Profile
 - **Sécurité** : Bcrypt pour hash des mots de passe
 
-### ✅ 6. Historique et Navigation
+### 6. Historique et Navigation
 - **Historique complet** : Page dédiée avec tous les prompts
 - **Sidebar dynamique** : Affichage des 5 derniers prompts
 - **Vue détails** : Affichage complet d'un prompt avec toutes ses réponses
 - **Navigation** : Query params pour liens directs
 - **Timestamps intelligents** : "5m ago", "2h ago", etc.
 
-### ✅ 7. Export Multi-Format
+### 7. Export Multi-Format
 - **Export JSON** : Données brutes complètes
 - **Export CSV** : Format tabulaire pour analyse Excel
 - **Export PDF** : Rapport professionnel formaté et imprimable
@@ -264,7 +264,7 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 
 ---
 
-## 🏗️ Architecture Technique Implémentée
+## Architecture Technique Implémentée
 
 ### Stack Technique Réelle
 
@@ -317,7 +317,7 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 
 ---
 
-## 📐 Architecture Système
+## Architecture Système
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -393,7 +393,7 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 
 ---
 
-## 📅 État d'Avancement par Phase
+## État d'Avancement par Phase
 
 ### Phase 1 : Planification et CDC ✅
 - [x] Définition des besoins
@@ -473,7 +473,7 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 
 ---
 
-## 📊 Modèles de Données Réels
+## Modèles de Données Réels
 
 ### Prompt Schema
 ```javascript
@@ -570,7 +570,7 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 
 ---
 
-## 🔐 Sécurité Implémentée
+## Sécurité Implémentée
 
 ### Mesures en Place
 - ✅ Hash des mots de passe avec bcrypt (10 rounds)
@@ -603,49 +603,49 @@ COHERE_API_KEY=votre_cle_cohere
 
 ---
 
-## 🌍 Indicateurs de Souveraineté Data
+## Indicateurs de Souveraineté Data
 
 ### Données par Modèle
 
-#### 🟢 Mistral AI (90/100)
-- **Location** : France 🇫🇷
-- **RGPD** : ✅ Conforme
+#### Mistral AI (90/100)
+- **Location** : France
+- **RGPD** : Conforme
 - **Cloud** : Scaleway (français)
 - **Open Source** : Partiellement
 - **Transparence** : Excellente
 
-#### 🟡 Hugging Face (70/100)
-- **Location** : Europe/USA 🇪🇺🇺🇸
-- **RGPD** : ⚠️ Partiel
+#### Hugging Face (70/100)
+- **Location** : Europe/USA
+- **RGPD** : Partiel
 - **Cloud** : Multi-cloud
-- **Open Source** : ✅ Oui
+- **Open Source** : Oui
 - **Transparence** : Bonne
 
-#### 🟡 Google Gemini (60/100)
-- **Location** : USA 🇺🇸
-- **RGPD** : ⚠️ Partiel (bouclier UE-US)
+#### Google Gemini (60/100)
+- **Location** : USA
+- **RGPD** : Partiel (bouclier UE-US)
 - **Cloud** : Google Cloud
-- **Open Source** : ❌ Non
+- **Open Source** : Non
 - **Transparence** : Moyenne
 
-#### 🔴 Cohere (55/100)
-- **Location** : USA 🇺🇸
-- **RGPD** : ⚠️ Limité
+#### Cohere (55/100)
+- **Location** : USA
+- **RGPD** : Limité
 - **Cloud** : AWS (multi-régions)
-- **Open Source** : ❌ Non
+- **Open Source** : Non
 - **Transparence** : Moyenne
 
 ---
 
-## 📈 Performances et KPIs
+## Performances et KPIs
 
 ### Performances Mesurées
-- ⚡ Temps de réponse moyen : 3-8s (4 APIs en parallèle)
-- 📊 Support de 4 APIs simultanées
-- 💾 Historique illimité par utilisateur
-- 📁 Export en 3 formats (JSON, CSV, PDF)
-- 🎨 Visualisations temps réel
-- 📱 Interface responsive (mobile + desktop)
+- Temps de réponse moyen : 3-8s (4 APIs en parallèle)
+- Support de 4 APIs simultanées
+- Historique illimité par utilisateur
+- Export en 3 formats (JSON, CSV, PDF)
+- Visualisations temps réel
+- Interface responsive (mobile + desktop)
 
 ### Métriques Techniques
 - Frontend build size : ~500KB (gzip)
@@ -655,7 +655,7 @@ COHERE_API_KEY=votre_cle_cohere
 
 ---
 
-## 🚀 Installation et Démarrage
+## Installation et Démarrage
 
 ### Prérequis
 - Node.js 18+
@@ -684,7 +684,7 @@ npm run dev
 
 ---
 
-## 📁 Structure du Projet
+## Structure du Projet
 
 ```
 ProjetFinale3/
@@ -758,7 +758,9 @@ ProjetFinale3/
 
 ---
 
-## 🎨 Design System
+## Design System
+
+**Maquettes Figma**: [Voir le design complet sur Figma](https://www.figma.com/design/ErpgGc9MsR4MzDUZs28YrK/PFE?node-id=0-1&t=1zoBcZ5hSujxvZd5-1)
 
 ### Palette de Couleurs
 ```css
@@ -791,7 +793,7 @@ ProjetFinale3/
 
 ---
 
-## 🐛 Problèmes Résolus
+## Problèmes Résolus
 
 ### 1. Hugging Face API Endpoint Deprecated
 **Problème** : `api-inference.huggingface.co` n'est plus supporté
@@ -821,7 +823,7 @@ ProjetFinale3/
 
 ---
 
-## 📚 Documentation API
+## Documentation API
 
 ### Endpoints Disponibles
 
@@ -840,80 +842,47 @@ ProjetFinale3/
 
 ---
 
-## 📝 Licence
+## Licence
 
 Ce projet est confidentiel et ne doit pas être diffusé sans l'accord de Skills4Mind.
 
 ---
 
-## 🎯 Retours Professeur - Prochaines Tâches Prioritaires
+## Tâches Restantes
 
-### Documentation et Tests
-- [x] **Swagger/OpenAPI** - Documentation API REST interactive (TERMINÉ)
-  - Installation: `swagger-jsdoc` + `swagger-ui-express`
-  - Endpoint `/api-docs` créé et fonctionnel
-  - Tous les endpoints documentés (POST/GET /api/prompts, /api/auth)
-  - Schémas complets (User, Prompt, Response, AIModel)
-  - Accessible sur: http://localhost:5001/api-docs
+### Prioritaires
 
-- [ ] **Captures d'écran Frontend** - Ajouter screenshots dans documentation
-  - Interface principale avec prompt input
-  - Résultats avec visualisations (charts, radar, matrices)
-  - Page historique
+- [ ] **HashiCorp Vault** - Migration de .env vers Vault pour gestion sécurisée des secrets
+  - Documentation: https://developer.hashicorp.com/vault
+  - Avantages: Rotation automatique, audit logs, accès contrôlé
+  - Migration: API keys (GEMINI, MISTRAL, HUGGINGFACE, COHERE), MONGODB_URI, JWT_SECRET
+
+- [ ] **Captures d'écran** - Documentation visuelle de l'application
+  - Interface principale avec prompt input et sélection modèles
+  - Résultats avec visualisations (graphiques, radar, matrices)
+  - Page historique avec liste des prompts
   - Exports (JSON, CSV, PDF)
 
-### Sécurité et Architecture
+### Optionnelles
 
-- [ ] **HashiCorp Vault** - Remplacer .env par Vault pour gestion des secrets
-  - Documentation: https://developer.hashicorp.com/vault
-  - Avantages: Modulable, rotation automatique, audit logs
-  - Migration des API keys (GEMINI_API_KEY, MISTRAL_API_KEY, etc.)
-  - Migration MONGODB_URI et JWT_SECRET
-
-### Principes SOLID (TERMINÉ)
-
-Référence: https://www.geeksforgeeks.org/system-design/solid-principle-in-programming-understand-with-real-life-examples/
-
-- [x] **Single Responsibility Principle** - Architecture refactorisée (TERMINÉ)
-
-  **Nouvelle architecture respectant SOLID**:
-
-  1. **Services AI séparés** - Chaque provider a son propre service
-     - `services/ai/geminiService.js` - Responsable uniquement de Gemini
-     - `services/ai/mistralService.js` - Responsable uniquement de Mistral
-     - `services/ai/huggingfaceService.js` - Responsable uniquement de Hugging Face
-     - `services/ai/cohereService.js` - Responsable uniquement de Cohere
-
-  2. **Orchestrator Service** - Coordination centralisée
-     - `services/ai/orchestratorService.js` - Coordonne les services AI
-     - Gère les appels parallèles et timeouts
-     - Ne fait PAS d'appels API directs (délègue aux services spécialisés)
-
-  3. **Controller simplifié**
-     - `promptController.js` utilise maintenant `OrchestratorService`
-     - Garde uniquement la logique HTTP (req/res)
-     - Délègue la logique métier aux services
-
-  **Avantages**:
-  - Chaque fichier a une seule responsabilité
-  - Code plus maintenable et testable
-  - Facilite l'ajout de nouveaux providers AI
-  - Respect des standards de l'industrie
-
-- [x] **Réduction des emojis** - Code professionnel sans emojis (TERMINÉ)
-  - Supprimé emojis dans code backend (index.js, database.js, ai-apis.js, controllers)
-  - Logs propres et professionnels
-  - Emojis conservés uniquement dans README pour lisibilité
-
-### Optimisations (Optionnel)
 - [ ] Tests unitaires (Jest + React Testing Library)
 - [ ] Tests d'intégration (Supertest)
-- [ ] Déploiement production (Vercel + Railway)
-- [ ] Cache Redis pour réponses
-- [ ] Rate limiting avancé
+- [ ] Déploiement production (Vercel frontend + Railway backend)
+- [ ] Cache Redis pour optimiser les réponses
+- [ ] Rate limiting avancé par utilisateur
+
+### Architecture SOLID
+
+Le projet respecte les principes SOLID (notamment Single Responsibility Principle):
+- Chaque service AI a sa propre responsabilité (`geminiService.js`, `mistralService.js`, etc.)
+- L'orchestrateur coordonne sans faire d'appels API directs
+- Architecture modulaire facilitant l'ajout de nouveaux modèles
+- Code maintenable et testable selon les standards de l'industrie
+
+Référence: https://www.geeksforgeeks.org/system-design/solid-principle-in-programming-understand-with-real-life-examples/
 
 ---
 
 **Version** : 2.0
-**Dernière mise à jour** : 1er Janvier 2026
+**Dernière mise à jour** : 25 Fevrier 2026
 **Statut** : ✅ Fonctionnel et opérationnel
