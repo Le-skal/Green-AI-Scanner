@@ -39,6 +39,8 @@
 ### 📊 Projet de Fin d'Études 2025-2026
 **IT for Green & Data Sovereignty** | Skills4Mind | B3 Data & IA
 
+**Maquettes Figma** : [Voir le design complet](https://www.figma.com/design/ErpgGc9MsR4MzDUZs28YrK/PFE?node-id=0-1&t=1zoBcZ5hSujxvZd5-1)
+
 </div>
 
 ---
@@ -56,15 +58,11 @@
   - [7. Export Multi-Format](#7-export-multi-format)
 - [Architecture Technique](#architecture-technique-implémentée)
 - [Architecture Système](#architecture-système)
-- [État d'Avancement](#état-davancement-par-phase)
 - [Modèles de Données](#modèles-de-données-réels)
 - [Sécurité](#sécurité-implémentée)
-- [Souveraineté Data](#indicateurs-de-souveraineté-data)
 - [Performances](#performances-et-kpis)
 - [Installation](#installation-et-démarrage)
 - [Structure du Projet](#structure-du-projet)
-- [Design System](#design-system)
-- [Problèmes Résolus](#problèmes-résolus)
 - [Documentation API](#documentation-api)
 - [Contact](#contact)
 
@@ -144,7 +142,7 @@ Ce projet utilise des algorithmes et métriques **scientifiquement validés** is
      - Standard académique pour l'évaluation NLP
      - Capture à la fois le contenu et la structure
 
-4. **Score de Souveraineté Dynamique** (0-100) - **AMÉLIORÉ** :
+4. **Score de Souveraineté Dynamique** (0-100) :
    - **Calcul scientifique en 3 composantes** :
      - Hosting (50 pts max) : Localisation serveurs (France=50, EU=40, USA=20)
      - Company (30 pts max) : Nationalité entreprise (France=30, EU=25, USA=15)
@@ -152,13 +150,8 @@ Ce projet utilise des algorithmes et métriques **scientifiquement validés** is
    - **Cloud Act Risk** : Détection automatique si score < 50
    - **RGPD Analysis** : Statut de conformité détaillé
    - **Recommandations** : Suggestions de sécurité automatiques
-   - **Scores réels** :
-     - Mistral: 95/100 (France + Open Weights + RGPD complet)
-     - Hugging Face: 70/100 (USA + Open Source)
-     - Gemini: 40/100 (USA + Proprietary)
-     - Cohere: 25/100 (USA + Proprietary + Non RGPD)
 
-5. **Green IT Impact Écologique** - **NOUVEAU** :
+5. **Green IT Impact Écologique** :
    - **Consommation énergétique** : kWh par 1000 tokens (Mistral=0.002, Gemini=0.005, Cohere=0.006)
    - **Impact carbone** : Grammes de CO2 calculés selon localisation serveurs
      - France: 50g CO2/kWh (nucléaire/renouvelable)
@@ -168,7 +161,6 @@ Ce projet utilise des algorithmes et métriques **scientifiquement validés** is
    - **Facteur temporel** : 1.2x entre 18h-22h (heures de pointe)
    - **Équivalences** : km voiture, charges smartphone, streaming vidéo, arbres/an
    - **Référence** : Green IT best practices + IEA 2024 carbon intensity data
-   - **Résultats** : Mistral (A - 0.096g CO2), Gemini (D - 2.34g CO2)
    - **Status** : ✅ FONCTIONNEL (frontend affiche toutes les données)
 
 6. **Score de Vitesse** (0-100) :
@@ -210,26 +202,12 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 - Matrices de similarité cosinus
 - ROUGE scores (qualité de génération)
 
-#### Références Académiques
-
-1. **BM25** : Robertson, S. & Zaragoza, H. (2009). "The Probabilistic Relevance Framework: BM25 and Beyond". *Foundations and Trends in Information Retrieval*.
-
-2. **TF-IDF & Cosine Similarity** : Salton, G. & McGill, M. J. (1983). "Introduction to Modern Information Retrieval". *McGraw-Hill*.
-
-3. **ROUGE** : Lin, C. Y. (2004). "ROUGE: A Package for Automatic Evaluation of Summaries". *ACL Workshop*.
-
-4. **Composite Scoring** : Manning, C. D., Raghavan, P., & Schütze, H. (2008). "Introduction to Information Retrieval". *Cambridge University Press*.
-
-5. **Ensemble Methods** : Dietterich, T. G. (2000). "Ensemble Methods in Machine Learning". *Multiple Classifier Systems*.
-
 ### 3. Scoring Data Souverain
 - **Localisation des serveurs** : USA, France, Europe
-- **Conformité RGPD** : Évaluation par modèle
-- **Score de souveraineté** (0-100) :
-  - Mistral AI : 90/100 (France, RGPD complet)
-  - Hugging Face : 70/100 (EU/USA, partiellement conforme)
-  - Google Gemini : 60/100 (USA, conformité partielle)
-  - Cohere : 55/100 (USA, risques de dépendance)
+- **Conformité RGPD** : Évaluation dynamique par modèle
+- **Score de souveraineté** (0-100) : calculé dynamiquement via 3 composantes (Hosting, Company, License)
+- **Cloud Act Risk** : détection automatique
+- **Recommandations RGPD** : suggestions de sécurité générées automatiquement
 
 ### 4. Visualisation Comparative (DataViz)
 - **Tableau de comparaison** : Affichage côte à côte avec ResponseCard
@@ -394,83 +372,6 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 
 ---
 
-## État d'Avancement par Phase
-
-### Phase 1 : Planification et CDC ✅
-- [x] Définition des besoins
-- [x] Rédaction du CDC
-- [x] Choix des technologies
-- [x] Architecture détaillée
-
-### Phase 2 : Setup et Structure du Projet ✅
-- [x] Initialisation frontend (React + Vite + Tailwind)
-- [x] Initialisation backend (Node.js + Express)
-- [x] Configuration MongoDB Atlas
-- [x] Git et structure des dossiers
-- [x] Configuration .env (4 API keys)
-
-### Phase 3 : Backend - Core API ✅
-- [x] Routes API REST (/api/prompts, /api/auth, /api/models)
-- [x] Authentification JWT (optionnelle)
-- [x] Connexions aux 4 APIs IA externes
-- [x] Système d'agrégation parallèle
-- [x] Gestion d'erreurs et timeouts
-
-### Phase 4 : Backend - Scoring et Analyse ✅
-- [x] **BM25 Algorithm** pour relevance scoring (Robertson & Zaragoza, 2009)
-- [x] **TF-IDF + Cosine Similarity** pour comparaison sémantique (Salton & McGill, 1983)
-- [x] **ROUGE Scores** (ROUGE-1, ROUGE-2, ROUGE-L) pour quality assessment (Lin, 2004)
-- [x] Analyse NLP avancée : tokenization, stopword removal, stemming
-- [x] Scoring de souveraineté (location, RGPD, cloud)
-- [x] Score composite scientifiquement pondéré (45% BM25 + 25% Sovereignty + 20% TF-IDF + 10% Speed)
-- [x] Génération de matrices de similarité cosinus
-
-### Phase 5 : Frontend - Interface Utilisateur ✅
-- [x] Interface de saisie de prompts (PromptInput)
-- [x] Tableau de comparaison (ResponseCard)
-- [x] Authentification côté client (Login/Register)
-- [x] Navigation et routing (React Router)
-- [x] Design system beige/noir professionnel
-- [x] Responsive design (mobile-first)
-
-### Phase 6 : Frontend - DataViz ✅
-- [x] Graphiques comparatifs (ScoresChart - Chart.js)
-- [x] Radar de performance (PerformanceRadar - Recharts)
-- [x] Matrices de similarité (SimilarityMatrix - custom)
-- [x] Nuages de mots (WordCloud - custom)
-- [x] Résumé comparatif (ComparisonSummary)
-- [x] Visualisations responsive et interactives
-
-### Phase 7 : Fonctionnalités Avancées ✅
-- [x] Historique des prompts (page dédiée)
-- [x] Sidebar historique (5 derniers prompts)
-- [x] Export JSON (données brutes)
-- [x] Export CSV (format tabulaire)
-- [x] Export PDF (rapport formaté)
-- [x] Vue détails de prompt
-- [x] Navigation par query params
-
-### Phase 8 : Amélioration Scoring (Green IT + Sovereignty) ✅
-- [x] **Sovereignty Service** - Calcul dynamique 3 composantes (Hosting/Company/License)
-- [x] **Green IT Service** - Calcul impact écologique (CO2, énergie, eco-score)
-- [x] Métadonnées AI enrichies (AI_SOVEREIGNTY_DATA)
-- [x] Schéma MongoDB étendu (sovereignty breakdown, greenIT)
-- [x] Fix validation Mongoose (objets imbriqués)
-- [x] Scores souveraineté fonctionnels (Mistral 95/100, Gemini 40/100)
-- [x] **Fix Green IT Bug** : promptController.js sauvegarde greenIT correctement
-- [x] Affichage frontend Green IT data (eco-score, CO2, équivalences)
-- [x] Affichage frontend Sovereignty détails (breakdown, RGPD, recommandations)
-- [x] Guide pédagogique (ScoringGuide.jsx) avec méthologie scientifique
-- [x] Suppression emojis frontend + hardcoded sovereignty scores
-
-### Phase 9 : Tests Manuels et Démo ✅
-- [x] Tests manuels des fonctionnalités clés
-- [x] Correction des bugs identifiés
-- [x] Préparation de la démo
-- [x] Documentation utilisateur finale complétée
-
----
-
 ## Modèles de Données Réels
 
 ### Prompt Schema
@@ -611,40 +512,6 @@ FRONTEND_URL=http://localhost:5173
 
 ---
 
-## Indicateurs de Souveraineté
-
-### Données par Modèle
-
-#### Mistral AI (90/100)
-- **Location** : France
-- **RGPD** : Conforme
-- **Cloud** : Scaleway (français)
-- **Open Source** : Partiellement
-- **Transparence** : Excellente
-
-#### Hugging Face (70/100)
-- **Location** : Europe/USA
-- **RGPD** : Partiel
-- **Cloud** : Multi-cloud
-- **Open Source** : Oui
-- **Transparence** : Bonne
-
-#### Google Gemini (60/100)
-- **Location** : USA
-- **RGPD** : Partiel (bouclier UE-US)
-- **Cloud** : Google Cloud
-- **Open Source** : Non
-- **Transparence** : Moyenne
-
-#### Cohere (55/100)
-- **Location** : USA
-- **RGPD** : Limité
-- **Cloud** : AWS (multi-régions)
-- **Open Source** : Non
-- **Transparence** : Moyenne
-
----
-
 ## Performances et KPIs
 
 ### Performances Mesurées
@@ -766,71 +633,6 @@ ProjetFinale3/
 
 ---
 
-## Design System
-
-**Maquettes Figma**: [Voir le design complet sur Figma](https://www.figma.com/design/ErpgGc9MsR4MzDUZs28YrK/PFE?node-id=0-1&t=1zoBcZ5hSujxvZd5-1)
-
-### Palette de Couleurs
-```css
-/* Beige/Sand */
---sand-50: #f5f1e8;
---sand-100: #e8dcc4;
---sand-200: #dcc8a0;
---sand-300: #d4c5a9;
---sand-400: #c9b896;
---sand-500: #b8a782;
---sand-600: #a89670;
-
-/* Ink/Black */
---ink-600: #666666;
---ink-700: #4a4a4a;
---ink-800: #2e2e2e;
---ink-900: #1a1a1a;
-```
-
-### Typographie
-- **Font** : System fonts (Arial, sans-serif)
-- **Headings** : font-semibold, font-bold
-- **Body** : font-normal
-
-### Composants
-- **Cards** : border, padding, hover effects
-- **Buttons** : border-ink-900, hover transitions
-- **Inputs** : border-sand-300, focus states
-- **Badges** : border, small padding, text-xs
-
----
-
-## Problèmes Résolus
-
-### 1. Hugging Face API Endpoint Deprecated
-**Problème** : `api-inference.huggingface.co` n'est plus supporté
-**Solution** : Migration vers `router.huggingface.co`
-
-### 2. Hugging Face Wrong API Method
-**Problème** : `textGeneration()` ne fonctionnait pas
-**Solution** : Utilisation de `chatCompletion()` format OpenAI
-
-### 3. Cohere Generate API Deprecated
-**Problème** : API Generate supprimée le 15 septembre 2025
-**Solution** : Migration vers `client.chat()`
-
-### 4. Sentiment Validation Error
-**Problème** : Objet sentiment au lieu de string
-**Solution** : Aplatissement de l'objet sentiment pour failed responses
-
-### 5. Layout Centering Issues
-**Problème** : Contenu principal décentré après ajout sidebar
-**Solution** : Wrapper `max-w-[1600px] mx-auto` autour du flex container
-
-### 6. Mongoose Validation Error - Nested Objects
-**Problème** : 500 error "Cast to string failed for value {...} (type Object)"
-**Cause** : Schéma Response.js avec objets imbriqués mal définis (sovereignty.breakdown)
-**Solution** : Définition explicite avec `{ type: ... }` pour tous les champs imbriqués
-**Date** : Janvier 2026
-
----
-
 ## Documentation API
 
 **Documentation interactive Swagger**: [http://localhost:5000/api-docs](http://localhost:5000/api-docs)
@@ -854,28 +656,7 @@ L'API REST est entièrement documentée avec Swagger/OpenAPI. Vous pouvez tester
 
 ---
 
-## Tâches Restantes
-
-### Prioritaires
-
-- [x] **Gestion des Secrets** - Migration vers Infisical (eu.infisical.com)
-  - Secrets chiffrés et hébergés en Europe (RGPD)
-  - Chargement dynamique au démarrage via `@infisical/sdk`
-  - Fallback transparent vers `.env` local si Infisical indisponible
-  - Fichier : `backend/src/config/secrets.js`
-
-- [ ] **Captures d'écran** - Documentation visuelle de l'application
-  - Interface principale avec prompt input et sélection modèles
-  - Résultats avec visualisations (graphiques, radar, matrices)
-  - Page historique avec liste des prompts
-  - Exports (JSON, CSV, PDF)
-
-### Optionnelles
-
-- [ ] Cache Redis pour optimiser les réponses
-- [ ] Rate limiting avancé par utilisateur
-
-### Architecture SOLID
+## Architecture SOLID
 
 Le projet respecte les principes SOLID (notamment Single Responsibility Principle):
 - Chaque service AI a sa propre responsabilité (`geminiService.js`, `mistralService.js`, etc.)
@@ -887,6 +668,6 @@ Référence: https://www.geeksforgeeks.org/system-design/solid-principle-in-prog
 
 ---
 
-**Version** : 2.1
+**Version** : 2.0
 **Dernière mise à jour** : 26 Fevrier 2026
 **Statut** : ✅ Fonctionnel et opérationnel
