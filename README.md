@@ -603,7 +603,7 @@ COHERE_API_KEY=votre_cle_cohere
 
 ---
 
-## Indicateurs de Souveraineté Data
+## Indicateurs de Souveraineté
 
 ### Données par Modèle
 
