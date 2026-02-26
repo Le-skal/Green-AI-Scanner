@@ -1,4 +1,4 @@
-import { InfisicalClient } from '@infisical/sdk';
+import { InfisicalSDK } from '@infisical/sdk';
 
 /**
  * Loads secrets from Infisical (eu.infisical.com) into process.env.
@@ -15,21 +15,19 @@ export const loadSecrets = async () => {
   try {
     console.log('[Secrets] Connecting to Infisical (eu.infisical.com)...');
 
-    const client = new InfisicalClient({
+    const client = new InfisicalSDK({
       siteUrl: 'https://eu.infisical.com',
-      auth: {
-        serviceToken: token,
-      },
     });
 
-    const secrets = await client.listSecrets({
+    await client.auth().accessToken(token);
+
+    const { secrets } = await client.secrets().listSecrets({
       environment: 'dev',
-      path: '/',
+      secretPath: '/',
     });
 
     let count = 0;
     for (const { secretKey, secretValue } of secrets) {
-      // Only set if not already defined locally (local .env takes precedence)
       if (!process.env[secretKey]) {
         process.env[secretKey] = secretValue;
         count++;
