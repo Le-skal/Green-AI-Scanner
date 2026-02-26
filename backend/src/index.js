@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
 
 // Configuration
+import { loadSecrets } from './config/secrets.js';
 import { connectDB, initAllAIClients } from './config/index.js';
 import swaggerSpec from './config/swagger.js';
 
@@ -83,6 +84,9 @@ const startServer = async () => {
   try {
     console.log('\nStarting AI Aggregator API Server...\n');
 
+    // Load secrets from Infisical (must be first, before DB and AI clients)
+    await loadSecrets();
+
     // Connecter à MongoDB
     console.log('Connecting to MongoDB...');
     await connectDB();
@@ -95,7 +99,7 @@ const startServer = async () => {
 
     if (Object.keys(aiClients).length === 0) {
       console.warn('\nWARNING: No AI clients initialized!');
-      console.warn('Please configure API keys in .env file\n');
+      console.warn('Please configure API keys in Infisical or .env file\n');
     }
 
     // Démarrer le serveur

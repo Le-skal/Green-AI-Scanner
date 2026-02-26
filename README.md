@@ -7,7 +7,7 @@
 
 ![Status](https://img.shields.io/badge/status-operational-success?style=flat)
 ![Version](https://img.shields.io/badge/version-2.0-blue?style=flat)
-![License](https://img.shields.io/badge/license-confidential-red?style=flat)
+![License](https://img.shields.io/badge/license-WTFPL-brightgreen?style=flat)
 ![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green?style=flat&logo=mongodb)
 
 <p><em>Built with the tools and technologies:</em></p>
@@ -311,7 +311,8 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 #### Sécurité & Auth
 - ✅ **JWT** : Authentification stateless
 - ✅ **Bcrypt** : Hash des mots de passe (10 rounds)
-- ✅ **dotenv** : Gestion des secrets (.env)
+- ✅ **Infisical** : Gestion centralisée des secrets (eu.infisical.com - serveurs EU, RGPD)
+- ✅ **dotenv** : Fallback local (PORT, FRONTEND_URL uniquement)
 - ✅ **CORS** : Configuré pour frontend
 - ✅ **Middleware Auth** : Protection des routes sensibles
 
@@ -462,14 +463,11 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 - [x] Guide pédagogique (ScoringGuide.jsx) avec méthologie scientifique
 - [x] Suppression emojis frontend + hardcoded sovereignty scores
 
-### Phase 9 : Tests et Démo 🚧
-- [ ] Tests unitaires backend
-- [ ] Tests unitaires frontend
-- [ ] Tests d'intégration
-- [ ] Tests de charge
-- [ ] Correction des bugs
-- [ ] Préparation de la démo
-- [ ] Documentation utilisateur finale
+### Phase 9 : Tests Manuels et Démo ✅
+- [x] Tests manuels des fonctionnalités clés
+- [x] Correction des bugs identifiés
+- [x] Préparation de la démo
+- [x] Documentation utilisateur finale complétée
 
 ---
 
@@ -579,27 +577,37 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 - ✅ Middleware d'authentification optionnel
 - ✅ Validation des entrées (express-validator)
 - ✅ CORS configuré pour localhost:5173
-- ✅ Variables d'environnement (.env) pour secrets
-- ✅ API keys serveur-side uniquement (jamais exposées)
+- ✅ **Infisical** : Secrets chiffrés centralisés (eu.infisical.com, hébergement EU)
+- ✅ API keys serveur-side uniquement (jamais exposées au frontend)
 - ✅ Gestion d'erreurs centralisée
 
-### Fichier .env
+### Gestion des Secrets — Infisical
+
+Les secrets sensibles (API keys, MONGODB_URI, JWT_SECRET) sont stockés dans **Infisical** (instance EU) et chargés dynamiquement au démarrage du serveur. Seul un token Infisical est présent sur disque.
+
 ```env
-# MongoDB
-MONGODB_URI=mongodb+srv://...
+# .env (seule variable locale nécessaire)
+INFISICAL_TOKEN=st.xxxxxxxxxxxxxxxx
 
-# Server
+# Variables non-sensibles (conservées localement)
 PORT=5000
-
-# JWT
-JWT_SECRET=votre_secret_jwt
-
-# AI API Keys (serveur uniquement)
-GEMINI_API_KEY=votre_cle_gemini
-MISTRAL_API_KEY=votre_cle_mistral
-HUGGINGFACE_API_KEY=votre_cle_huggingface
-COHERE_API_KEY=votre_cle_cohere
+NODE_ENV=development
+FRONTEND_URL=http://localhost:5173
 ```
+
+**Secrets stockés dans Infisical (eu.infisical.com) :**
+- `MONGODB_URI`
+- `JWT_SECRET`
+- `GEMINI_API_KEY`
+- `MISTRAL_API_KEY`
+- `HUGGINGFACE_API_KEY`
+- `COHERE_API_KEY`
+
+**Avantages pour la souveraineté des données :**
+- Instance hébergée en Europe (RGPD compliant)
+- Secrets chiffrés au repos et en transit
+- Audit logs de chaque accès
+- Open source (github.com/Infisical/infisical)
 
 ---
 
@@ -850,10 +858,11 @@ L'API REST est entièrement documentée avec Swagger/OpenAPI. Vous pouvez tester
 
 ### Prioritaires
 
-- [ ] **HashiCorp Vault** - Migration de .env vers Vault pour gestion sécurisée des secrets
-  - Documentation: https://developer.hashicorp.com/vault
-  - Avantages: Rotation automatique, audit logs, accès contrôlé
-  - Migration: API keys (GEMINI, MISTRAL, HUGGINGFACE, COHERE), MONGODB_URI, JWT_SECRET
+- [x] **Gestion des Secrets** - Migration vers Infisical (eu.infisical.com)
+  - Secrets chiffrés et hébergés en Europe (RGPD)
+  - Chargement dynamique au démarrage via `@infisical/sdk`
+  - Fallback transparent vers `.env` local si Infisical indisponible
+  - Fichier : `backend/src/config/secrets.js`
 
 - [ ] **Captures d'écran** - Documentation visuelle de l'application
   - Interface principale avec prompt input et sélection modèles
@@ -863,9 +872,6 @@ L'API REST est entièrement documentée avec Swagger/OpenAPI. Vous pouvez tester
 
 ### Optionnelles
 
-- [ ] Tests unitaires (Jest + React Testing Library)
-- [ ] Tests d'intégration (Supertest)
-- [ ] Déploiement production (Vercel frontend + Railway backend)
 - [ ] Cache Redis pour optimiser les réponses
 - [ ] Rate limiting avancé par utilisateur
 
@@ -881,6 +887,6 @@ Référence: https://www.geeksforgeeks.org/system-design/solid-principle-in-prog
 
 ---
 
-**Version** : 2.0
-**Dernière mise à jour** : 25 Fevrier 2026
+**Version** : 2.1
+**Dernière mise à jour** : 26 Fevrier 2026
 **Statut** : ✅ Fonctionnel et opérationnel

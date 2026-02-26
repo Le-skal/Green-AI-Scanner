@@ -1,8 +1,8 @@
 # Claude Checkpoint - PFE AI Aggregator
 
-**Date**: 2026-02-25
+**Date**: 2026-02-26
 **Projet**: Agrégateur de Moteurs d'IA (PFE 2025-2026)
-**Status**: Phase 8 & 9 Complétées - Production Ready
+**Status**: Phase 8, 9 & 10 Complétées - Production Ready
 
 ---
 
@@ -23,6 +23,7 @@
 12. **AI Metadata Enrichment** - AI_SOVEREIGNTY_DATA avec détails (location, RGPD, license)
 13. **MongoDB Schema Extension** - Champs sovereignty.breakdown et greenIT ajoutés
 14. **Mongoose Validation Fix** - Objets imbriqués correctement définis avec `{ type: ... }`
+15. **Infisical Secret Management** - Secrets chiffrés sur eu.infisical.com (hébergement EU, RGPD)
 
 ### Fonctionnel - Phase 8 Complétée
 - **Sovereignty Score** : Mistral 95/100, Gemini 40/100 (calcul dynamique 3 composantes)
@@ -39,10 +40,9 @@
 - **Gitignore** : CLAUDE_CHECKPOINT.md ajouté (fichier dev uniquement)
 
 ### En Attente (Prochaines Phases)
-1. **HashiCorp Vault** - Migration des secrets depuis .env
-2. **Captures d'écran Frontend** - Documentation visuelle
-3. **Tests unitaires** - Jest + React Testing Library (optionnel)
-4. **Déploiement production** - Vercel + Railway (optionnel)
+1. **Captures d'écran Frontend** - Documentation visuelle
+2. **Tests unitaires** - Jest + React Testing Library (optionnel)
+3. **Déploiement production** - Vercel + Railway (optionnel)
 
 ---
 
@@ -253,18 +253,19 @@ npm run dev
 
 **Dossier**: `docs/screenshots/`
 
-### 3. HashiCorp Vault - Migration .env
-**Objectif**: Gestion modulable et sécurisée des secrets
+### 3. Infisical Secret Management (TERMINÉ)
+**Objectif**: Gestion sécurisée des secrets hors du filesystem
 
-**Documentation**: https://developer.hashicorp.com/vault
+**Solution choisie**: Infisical (eu.infisical.com) - alternative open source, hébergée en EU
 
-**Avantages**:
-- Rotation automatique des secrets
-- Audit logs
-- Accès contrôlé par policies
-- Centralisé et modulable
+**Avantages pour le PFE**:
+- Hébergement EU = aligné avec thème Data Sovereignty
+- Open source = aligné avec Green IT / transparence
+- Secrets chiffrés au repos et en transit
+- Audit logs de chaque accès
+- Fallback transparent vers `.env` si indisponible
 
-**Secrets à migrer**:
+**Secrets migrés dans Infisical**:
 - MONGODB_URI
 - JWT_SECRET
 - GEMINI_API_KEY
@@ -272,16 +273,11 @@ npm run dev
 - HUGGINGFACE_API_KEY
 - COHERE_API_KEY
 
-**Actions**:
-1. Installer HashiCorp Vault (dev server ou Docker)
-2. Créer `backend/src/config/vault.js`
-3. Remplacer `dotenv` par appels Vault
-4. Documenter le setup dans README
-
-**Fichiers à modifier**:
-- `backend/src/config/vault.js` (nouveau)
-- `backend/src/index.js` (remplacer dotenv)
-- `backend/src/config/ai-apis.js` (charger depuis Vault)
+**Fichiers créés/modifiés**:
+- `backend/src/config/secrets.js` (NOUVEAU) - client Infisical + injection process.env
+- `backend/src/index.js` (MODIFIÉ) - appel `loadSecrets()` en premier dans startServer()
+- `backend/.env.example` (MODIFIÉ) - template avec INFISICAL_TOKEN
+- `backend/package.json` (MODIFIÉ) - ajout @infisical/sdk ^4.0.6
 
 ### 4. SOLID Principles - Refactoring (TERMINÉ)
 
@@ -374,9 +370,11 @@ backend/src/services/ai/
 ## Fichiers Clés
 
 ### Configuration
-- `backend/.env` - Variables d'environnement (PORT=5000, API keys)
+- `backend/.env` - Variables locales uniquement (INFISICAL_TOKEN, PORT, FRONTEND_URL)
+- `backend/.env.example` - Template avec instructions Infisical
+- `backend/src/config/secrets.js` - Chargement secrets depuis Infisical (NOUVEAU)
 - `backend/src/config/ai-apis.js` - Config des APIs (models, sovereignty)
-- `backend/src/config/swagger.js` - Configuration Swagger/OpenAPI (NOUVEAU)
+- `backend/src/config/swagger.js` - Configuration Swagger/OpenAPI
 - `frontend/tailwind.config.js` - Palette beige/noir
 
 ### Modèles Backend
@@ -423,7 +421,8 @@ backend/src/services/ai/
 ### Backend
 - express, mongoose, mongodb
 - bcryptjs, jsonwebtoken (auth)
-- swagger-jsdoc, swagger-ui-express (documentation - NOUVEAU)
+- **@infisical/sdk** - Gestion des secrets (NOUVEAU)
+- swagger-jsdoc, swagger-ui-express (documentation)
 - @google/generative-ai (Gemini)
 - @mistralai/mistralai (Mistral)
 - cohere-ai, @huggingface/inference
@@ -790,15 +789,16 @@ curl http://localhost:5000/api/prompts/models
 
 ---
 
-**Dernière mise à jour**: 2026-02-25 (Soir)
+**Dernière mise à jour**: 2026-02-26
 **Status actuel**:
 - Phase 8 COMPLÉTÉE: Sovereignty + Green IT 100% fonctionnels
 - Phase 9 COMPLÉTÉE: UI refinements (couleurs, Markdown, exports)
+- Phase 10 COMPLÉTÉE: Infisical secret management (eu.infisical.com)
 - Frontend: Affichage complet avec palette cohérente beige/ink
 - Export: JSON/CSV/PDF incluent analyse comparative du gagnant
 - Guide pédagogique: Méthodologie scientifique documentée
-- Documentation: README + CHECKPOINT professionnels (sans emojis)
+- Secrets: Chiffrés et hébergés en EU via Infisical
 
-**Prochaines phases**: HashiCorp Vault, Captures d'écran, Tests unitaires (optionnel)
+**Prochaines phases**: Captures d'écran, Tests unitaires (optionnel)
 
 **Projet prêt pour démonstration et évaluation PFE**
