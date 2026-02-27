@@ -1,6 +1,70 @@
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 import ScoreExplanationModal from '../modals/ScoreExplanationModal';
+
+const MATH_CMD_RE = /\\(?:frac|sum|pi|left|right|arctan|sqrt|cdots|approx|times|infty|int|prod|lim|partial|leq|geq|neq|quad|sin|cos|tan|log|alpha|beta|gamma|delta|theta|sigma|omega|mu|lambda|cdot|dots)/;
+
+const preprocessMath = (text) => {
+  if (!text) return text;
+
+  // Normalize line endings
+  let result = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+  // Convert lone $ on its own line to $$ (some models use single $ as display math delimiter)
+  result = result.replace(/^[ \t]*\$[ \t]*$/gm, '$$$$');
+
+  // Fix concatenated numbered list items mid-paragraph: "text. 3. **Item**" → newlines
+  result = result.replace(/([^\n])\n([ \t]*\d+\.[ \t]+)/g, (_, prev, item) => {
+    // Only insert blank line if previous line is not already empty
+    return `${prev}\n\n${item}`;
+  });
+  // Also catch items on the same line: "sentence. 3. **Item** text. 4. **Item**"
+  result = result.replace(/([.!?:])\s{1,3}(\d{1,2}\.\s+(?:\*\*|[A-Z]))/g, '$1\n\n$2');
+
+  // Convert standard LaTeX block delimiters
+  result = result
+    .replace(/\\\[/g, '\n\n$$\n')
+    .replace(/\\\]/g, '\n$$\n\n')
+    .replace(/\\\(/g, '$')
+    .replace(/\\\)/g, '$');
+
+  // Wrap bare LaTeX lines (lines starting with \ containing math commands)
+  const lines = result.split('\n');
+  const output = [];
+  let i = 0;
+
+  while (i < lines.length) {
+    const line = lines[i];
+    const trimmed = line.trim();
+    const prevOut = output.length > 0 ? output[output.length - 1].trim() : '';
+
+    if (trimmed.startsWith('\\') && MATH_CMD_RE.test(trimmed) && prevOut !== '$$') {
+      const formulaLines = [trimmed];
+      i++;
+      while (i < lines.length) {
+        const next = lines[i].trim();
+        if (next === '' || /^[#*\->`~\d]/.test(next)) break;
+        if (next.startsWith('\\') || MATH_CMD_RE.test(next)) {
+          formulaLines.push(next);
+          i++;
+        } else break;
+      }
+      // Blank line before $$ to break out of any list context
+      if (output.length > 0 && output[output.length - 1].trim() !== '') output.push('');
+      output.push('$$', ...formulaLines, '$$');
+      // Blank line after $$ to resume normal flow
+      output.push('');
+    } else {
+      output.push(line);
+      i++;
+    }
+  }
+
+  return output.join('\n');
+};
 
 const ResponseCard = ({ response, isFirst, promptText }) => {
   const [modalState, setModalState] = useState({ isOpen: false, metricType: null });
@@ -43,7 +107,7 @@ const ResponseCard = ({ response, isFirst, promptText }) => {
       {/* Response Text */}
       {response.responseText && (
         <div className={`${isFirst ? 'text-sand-100' : 'text-ink-800'} text-sm leading-relaxed prose prose-sm ${isFirst ? 'prose-invert' : ''} max-w-none`}>
-          <ReactMarkdown>{response.responseText}</ReactMarkdown>
+          <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[[rehypeKatex, { strict: false, throwOnError: false, errorColor: '#888' }]]}>{preprocessMath(response.responseText)}</ReactMarkdown>
         </div>
       )}
 
