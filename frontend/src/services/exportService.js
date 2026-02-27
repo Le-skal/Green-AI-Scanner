@@ -1,6 +1,112 @@
 /**
  * Export Service - Handles exporting prompt results to various formats
  */
+import { marked } from 'marked';
+import katex from 'katex';
+
+marked.use({ gfm: true, breaks: true });
+
+// Same math commands as ResponseCard
+const MATH_CMD_RE = /\\(?:frac|sum|pi|left|right|arctan|sqrt|cdots|approx|times|infty|int|prod|lim|partial|leq|geq|neq|quad|sin|cos|tan|log|alpha|beta|gamma|delta|theta|sigma|omega|mu|lambda|cdot|dots)/;
+
+const preprocessMath = (text) => {
+  if (!text) return text;
+  let result = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  result = result.replace(/^[ \t]*\$[ \t]*$/gm, '$$$$');
+  result = result
+    .replace(/\\\[/g, '\n\n$$\n')
+    .replace(/\\\]/g, '\n$$\n\n')
+    .replace(/\\\(/g, '$')
+    .replace(/\\\)/g, '$');
+  const lines = result.split('\n');
+  const output = [];
+  let i = 0;
+  while (i < lines.length) {
+    const line = lines[i];
+    const trimmed = line.trim();
+    const prevOut = output.length > 0 ? output[output.length - 1].trim() : '';
+    if (trimmed.startsWith('\\') && MATH_CMD_RE.test(trimmed) && prevOut !== '$$') {
+      const formulaLines = [trimmed];
+      i++;
+      while (i < lines.length) {
+        const next = lines[i].trim();
+        if (next === '' || /^[#*\->`~\d]/.test(next)) break;
+        if (next.startsWith('\\') || MATH_CMD_RE.test(next)) { formulaLines.push(next); i++; }
+        else break;
+      }
+      if (output.length > 0 && output[output.length - 1].trim() !== '') output.push('');
+      output.push('$$', ...formulaLines, '$$', '');
+    } else { output.push(line); i++; }
+  }
+  return output.join('\n');
+};
+
+const katexOpts = { throwOnError: false, strict: false };
+
+const renderMarkdown = (text) => {
+  if (!text) return '';
+  const clean = text
+    .replace(/<think>[\s\S]*?<\/think>/gi, '')
+    .trim();
+  const processed = preprocessMath(clean);
+
+  // 1. Extract display math $$...$$ with placeholders so marked doesn't touch them
+  const displayBlocks = [];
+  const withDisplayPH = processed.replace(/\$\$([\s\S]*?)\$\$/g, (_, formula) => {
+    const idx = displayBlocks.length;
+    try {
+      displayBlocks.push(katex.renderToString(formula.trim(), { ...katexOpts, displayMode: true }));
+    } catch {
+      displayBlocks.push(`<code>${formula}</code>`);
+    }
+    return `DISPLAY_MATH_${idx}`;
+  });
+
+  // 2. Run marked on the remaining text
+  let html = marked.parse(withDisplayPH);
+
+  // 3. Restore display math blocks
+  html = html.replace(/DISPLAY_MATH_(\d+)/g, (_, idx) =>
+    `<div class="math-display">${displayBlocks[parseInt(idx)]}</div>`
+  );
+
+  // 4. Render remaining inline $...$
+  // Note: marked HTML-escapes < > inside $...$ so we decode entities before KaTeX
+  html = html.replace(/\$([^$\n]{1,300}?)\$/g, (match, formula) => {
+    const decoded = formula
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&amp;/g, '&')
+      .replace(/&quot;/g, '"');
+    try {
+      return katex.renderToString(decoded.trim(), { ...katexOpts, displayMode: false });
+    } catch {
+      return match;
+    }
+  });
+
+  return html;
+};
+
+/**
+ * Render markdown split at --- boundaries so page breaks only occur between sections.
+ * Each section is wrapped in break-inside:avoid, cuts happen at <hr> dividers.
+ */
+const renderMarkdownSectioned = (text) => {
+  if (!text) return '';
+  const clean = text.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
+  // Split on --- / *** / ___ horizontal rule markers
+  const sections = clean.split(/\n[ \t]*(?:---|\*\*\*|___)[ \t]*\n/);
+  if (sections.length === 1) {
+    // No --- found — wrap the whole thing as one section
+    return `<div class="prose-section">${renderMarkdown(clean)}</div>`;
+  }
+  return sections
+    .map((s, idx) =>
+      `<div class="prose-section">${idx > 0 ? '<hr class="section-break">' : ''}${renderMarkdown(s.trim())}</div>`
+    )
+    .join('');
+};
 
 /**
  * Download a file with the given content
@@ -155,10 +261,11 @@ export const exportToPDF = (data, filename = 'prompt-results') => {
   printWindow.document.write(htmlContent);
   printWindow.document.close();
 
-  // Wait for content to load, then print
+  // Wait for all resources (KaTeX CSS from CDN) to load before printing
   printWindow.onload = () => {
     printWindow.focus();
-    printWindow.print();
+    // Small delay to ensure CDN stylesheet is applied
+    setTimeout(() => printWindow.print(), 400);
   };
 };
 
@@ -177,360 +284,349 @@ const generatePDFHTML = (data) => {
     <head>
       <meta charset="utf-8">
       <title>AI Aggregator - Prompt Results</title>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
       <style>
+        /* KaTeX display block centering */
+        .math-display { margin: 14px 0; text-align: center; overflow-x: auto; }
+        .katex-display { overflow-x: auto; overflow-y: hidden; }
+        /* ── Force background colors in print for ALL elements ── */
+        * {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          color-adjust: exact !important;
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+        }
         body {
-          font-family: Arial, sans-serif;
-          max-width: 1200px;
+          font-family: 'Georgia', serif;
+          font-size: 13px;
+          line-height: 1.65;
+          color: #1c1917;
+          background: #fff;
+          padding: 32px 40px;
+          max-width: 900px;
           margin: 0 auto;
+        }
+
+        /* ── Typography ── */
+        h1 { font-size: 22px; font-weight: 700; border-bottom: 3px solid #d4c5a3; padding-bottom: 10px; margin-bottom: 20px; }
+        h2 { font-size: 16px; font-weight: 700; color: #1c1917; border-bottom: 1.5px solid #ede7d7; padding-bottom: 6px; margin: 28px 0 14px; }
+        h3 { font-size: 14px; font-weight: 700; margin: 14px 0 6px; }
+
+        /* ── Blocks ── */
+        .meta-block {
+          background: #fdfbf7;
+          border: 1px solid #d4c5a3;
+          padding: 14px 18px;
+          margin-bottom: 24px;
+        }
+        .meta-row { display: flex; gap: 8px; margin: 5px 0; font-size: 12px; }
+        .meta-label { font-weight: 700; color: #57534e; min-width: 110px; }
+
+        /* ── Winner Banner ── */
+        .winner-banner {
+          background: #1c1917;
+          color: #fdfbf7;
           padding: 20px;
-          color: #1a1a1a;
-        }
-        h1 {
-          color: #1a1a1a;
-          border-bottom: 3px solid #d4c5a9;
-          padding-bottom: 10px;
-        }
-        h2 {
-          color: #1a1a1a;
-          margin-top: 30px;
-          border-bottom: 2px solid #e8dcc4;
-          padding-bottom: 8px;
-        }
-        .metadata {
-          background: #f5f1e8;
-          border: 1px solid #d4c5a9;
-          padding: 15px;
-          margin: 20px 0;
-        }
-        .metadata-item {
-          margin: 8px 0;
-        }
-        .metadata-label {
-          font-weight: bold;
-          color: #666;
-        }
-        .summary {
-          background: #f5f1e8;
-          border: 1px solid #d4c5a9;
-          padding: 15px;
-          margin: 20px 0;
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          gap: 15px;
-        }
-        .summary-item {
           text-align: center;
-        }
-        .summary-value {
-          font-size: 24px;
-          font-weight: bold;
-          color: #1a1a1a;
-        }
-        .summary-label {
-          font-size: 12px;
-          color: #666;
-          margin-top: 5px;
-        }
-        .response {
-          border: 1px solid #d4c5a9;
-          padding: 20px;
-          margin: 20px 0;
+          margin-bottom: 10px;
+          break-inside: avoid;
           page-break-inside: avoid;
         }
-        .response-header {
+        .winner-banner .label { font-size: 10px; letter-spacing: 2px; color: #a89263; margin-bottom: 6px; }
+        .winner-banner .name { font-size: 26px; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+        .winner-banner .score { font-size: 42px; font-weight: 700; color: #d4c5a3; }
+        .winner-banner .score span { font-size: 20px; }
+
+        /* ── Score breakdown bars ── */
+        .breakdown { background: #fdfbf7; border: 1px solid #d4c5a3; padding: 16px 18px; margin-bottom: 24px; }
+        .bar-row { display: flex; align-items: center; gap: 10px; margin: 8px 0; }
+        .bar-label { width: 90px; font-size: 11px; color: #57534e; }
+        .bar-track { flex: 1; background: #ede7d7; height: 14px; border: 1px solid #d4c5a3; }
+        .bar-fill { height: 100%; background: #1c1917; }
+        .bar-value { width: 140px; text-align: right; font-size: 11px; color: #57534e; }
+        .formula-box {
+          background: #fff;
+          border: 1px solid #d4c5a3;
+          padding: 10px 14px;
+          font-family: monospace;
+          font-size: 12px;
+          margin: 12px 0;
+        }
+        .total-row {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 15px;
+          background: #1c1917;
+          color: #fdfbf7;
+          padding: 10px 14px;
+          margin-top: 12px;
+          font-weight: 700;
+          font-size: 15px;
         }
-        .model-name {
-          font-size: 18px;
-          font-weight: bold;
-          text-transform: capitalize;
-        }
-        .status {
-          padding: 4px 12px;
-          border: 1px solid;
-          font-size: 12px;
-        }
-        .status-success {
-          background: #d1f4e0;
-          color: #1e7e34;
-          border-color: #86d4a8;
-        }
-        .status-failed {
-          background: #f8d7da;
-          color: #721c24;
-          border-color: #f5c6cb;
-        }
-        .response-text {
-          margin: 15px 0;
-          line-height: 1.6;
-        }
-        .scores {
+
+        /* ── Summary grid ── */
+        .summary-grid {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 15px;
-          margin-top: 15px;
-          padding-top: 15px;
-          border-top: 1px solid #e8dcc4;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 12px;
+          margin-bottom: 24px;
         }
-        .score-item {
+        .summary-cell {
+          background: #fdfbf7;
+          border: 1px solid #d4c5a3;
+          padding: 12px;
           text-align: center;
         }
-        .score-label {
-          font-size: 12px;
-          color: #666;
+        .summary-cell .val { font-size: 22px; font-weight: 700; color: #1c1917; }
+        .summary-cell .lbl { font-size: 10px; color: #57534e; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* ── Response card ── */
+        .response {
+          border: 1.5px solid #d4c5a3;
+          margin-bottom: 28px;
+          /* no break-inside here — we let breaks happen at --- section dividers */
         }
-        .score-value {
-          font-size: 18px;
-          font-weight: bold;
-          color: #1a1a1a;
+        .response-head {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background: #1c1917;
+          color: #fdfbf7;
+          padding: 10px 16px;
+          break-inside: avoid;
+          page-break-inside: avoid;
+          break-after: avoid;
+          page-break-after: avoid;
         }
-        .keywords {
-          margin-top: 15px;
-          padding-top: 15px;
-          border-top: 1px solid #e8dcc4;
+        .response-head .model { font-size: 15px; font-weight: 700; text-transform: capitalize; }
+        .response-head .time { font-size: 11px; color: #a89263; }
+        .response-body { padding: 16px; }
+
+        /* ── Prose sections (break-points at ---) ── */
+        .prose-section {
+          break-inside: avoid;
+          page-break-inside: avoid;
         }
-        .keyword-tag {
+        hr.section-break {
+          border: none;
+          border-top: 1px solid #d4c5a3;
+          margin: 10px 0;
+        }
+
+        /* ── Markdown prose ── */
+        .prose { font-size: 12.5px; line-height: 1.7; color: #292524; }
+        .prose p { margin: 8px 0; }
+        .prose h1, .prose h2, .prose h3, .prose h4 { margin: 12px 0 6px; font-weight: 700; }
+        .prose h1 { font-size: 16px; }
+        .prose h2 { font-size: 14px; border: none; }
+        .prose h3 { font-size: 13px; }
+        .prose ul, .prose ol { padding-left: 20px; margin: 6px 0; }
+        .prose li { margin: 3px 0; }
+        .prose strong { font-weight: 700; color: #1c1917; }
+        .prose em { font-style: italic; }
+        .prose code { background: #f5f1e8; padding: 1px 5px; font-family: monospace; font-size: 11.5px; border: 1px solid #ede7d7; }
+        .prose pre { background: #f5f1e8; border: 1px solid #ede7d7; padding: 10px; margin: 8px 0; overflow: hidden; font-size: 11px; }
+        .prose pre code { background: none; border: none; padding: 0; }
+        .prose blockquote { border-left: 3px solid #d4c5a3; padding-left: 12px; color: #57534e; margin: 8px 0; }
+        .prose table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 11.5px; }
+        .prose th, .prose td { border: 1px solid #d4c5a3; padding: 5px 8px; }
+        .prose th { background: #f5f1e8; font-weight: 700; }
+
+        /* ── Score strip ── */
+        .score-strip {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          border-top: 1px solid #ede7d7;
+          margin-top: 14px;
+        }
+        .score-cell {
+          text-align: center;
+          padding: 10px 6px;
+          border-right: 1px solid #ede7d7;
+        }
+        .score-cell:last-child { border-right: none; }
+        .score-cell .s-lbl { font-size: 10px; color: #57534e; text-transform: uppercase; letter-spacing: 0.5px; }
+        .score-cell .s-val { font-size: 18px; font-weight: 700; color: #1c1917; }
+        /* Scores block: stays together, breaks cleanly before composite if needed */
+        .scores-block {
+          break-inside: avoid;
+          page-break-inside: avoid;
+          margin-top: 14px;
+        }
+        .composite-strip {
+          background: #1c1917;
+          color: #fdfbf7;
+          text-align: center;
+          padding: 10px;
+        }
+        .score-strip {
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
+        .composite-strip .cs-lbl { font-size: 10px; color: #a89263; margin-bottom: 3px; }
+        .composite-strip .cs-val { font-size: 28px; font-weight: 700; }
+
+        /* ── Green IT ── */
+        .green-row {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 10px;
+          background: #fdfbf7;
+          border: 1px solid #ede7d7;
+          padding: 10px;
+          margin-top: 10px;
+          font-size: 11px;
+        }
+        .eco-badge {
           display: inline-block;
-          background: #e8dcc4;
-          color: #1a1a1a;
-          padding: 4px 10px;
-          margin: 4px;
-          border: 1px solid #d4c5a9;
-          font-size: 12px;
+          background: #1c1917;
+          color: #fdfbf7;
+          padding: 3px 8px;
+          font-size: 11px;
+          font-weight: 700;
+          margin-bottom: 6px;
         }
+
+        /* ── Keywords ── */
+        .kw-tag {
+          display: inline-block;
+          background: #ede7d7;
+          color: #1c1917;
+          padding: 2px 8px;
+          margin: 2px;
+          border: 1px solid #d4c5a3;
+          font-size: 11px;
+        }
+
+        /* ── Footer ── */
+        .footer {
+          margin-top: 36px;
+          padding-top: 14px;
+          border-top: 1.5px solid #d4c5a3;
+          text-align: center;
+          color: #57534e;
+          font-size: 11px;
+        }
+
+        /* ── Print ── */
         @media print {
-          body {
-            padding: 10px;
-          }
-          .response {
-            page-break-inside: avoid;
-          }
+          body { padding: 16px 20px; }
+          h2 { break-after: avoid; page-break-after: avoid; }
         }
       </style>
     </head>
     <body>
-      <h1>AI Response Aggregator - Export Report</h1>
+      <h1>AI Response Aggregator — Export Report</h1>
 
-      <div class="metadata">
-        <div class="metadata-item">
-          <span class="metadata-label">Prompt:</span> ${prompt.promptText || 'N/A'}
-        </div>
-        <div class="metadata-item">
-          <span class="metadata-label">Date:</span> ${new Date(prompt.createdAt || Date.now()).toLocaleString()}
-        </div>
-        <div class="metadata-item">
-          <span class="metadata-label">AI Models:</span> ${prompt.aiModels?.join(', ') || 'N/A'}
-        </div>
-        ${metadata.processingTime ? `
-        <div class="metadata-item">
-          <span class="metadata-label">Processing Time:</span> ${(metadata.processingTime / 1000).toFixed(2)}s
-        </div>
-        ` : ''}
+      <!-- Meta block -->
+      <div class="meta-block">
+        <div class="meta-row"><span class="meta-label">Prompt</span><span>${prompt.promptText || 'N/A'}</span></div>
+        <div class="meta-row"><span class="meta-label">Date</span><span>${new Date(prompt.createdAt || Date.now()).toLocaleString()}</span></div>
+        <div class="meta-row"><span class="meta-label">Models</span><span>${prompt.aiModels?.join(', ') || 'N/A'}</span></div>
+        ${metadata.processingTime ? `<div class="meta-row"><span class="meta-label">Processing time</span><span>${(metadata.processingTime / 1000).toFixed(2)}s</span></div>` : ''}
       </div>
 
       ${(() => {
-        // Find winner (highest composite score)
-        const winner = responses.reduce((best, current) => {
-          const currentScore = current.scores?.composite || 0;
-          const bestScore = best?.scores?.composite || 0;
-          return currentScore > bestScore ? current : best;
-        }, responses[0]);
-
+        if (!responses.length) return '';
+        const winner = responses.reduce((best, cur) =>
+          (cur.scores?.composite || 0) > (best.scores?.composite || 0) ? cur : best, responses[0]);
+        const rel  = winner.scores?.relevance || 0;
+        const sov  = winner.scores?.sovereignty?.score || 0;
+        const sim  = winner.scores?.similarity || 0;
+        const spd  = winner.scores?.speed || 0;
         return `
-        <h2>Comparative Analysis - Winner</h2>
-        <div style="background: #1a1a1a; color: #f5f1e8; padding: 20px; margin: 20px 0; border: 3px solid #d4c5a9;">
-          <div style="text-align: center;">
-            <div style="font-size: 14px; color: #d4c5a9; margin-bottom: 10px;">BEST MODEL</div>
-            <div style="font-size: 32px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase;">
-              ${winner.aiModel || 'Unknown'}
-            </div>
-            <div style="font-size: 48px; font-weight: bold; color: #d4c5a9;">
-              ${winner.scores?.composite || 0}<span style="font-size: 24px;">/100</span>
-            </div>
-          </div>
+        <h2>Winner</h2>
+        <div class="winner-banner">
+          <div class="label">BEST MODEL</div>
+          <div class="name">${winner.aiModel || 'Unknown'}</div>
+          <div class="score">${winner.scores?.composite || 0}<span>/100</span></div>
         </div>
 
-        <h2>Why This Model Won - Score Breakdown</h2>
-        <div style="background: #f5f1e8; border: 1px solid #d4c5a9; padding: 20px; margin: 20px 0;">
-          <p style="margin-bottom: 15px;">
-            The composite score is calculated using a weighted formula that prioritizes relevance
-            while considering privacy, consensus, and efficiency:
-          </p>
-
-          <div style="background: white; border: 1px solid #d4c5a9; padding: 15px; margin: 15px 0; font-family: monospace; font-size: 13px;">
-            <strong>Composite Score Formula:</strong><br>
-            = (Relevance × <strong>45%</strong>) + (Sovereignty × <strong>25%</strong>) +
-            (Similarity × <strong>20%</strong>) + (Speed × <strong>10%</strong>)
+        <h2>Score Breakdown</h2>
+        <div class="breakdown">
+          <div class="formula-box">Composite = (Relevance × 45%) + (Sovereignty × 25%) + (Similarity × 20%) + (Speed × 10%)</div>
+          <div class="bar-row">
+            <span class="bar-label">Relevance</span>
+            <div class="bar-track"><div class="bar-fill" style="width:${rel}%"></div></div>
+            <span class="bar-value">${rel} × 45% = ${(rel * 0.45).toFixed(1)}</span>
           </div>
-
-          <div style="margin-top: 20px;">
-            <strong style="margin-bottom: 10px; display: block;">Calculation for ${winner.aiModel}:</strong>
-
-            <div style="margin: 10px 0; display: flex; align-items: center; gap: 10px;">
-              <span style="width: 100px;">Relevance:</span>
-              <div style="flex: 1; background: #e8dcc4; height: 20px; position: relative; border: 1px solid #d4c5a9;">
-                <div style="background: #1a1a1a; height: 100%; width: ${winner.scores?.relevance || 0}%;"></div>
-              </div>
-              <span style="width: 150px; text-align: right; font-size: 12px;">
-                ${winner.scores?.relevance || 0} × 45% = ${((winner.scores?.relevance || 0) * 0.45).toFixed(1)}
-              </span>
-            </div>
-
-            <div style="margin: 10px 0; display: flex; align-items: center; gap: 10px;">
-              <span style="width: 100px;">Sovereignty:</span>
-              <div style="flex: 1; background: #e8dcc4; height: 20px; position: relative; border: 1px solid #d4c5a9;">
-                <div style="background: #a89263; height: 100%; width: ${winner.scores?.sovereignty?.score || 0}%;"></div>
-              </div>
-              <span style="width: 150px; text-align: right; font-size: 12px;">
-                ${winner.scores?.sovereignty?.score || 0} × 25% = ${((winner.scores?.sovereignty?.score || 0) * 0.25).toFixed(1)}
-              </span>
-            </div>
-
-            <div style="margin: 10px 0; display: flex; align-items: center; gap: 10px;">
-              <span style="width: 100px;">Similarity:</span>
-              <div style="flex: 1; background: #e8dcc4; height: 20px; position: relative; border: 1px solid #d4c5a9;">
-                <div style="background: #c5b083; height: 100%; width: ${winner.scores?.similarity || 0}%;"></div>
-              </div>
-              <span style="width: 150px; text-align: right; font-size: 12px;">
-                ${winner.scores?.similarity || 0} × 20% = ${((winner.scores?.similarity || 0) * 0.2).toFixed(1)}
-              </span>
-            </div>
-
-            <div style="margin: 10px 0; display: flex; align-items: center; gap: 10px;">
-              <span style="width: 100px;">Speed:</span>
-              <div style="flex: 1; background: #e8dcc4; height: 20px; position: relative; border: 1px solid #d4c5a9;">
-                <div style="background: #d4c5a3; height: 100%; width: ${winner.scores?.speed || 0}%;"></div>
-              </div>
-              <span style="width: 150px; text-align: right; font-size: 12px;">
-                ${winner.scores?.speed || 0} × 10% = ${((winner.scores?.speed || 0) * 0.1).toFixed(1)}
-              </span>
-            </div>
-
-            <div style="margin-top: 20px; padding-top: 15px; border-top: 2px solid #d4c5a9; display: flex; justify-content: space-between; align-items: center; background: #1a1a1a; color: #f5f1e8; padding: 15px;">
-              <span style="font-weight: bold;">Final Composite Score:</span>
-              <span style="font-size: 28px; font-weight: bold;">${winner.scores?.composite || 0}/100</span>
-            </div>
+          <div class="bar-row">
+            <span class="bar-label">Sovereignty</span>
+            <div class="bar-track"><div class="bar-fill" style="width:${sov}%; background:#a89263"></div></div>
+            <span class="bar-value">${sov} × 25% = ${(sov * 0.25).toFixed(1)}</span>
           </div>
-
-          <div style="background: #f5f1e8; border-left: 4px solid #1a1a1a; padding: 10px; margin-top: 15px; font-size: 12px;">
-            <strong>Why these weights?</strong> Relevance (45%) is most important because answer quality matters most.
-            Sovereignty (25%) ensures data privacy. Similarity (20%) validates consensus. Speed (10%) improves user
-            experience. These weights are based on academic research in Information Retrieval.
+          <div class="bar-row">
+            <span class="bar-label">Similarity</span>
+            <div class="bar-track"><div class="bar-fill" style="width:${sim}%; background:#574a2e"></div></div>
+            <span class="bar-value">${sim} × 20% = ${(sim * 0.2).toFixed(1)}</span>
           </div>
-        </div>
-        `;
+          <div class="bar-row">
+            <span class="bar-label">Speed</span>
+            <div class="bar-track"><div class="bar-fill" style="width:${spd}%; background:#8a7447"></div></div>
+            <span class="bar-value">${spd} × 10% = ${(spd * 0.1).toFixed(1)}</span>
+          </div>
+          <div class="total-row">
+            <span>Final Composite Score</span>
+            <span>${winner.scores?.composite || 0} / 100</span>
+          </div>
+        </div>`;
       })()}
 
       ${summary && Object.keys(summary).length > 0 ? `
       <h2>Summary Statistics</h2>
-      <div class="summary">
-        ${summary.averageRelevance !== undefined ? `
-        <div class="summary-item">
-          <div class="summary-value">${summary.averageRelevance.toFixed(2)}</div>
-          <div class="summary-label">Average Relevance</div>
-        </div>
-        ` : ''}
-        ${summary.averageSimilarity !== undefined ? `
-        <div class="summary-item">
-          <div class="summary-value">${summary.averageSimilarity.toFixed(2)}</div>
-          <div class="summary-label">Average Similarity</div>
-        </div>
-        ` : ''}
-        ${summary.consensusLevel !== undefined ? `
-        <div class="summary-item">
-          <div class="summary-value">${summary.consensusLevel.toFixed(2)}%</div>
-          <div class="summary-label">Consensus Level</div>
-        </div>
-        ` : ''}
-        ${summary.averageSovereignty !== undefined ? `
-        <div class="summary-item">
-          <div class="summary-value">${summary.averageSovereignty.toFixed(2)}</div>
-          <div class="summary-label">Average Sovereignty</div>
-        </div>
-        ` : ''}
-      </div>
-      ` : ''}
+      <div class="summary-grid">
+        ${summary.averageRelevance !== undefined ? `<div class="summary-cell"><div class="val">${summary.averageRelevance.toFixed(1)}</div><div class="lbl">Avg Relevance</div></div>` : ''}
+        ${summary.averageSimilarity !== undefined ? `<div class="summary-cell"><div class="val">${summary.averageSimilarity.toFixed(1)}</div><div class="lbl">Avg Similarity</div></div>` : ''}
+        ${summary.consensusLevel !== undefined ? `<div class="summary-cell"><div class="val">${summary.consensusLevel.toFixed(1)}%</div><div class="lbl">Consensus</div></div>` : ''}
+        ${summary.averageSovereignty !== undefined ? `<div class="summary-cell"><div class="val">${summary.averageSovereignty.toFixed(1)}</div><div class="lbl">Avg Sovereignty</div></div>` : ''}
+      </div>` : ''}
 
       <h2>AI Responses (${responses.length})</h2>
 
-      ${responses.map((response, index) => `
+      ${responses.map((response) => `
         <div class="response">
-          <div class="response-header">
-            <span class="model-name">${response.aiModel || response.model || 'Unknown Model'}</span>
-            <span class="status ${response.status === 'success' ? 'status-success' : 'status-failed'}">
-              ${response.status || 'unknown'}
-            </span>
+          <div class="response-head">
+            <span class="model">${response.aiModel || response.model || 'Unknown'}</span>
+            <span class="time">${response.responseTime || 0}ms</span>
           </div>
+          <div class="response-body">
+            ${response.status === 'success' ? `
+              <div class="prose">${renderMarkdownSectioned(response.responseText)}</div>
 
-          ${response.status === 'success' ? `
-            <div class="response-text">
-              ${response.responseText || 'No response text'}
-            </div>
+              <div class="scores-block">
+                <div class="composite-strip">
+                  <div class="cs-lbl">COMPOSITE SCORE</div>
+                  <div class="cs-val">${response.scores?.composite || '-'}<span style="font-size:16px;color:#a89263"> /100</span></div>
+                </div>
 
-            <div style="background: #1a1a1a; color: #f5f1e8; padding: 15px; margin: 15px 0; text-align: center;">
-              <div style="font-size: 12px; color: #d4c5a9; margin-bottom: 5px;">COMPOSITE SCORE</div>
-              <div style="font-size: 36px; font-weight: bold;">
-                ${response.scores?.composite || '-'}<span style="font-size: 18px; color: #d4c5a9;">/100</span>
-              </div>
-            </div>
+                <div class="score-strip">
+                  <div class="score-cell"><div class="s-lbl">Relevance</div><div class="s-val">${response.scores?.relevance || '-'}</div></div>
+                  <div class="score-cell"><div class="s-lbl">Sovereignty</div><div class="s-val">${response.scores?.sovereignty?.score || '-'}</div></div>
+                  <div class="score-cell"><div class="s-lbl">Similarity</div><div class="s-val">${response.scores?.similarity || '-'}</div></div>
+                  <div class="score-cell"><div class="s-lbl">Speed</div><div class="s-val">${response.scores?.speed || '-'}</div></div>
+                </div>
 
-            <div class="scores">
-              <div class="score-item">
-                <div class="score-label">Relevance (BM25)</div>
-                <div class="score-value">${response.scores?.relevance || '-'}/100</div>
-              </div>
-              <div class="score-item">
-                <div class="score-label">Similarity (TF-IDF)</div>
-                <div class="score-value">${response.scores?.similarity || '-'}/100</div>
-              </div>
-              <div class="score-item">
-                <div class="score-label">Sovereignty</div>
-                <div class="score-value">${response.scores?.sovereignty?.score || response.sovereignty?.score || '-'}/100</div>
-              </div>
-              <div class="score-item">
-                <div class="score-label">Speed</div>
-                <div class="score-value">${response.scores?.speed || '-'}/100</div>
-              </div>
-              ${response.greenIT?.ecoScore && response.greenIT.ecoScore !== 'N/A' ? `
-              <div class="score-item">
-                <div class="score-label">Eco-Score</div>
-                <div class="score-value">${response.greenIT.ecoScore}</div>
-              </div>
-              <div class="score-item">
-                <div class="score-label">CO₂ Impact</div>
-                <div class="score-value">${response.greenIT.carbon.impactGrams.toFixed(4)}g</div>
-              </div>
-              ` : ''}
-            </div>
+                ${response.greenIT?.ecoScore && response.greenIT.ecoScore !== 'N/A' ? `
+                <div class="green-row">
+                  <div><span class="eco-badge">ECO ${response.greenIT.ecoScore}</span><br>${response.greenIT.carbon.location}</div>
+                  <div><strong>CO₂</strong><br>${response.greenIT.carbon.impactGrams.toFixed(4)} g</div>
+                  <div><strong>Energy</strong><br>${response.greenIT.energy.consumedKwh.toFixed(6)} kWh</div>
+                </div>` : ''}
 
-            ${response.nlpAnalysis?.keywords && response.nlpAnalysis.keywords.length > 0 ? `
-            <div class="keywords">
-              <strong>Keywords:</strong><br>
-              ${response.nlpAnalysis.keywords.map(k => {
-                const word = typeof k === 'string' ? k : k.word;
-                return `<span class="keyword-tag">${word}</span>`;
-              }).join('')}
-            </div>
-            ` : ''}
-          ` : `
-            <div class="response-text" style="color: #721c24;">
-              Error: ${response.error || 'Request failed'}
-            </div>
-          `}
-
-          <div style="margin-top: 15px; font-size: 12px; color: #666;">
-            Response time: ${response.responseTime}ms |
-            Location: ${response.sovereignty?.location || 'Unknown'} |
-            GDPR: ${response.sovereignty?.gdprCompliant ? 'Yes' : 'No'}
+                ${response.nlpAnalysis?.keywords?.length ? `
+                <div style="margin-top:10px;font-size:11px;color:#57534e;margin-bottom:4px;">Keywords</div>
+                <div>${response.nlpAnalysis.keywords.slice(0, 12).map(k =>
+                  `<span class="kw-tag">${typeof k === 'string' ? k : k.word}</span>`).join('')}</div>` : ''}
+              </div>
+            ` : `<p style="color:#7c2d12;font-size:12px;">Error: ${response.error || 'Request failed'}</p>`}
           </div>
         </div>
       `).join('')}
 
-      <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #d4c5a9; text-align: center; color: #666; font-size: 12px;">
-        <p>Generated by AI Response Aggregator - IT for Green & Data Sovereignty</p>
+      <div class="footer">
+        <p>AI Response Aggregator — IT for Green &amp; Data Sovereignty</p>
         <p>${new Date().toLocaleString()}</p>
       </div>
     </body>
