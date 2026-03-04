@@ -21,8 +21,9 @@ export const loadSecrets = async () => {
 
     await client.auth().accessToken(token);
 
+    const infisicalEnv = process.env.INFISICAL_ENV || 'dev';
     const { secrets } = await client.secrets().listSecrets({
-      environment: 'dev',
+      environment: infisicalEnv,
       secretPath: '/',
     });
 
