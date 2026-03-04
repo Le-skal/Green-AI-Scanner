@@ -9,11 +9,11 @@ const options = {
       description: 'API REST pour l\'agrégation et l\'analyse comparative de réponses IA multi-modèles avec scoring scientifique (BM25, TF-IDF, ROUGE) et évaluation de souveraineté des données.',
       contact: {
         name: 'PFE 2025-2026',
-        email: 'contact@skills4mind.com'
+        email: 'contact@Skills4Mind.com'
       },
       license: {
         name: 'Confidential',
-        url: 'https://skills4mind.com'
+        url: 'https://Skills4Mind.com'
       }
     },
     servers: [
