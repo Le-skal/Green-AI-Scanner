@@ -39,7 +39,7 @@
 
 ### 📊 Projet de Fin d'Études 2025-2026
 
-**IT for Green & Data Sovereignty** | DeepSkal - Exowz - Julien | B3 Data & IA
+**IT for Green & Data Sovereignty** | DeepSkal | B3 Data & IA
 
 **[🌐 Live Demo](https://green-ai.deepskal.com/) · [📚 Maquettes Figma](https://www.figma.com/design/ErpgGc9MsR4MzDUZs28YrK/PFE?node-id=0-1&t=1zoBcZ5hSujxvZd5-1)**
 
@@ -704,6 +704,14 @@ Le projet respecte les principes SOLID (notamment Single Responsibility Principl
 - Code maintenable et testable selon les standards de l'industrie
 
 Référence: https://www.geeksforgeeks.org/system-design/solid-principle-in-programming-understand-with-real-life-examples/
+
+---
+
+## Contributeurs
+
+- **Raphaël MARTIN**
+- **Mathew Kristoffer Ewan KAPOOR**
+- **Julien KLINGER**
 
 ---
 
