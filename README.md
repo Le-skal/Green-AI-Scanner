@@ -1,7 +1,8 @@
 <div align="center">
 
 # AI Response Aggregator
-### *Agrégateur de Moteurs d'IA pour la Consolidation et l'Analyse*
+
+### _Agrégateur de Moteurs d'IA pour la Consolidation et l'Analyse_
 
 <p><em>Unify AI Responses, Empower Data-Driven Decisions with Data Sovereignty</em></p>
 
@@ -37,7 +38,8 @@
 ---
 
 ### 📊 Projet de Fin d'Études 2025-2026
-**IT for Green & Data Sovereignty** | DeepSkal | B3 Data & IA
+
+**IT for Green & Data Sovereignty** | DeepSkal - Exowz - Julien | B3 Data & IA
 
 **[🌐 Live Demo](https://green-ai.deepskal.com/) · [📚 Maquettes Figma](https://www.figma.com/design/ErpgGc9MsR4MzDUZs28YrK/PFE?node-id=0-1&t=1zoBcZ5hSujxvZd5-1)**
 
@@ -73,6 +75,7 @@
 Créer une plateforme web permettant de **consolider et comparer les réponses de plusieurs moteurs d'IA** pour un même prompt, en évaluant leur pertinence, cohérence et niveau de souveraineté des données.
 
 Ce projet s'inscrit dans le cadre du **PFE 2025-2026** avec pour objectifs :
+
 - **IT for Green** : Évaluer l'impact écologique des modèles d'IA
 - **Data Sovereignty** : Analyser la souveraineté et conformité RGPD
 - **Analyse Comparative** : Comparer les performances de 4 moteurs d'IA
@@ -83,6 +86,7 @@ Ce projet s'inscrit dans le cadre du **PFE 2025-2026** avec pour objectifs :
 ## Fonctionnalités Implémentées
 
 ### 1. Agrégation Multi-API IA
+
 - Interface de saisie de prompt unique
 - Envoi simultané vers 4 APIs d'IA :
   - **Google Gemini** (Gemini 2.0 Flash)
@@ -103,8 +107,9 @@ Ce projet utilise des algorithmes et métriques **scientifiquement validés** is
 **4 Scores Calculés par Réponse :**
 
 1. **Score de Pertinence BM25** (0-100) :
+
    - **Algorithme** : BM25 (Best Matching 25)
-   - **Référence** : Robertson & Zaragoza (2009) *"The Probabilistic Relevance Framework: BM25 and Beyond"*
+   - **Référence** : Robertson & Zaragoza (2009) _"The Probabilistic Relevance Framework: BM25 and Beyond"_
    - **Description** : Algorithme de ranking probabiliste utilisé par Elasticsearch et les moteurs de recherche modernes
    - **Formule** :
      ```
@@ -117,8 +122,9 @@ Ce projet utilise des algorithmes et métriques **scientifiquement validés** is
      - Applique un IDF pour réduire l'importance des termes communs
 
 2. **Score de Similarité TF-IDF** (0-100) :
+
    - **Algorithme** : Cosine Similarity sur vecteurs TF-IDF
-   - **Référence** : Salton & McGill (1983) *"Introduction to Modern Information Retrieval"*
+   - **Référence** : Salton & McGill (1983) _"Introduction to Modern Information Retrieval"_
    - **Description** : Mesure la similarité sémantique entre réponses en comparant leurs vecteurs TF-IDF
    - **Formule** :
      ```
@@ -130,8 +136,9 @@ Ce projet utilise des algorithmes et métriques **scientifiquement validés** is
      - Standard en NLP pour comparaison de textes
 
 3. **Scores ROUGE (Quality Assessment)** (0-1) :
+
    - **Algorithme** : ROUGE-1, ROUGE-2, ROUGE-L
-   - **Référence** : Lin (2004) *"ROUGE: A Package for Automatic Evaluation of Summaries"*
+   - **Référence** : Lin (2004) _"ROUGE: A Package for Automatic Evaluation of Summaries"_
    - **Description** : Métrique standard pour évaluer la qualité des résumés et réponses générées
    - **Métriques** :
      - **ROUGE-1** : Overlap d'unigrams (mots individuels)
@@ -143,6 +150,7 @@ Ce projet utilise des algorithmes et métriques **scientifiquement validés** is
      - Capture à la fois le contenu et la structure
 
 4. **Score de Souveraineté Dynamique** (0-100) :
+
    - **Calcul scientifique en 3 composantes** :
      - Hosting (50 pts max) : Localisation serveurs (France=50, EU=40, USA=20)
      - Company (30 pts max) : Nationalité entreprise (France=30, EU=25, USA=15)
@@ -152,6 +160,7 @@ Ce projet utilise des algorithmes et métriques **scientifiquement validés** is
    - **Recommandations** : Suggestions de sécurité automatiques
 
 5. **Green IT Impact Écologique** :
+
    - **Consommation énergétique** : kWh par 1000 tokens (Mistral=0.002, Gemini=0.005, Cohere=0.006)
    - **Impact carbone** : Grammes de CO2 calculés selon localisation serveurs
      - France: 50g CO2/kWh (nucléaire/renouvelable)
@@ -176,12 +185,14 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 ```
 
 **Pondération basée sur la recherche académique :**
+
 - **45%** - Pertinence BM25 (critère principal en IR - Manning et al., 2008)
 - **25%** - Souveraineté (RGPD + Green IT - importance réglementaire)
 - **20%** - Consensus TF-IDF (Ensemble methods - Dietterich, 2000)
 - **10%** - Vitesse (Green computing - efficacité énergétique)
 
 **Justification des pondérations** :
+
 - La recherche en Information Retrieval montre que la pertinence est le critère #1 (45%)
 - Le contexte IT for Green justifie l'importance de la souveraineté (25%)
 - Le consensus entre modèles est un indicateur de fiabilité (20%)
@@ -190,12 +201,14 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 #### Analyse NLP Scientifique
 
 **Preprocessing Avancé** :
+
 - Tokenization (natural library)
 - Stopword removal (liste étendue)
 - Stemming (Porter Stemmer)
 - Vectorisation TF-IDF
 
 **Métriques Extraites** :
+
 - Keywords extraction (TF-IDF ranking)
 - Sentiment analysis (AFINN lexicon)
 - Topic detection (POS tagging)
@@ -203,6 +216,7 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 - ROUGE scores (qualité de génération)
 
 ### 3. Scoring Data Souverain
+
 - **Localisation des serveurs** : USA, France, Europe
 - **Conformité RGPD** : Évaluation dynamique par modèle
 - **Score de souveraineté** (0-100) : calculé dynamiquement via 3 composantes (Hosting, Company, License)
@@ -210,6 +224,7 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 - **Recommandations RGPD** : suggestions de sécurité générées automatiquement
 
 ### 4. Visualisation Comparative (DataViz)
+
 - **Tableau de comparaison** : Affichage côte à côte avec ResponseCard
 - **Graphiques de scores** : Barres comparatives (ScoresChart)
 - **Radar de performance** : Visualisation multi-critères (PerformanceRadar)
@@ -218,6 +233,7 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 - **Résumé comparatif** : Moyennes et consensus (ComparisonSummary)
 
 ### 5. Authentification et Gestion Utilisateurs
+
 - **Système optionnel** : L'application fonctionne sans compte
 - **JWT Authentication** : Tokens sécurisés
 - **Gestion de session** : Zustand avec persistence localStorage
@@ -225,6 +241,7 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 - **Sécurité** : Bcrypt pour hash des mots de passe
 
 ### 6. Historique et Navigation
+
 - **Historique complet** : Page dédiée avec tous les prompts
 - **Sidebar dynamique** : Affichage des 5 derniers prompts
 - **Vue détails** : Affichage complet d'un prompt avec toutes ses réponses
@@ -232,6 +249,7 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 - **Timestamps intelligents** : "5m ago", "2h ago", etc.
 
 ### 7. Export Multi-Format
+
 - **Export JSON** : Données brutes complètes
 - **Export CSV** : Format tabulaire pour analyse Excel
 - **Export PDF** : Rapport professionnel formaté et imprimable
@@ -247,6 +265,7 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 ### Stack Technique Réelle
 
 #### Frontend
+
 - **Framework** : ✅ React.js 18 avec Vite
 - **Styling** : ✅ Tailwind CSS (palette beige/noir)
 - **State Management** : ✅ Zustand avec persistence
@@ -258,6 +277,7 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
   - ✅ Custom components (matrices, word cloud)
 
 #### Backend
+
 - **Framework** : ✅ Node.js avec Express.js
 - **Langage** : ✅ JavaScript (ES6+)
 - **API Architecture** : ✅ RESTful API + Swagger/OpenAPI 3.0
@@ -266,6 +286,7 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 - **Architecture** : ✅ SOLID Principles (Single Responsibility)
 
 #### Base de Données
+
 - **Database** : ✅ MongoDB Atlas (Cloud)
 - **ORM** : ✅ Mongoose
 - **Collections** :
@@ -274,6 +295,7 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
   - Responses (réponses des modèles)
 
 #### Intelligence Artificielle
+
 - **APIs IA Intégrées** :
   - ✅ Google Generative AI SDK (Gemini)
   - ✅ Mistral AI SDK
@@ -287,6 +309,7 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
   - ✅ Cosine similarity sur vecteurs TF-IDF
 
 #### Sécurité & Auth
+
 - ✅ **JWT** : Authentification stateless
 - ✅ **Bcrypt** : Hash des mots de passe (10 rounds)
 - ✅ **Infisical** : Gestion centralisée des secrets (eu.infisical.com - serveurs EU, RGPD)
@@ -375,6 +398,7 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 ## Modèles de Données Réels
 
 ### Prompt Schema
+
 ```javascript
 {
   _id: ObjectId,
@@ -393,6 +417,7 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 ```
 
 ### Response Schema
+
 ```javascript
 {
   _id: ObjectId,
@@ -456,6 +481,7 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 ```
 
 ### User Schema
+
 ```javascript
 {
   _id: ObjectId,
@@ -472,6 +498,7 @@ Score Composite = (BM25 × 45%) + (Souveraineté × 25%) +
 ## Sécurité Implémentée
 
 ### Mesures en Place
+
 - ✅ Hash des mots de passe avec bcrypt (10 rounds)
 - ✅ JWT pour authentification stateless
 - ✅ Tokens stockés dans localStorage (côté client)
@@ -497,6 +524,7 @@ FRONTEND_URL=http://localhost:5173
 ```
 
 **Secrets stockés dans Infisical (eu.infisical.com) :**
+
 - `MONGODB_URI`
 - `JWT_SECRET`
 - `GEMINI_API_KEY`
@@ -505,6 +533,7 @@ FRONTEND_URL=http://localhost:5173
 - `COHERE_API_KEY`
 
 **Avantages pour la souveraineté des données :**
+
 - Instance hébergée en Europe (RGPD compliant)
 - Secrets chiffrés au repos et en transit
 - Audit logs de chaque accès
@@ -515,6 +544,7 @@ FRONTEND_URL=http://localhost:5173
 ## Performances et KPIs
 
 ### Performances Mesurées
+
 - Temps de réponse moyen : 3-8s (4 APIs en parallèle)
 - Support de 4 APIs simultanées
 - Historique illimité par utilisateur
@@ -523,6 +553,7 @@ FRONTEND_URL=http://localhost:5173
 - Interface responsive (mobile + desktop)
 
 ### Métriques Techniques
+
 - Frontend build size : ~500KB (gzip)
 - Backend RAM usage : ~150MB
 - Database : MongoDB Atlas (M0 gratuit)
@@ -533,12 +564,14 @@ FRONTEND_URL=http://localhost:5173
 ## Installation et Démarrage
 
 ### Prérequis
+
 - Node.js 18+
 - npm ou yarn
 - Compte MongoDB Atlas
 - Clés API : Gemini, Mistral, Hugging Face, Cohere
 
 ### Backend
+
 ```bash
 cd backend
 npm install
@@ -547,6 +580,7 @@ npm run dev
 ```
 
 ### Frontend
+
 ```bash
 cd frontend
 npm install
@@ -554,6 +588,7 @@ npm run dev
 ```
 
 ### URLs
+
 - Frontend : http://localhost:5173
 - Backend : http://localhost:5000
 
@@ -642,16 +677,19 @@ L'API REST est entièrement documentée avec Swagger/OpenAPI. Vous pouvez tester
 ### Endpoints Disponibles
 
 #### Auth
+
 - `POST /api/auth/register` - Créer un compte
 - `POST /api/auth/login` - Se connecter
 - `GET /api/auth/profile` - Profil utilisateur (JWT requis)
 
 #### Prompts
+
 - `POST /api/prompts` - Créer un prompt
 - `GET /api/prompts` - Liste des prompts (avec pagination)
 - `GET /api/prompts/:id` - Détails d'un prompt
 
 #### Models
+
 - `GET /api/models` - Liste des modèles disponibles
 
 ---
@@ -659,6 +697,7 @@ L'API REST est entièrement documentée avec Swagger/OpenAPI. Vous pouvez tester
 ## Architecture SOLID
 
 Le projet respecte les principes SOLID (notamment Single Responsibility Principle):
+
 - Chaque service AI a sa propre responsabilité (`geminiService.js`, `mistralService.js`, etc.)
 - L'orchestrateur coordonne sans faire d'appels API directs
 - Architecture modulaire facilitant l'ajout de nouveaux modèles
